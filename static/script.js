@@ -20,6 +20,14 @@ $(document).ready(function() {
                     $('#suggestions-bubbles').append(bubbleElement);
                 }
             });
+
+            // Socket listener to handle the graph image
+            socket.on('show_graph', function(data) {
+                console.log("Received graph data:", data);
+                let base64Image = data.image;
+                $('#graph-image').attr('src', 'data:image/png;base64,' + base64Image);
+            });
+            
         }
     }
 

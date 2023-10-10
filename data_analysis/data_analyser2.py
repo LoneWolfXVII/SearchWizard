@@ -15,6 +15,8 @@ from data_analysis.data_visualisation import DataVisualiser
 from pathlib import Path
 import csv
 import re
+import io
+import base64
 
 
 
@@ -59,6 +61,12 @@ class DataAnalyser:
     def show_suggestions(self, suggestions):
         if self.socketio:
             self.socketio.emit('show_suggestions', {'suggestions': suggestions})
+
+    def show_graph(self, base64_image):
+        print("Emitting graph...")
+        if self.socketio:
+            self.socketio.emit('show_graph', {'image': base64_image})
+
 
     
     def connect_to_database(self):
@@ -119,6 +127,7 @@ class DataAnalyser:
             if "This is a reasonable question" in response:
                 valid_questions.append(question)
                 # Send the valid question to frontend
+                question=question.split('.')[-1]
                 self.show_suggestions(question)
                 print(valid_questions)
                 # Record the valid question to CSV
@@ -236,9 +245,22 @@ class DataAnalyser:
         data_description=response.get('Data_Description')
         data= self.execute_sql_query(sql_query)
         if data:
+            print("SQL query result:", data)
+
             plot_params=self.DV.get_plot_function_params(data,data_description)
-            print(plot_params)
-            self.DV.generate_plot(plot_params.get('data'),plot_params.get('plot_title'),plot_params.get('axis_names'),plot_params.get('graph_type'))
+            base64_image = self.DV.generate_plot(
+                plot_params.get('data'),
+                plot_params.get('plot_title'),
+                plot_params.get('axis_names'),
+                plot_params.get('graph_type')
+            )
+            if base64_image:
+                print("Generated graph successfully!")
+                self.show_graph(base64_image)
+            else:
+                print("Failed to generate graph.")
+
+            
         else:
             print("Failed to execute SQL query.")
         

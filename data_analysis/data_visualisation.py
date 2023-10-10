@@ -60,7 +60,8 @@ from datetime import date
 from dotenv import find_dotenv, load_dotenv
 import matplotlib.pyplot as plt
 import uuid
-
+import io
+import base64
 
 
 
@@ -205,9 +206,10 @@ data description: {delimiter2}{data_description}{delimiter2}
     
 
 
+    
     def generate_plot(self, data, plot_title, axis_names, graph_type):
         """
-        Generate a plot based on the provided data and save it as a PNG image.
+        Generate a plot based on the provided data and return it as a base64 encoded PNG image.
 
         Parameters:
         - data: The data to be plotted. This should be a dictionary where keys are x-axis values and values are y-axis values.
@@ -216,7 +218,7 @@ data description: {delimiter2}{data_description}{delimiter2}
         - graph_type: The type of graph to be plotted (e.g., 'bar', 'pie', 'line', 'scatter', 'histogram', etc.)
 
         Returns:
-        - The path to the saved PNG image.
+        - Base64 encoded PNG image string.
         """
         num_data_points = len(data)
         fig_width = max(10, num_data_points * 0.5)  # Adjust width based on number of data points
@@ -248,11 +250,14 @@ data description: {delimiter2}{data_description}{delimiter2}
         # Add more graph types as needed
 
         fig.autofmt_xdate()  # Automatically adjust x-axis labels to prevent overlap
-        image_path = f"plot_{uuid.uuid4()}.png"
-        plt.savefig(image_path, bbox_inches='tight')
+
+        # Convert plot to base64 instead of saving to file
+        image = io.BytesIO()
+        plt.savefig(image, format="png", bbox_inches='tight')
         plt.close()
 
-        return image_path
+        base64_image = base64.b64encode(image.getvalue()).decode('utf-8')
+        return base64_image
 
     
 

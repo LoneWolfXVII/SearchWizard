@@ -13,9 +13,6 @@
             <input type="text" id="search-bar" placeholder="Search ">
             <span class="search-symbol">&#128269;</span>
         </div>
-        
-        
-        
     </div>
 
     <div id="answer-section">
@@ -23,9 +20,20 @@
         <div id="loading-text"></div>
     </div>
         
-        <div id="timer-section"></div> <!-- Timer section below answer-section -->
+    <div id="timer-section"></div> <!-- Timer section below answer-section -->
+    
+    <div class="content-container">
+        <div id="graph-section">
+            <div id="graph-container">
+                <!-- This is where we'll render the graph -->
+                <img id="graph-image" src="" alt="Generated Graph" style="max-width:100%; height:auto;">
+            </div>
+        </div>
+
         <div id="suggestions-section">
-            <div id="suggestions-bubbles"></div> <!-- Bubbles for suggestions -->
+            <div class="suggestions-wrapper">
+                <div id="suggestions-bubbles"></div> <!-- Bubbles for suggestions -->
+            </div>
         </div>
     </div>
 
@@ -34,15 +42,9 @@
         <a href="#"><span class="icon icon-home"></span> Travel -1 </a>
         <a href="#"><span class="icon icon-about"></span> Travel -2  </a>
         <a href="#"><span class="icon icon-services"></span> Finance -1 </a>
-       
     </div>
-    
-    
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-
 </body>
 </html>
