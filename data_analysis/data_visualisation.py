@@ -206,6 +206,50 @@ data description: {delimiter2}{data_description}{delimiter2}
     
 
 
+    def get_insight_function_params(self, data, data_description, user_query):
+        
+        # Using delimiters to separate and extract information.
+        delimiter = "####"
+        delimiter2 = "****"
+        delimiter4 = "$$$$"
+        
+        # Defining the system message for this function.
+        system_message = f"""
+You are provided with raw data, its description, and a user query.
+
+Your task is not merely to describe the data but to critically analyze it in the context of the user query and its description. Extract actionable insights that can directly inform and drive business decisions.
+
+- User Query: {delimiter2}{user_query}{delimiter2}
+- Data Description: {delimiter4}{data_description}{delimiter4}
+
+Based on the information provided:
+
+1. Deliver a minimum of 3 to 5 actionable insights. These should be deep and strategic recommendations that can positively impact business outcomes.
+2. Every insight should be grounded in the data, relevant to the user query, and offer clear avenues for business growth or improvements.
+3. Be concise, yet ensure each insight carries weight and significance.
+
+Format your response as:
+- Insight 1: ...
+- Insight 2: ...
+- ...
+
+Provide your response in JSON format with keys: 'insight_title' and 'insight_description'
+"""
+
+
+        
+        messages = [
+            {'role': 'system', 'content': system_message},
+            {'role': 'user', 'content': f"{delimiter}{data}{delimiter}"},
+        ]
+        response = self.get_completion(messages)
+
+        
+        return response
+
+    
+
+
     
     def generate_plot(self, data, plot_title, axis_names, graph_type):
         """

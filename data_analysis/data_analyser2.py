@@ -17,6 +17,8 @@ import csv
 import re
 import io
 import base64
+import json
+
 
 
 
@@ -67,6 +69,25 @@ class DataAnalyser:
         if self.socketio:
             self.socketio.emit('show_graph', {'image': base64_image})
 
+    def show_insight(self, insights):
+        # Check if insights is a string and try to load it as JSON
+        if isinstance(insights, str):
+            try:
+                insights = json.loads(insights)
+            except json.JSONDecodeError:
+                print("Failed to decode insights JSON string.")
+                return
+
+        # Now, check if the loaded/passed insights is a dictionary with an 'insights' key
+        if isinstance(insights, dict) and 'insights' in insights:
+            if self.socketio:
+                formatted_insights = []
+                for insight in insights['insights']:
+                    formatted_insight = f"<strong>{insight['insight_title']}</strong> : {insight['insight_description']}"
+                    formatted_insights.append(formatted_insight)
+                self.socketio.emit('show_insight', {'insights': formatted_insights})
+        else:
+            print("Insights is not in the expected format.")
 
     
     def connect_to_database(self):
@@ -259,12 +280,16 @@ class DataAnalyser:
                 self.show_graph(base64_image)
             else:
                 print("Failed to generate graph.")
+            
+            insights=self.DV.get_insight_function_params(data, data_description, user_query)
+            print(insights)
+            self.show_insight(insights)
 
             
         else:
             print("Failed to execute SQL query.")
         
-       
+        
         suggestions=self.generate_suggestions(user_query,schema_description,model,function_descriptions)
         
         

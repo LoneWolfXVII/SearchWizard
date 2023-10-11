@@ -27,7 +27,18 @@ $(document).ready(function() {
                 let base64Image = data.image;
                 $('#graph-image').attr('src', 'data:image/png;base64,' + base64Image);
             });
-            
+
+            // Socket listener to handle the insights
+            socket.on('show_insight', function(data) {
+                console.log("Received insight data:", data);
+                let insights = data.insights;
+                let insightsHTML = '';
+                for(let insight of insights) {
+                    insightsHTML += `<p>${insight}</p>`;
+                }
+                $('#insight-section').html(insightsHTML);
+            });
+
         }
     }
 
