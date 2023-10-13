@@ -1,201 +1,196 @@
-    body {
-        background-color: #f0f0f0; /* Change this to a grey color */
-        font-family: Arial, sans-serif;
-    }
+body {
+    background-color: #f0f0f0; /* Change this to a grey color */
+    font-family: Arial, sans-serif;
+}
 
-    .header {
-        background-color: white;
-        padding: 20px 0;
-        text-align: center;
-        width: 100%;
-    
-    }
+.header {
+    background-color: white;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+}
 
-    .header, #answer-section, #timer-section, #suggestions-section {
-        margin-left: 210px; /* Adjust this value based on the width of the navigation panel + some spacing */
-    }
-    
-    
+.header, #answer-section, #timer-section, #suggestions-section {
+    margin-left: 210px; /* Adjust this value based on the width of the navigation panel + some spacing */
+}
 
-    .container {
-        width: 80%;
-        margin: 50px auto;
-    }
-    .search-container {
-        position: relative;
-    }
+.container {
+    width: 80%;
+    margin: 50px auto;
+}
 
-    #search-bar {
-        width: 40%;
-        padding: 10px;
-        font-size: 16px;
-        padding-left: 40px; /* Adjusted padding to make space for the search symbol */
-        border-radius: 50px;
-        z-index: 1; 
-    }
+.search-container {
+    position: relative;
+}
 
-    .search-symbol {
-        position: absolute; /* Ensure this is absolute */
-        left: calc(29.5%); /* Adjust this value. 30% is half of the 40% width of the search bar minus half of the search symbol width. 10px is a slight offset inside the search bar. */
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 18px;
-        pointer-events: none;  /* Makes the icon non-clickable */
-        z-index: 2; /* Ensure the symbol is above the input field */
-    }
+#search-bar {
+    width: 40%;
+    padding: 10px;
+    font-size: 16px;
+    padding-left: 40px; /* Adjusted padding to make space for the search symbol */
+    border-radius: 50px;
+    z-index: 1; 
+}
 
+.search-symbol {
+    position: absolute; /* Ensure this is absolute */
+    left: calc(29.5%); /* Adjust this value. 30% is half of the 40% width of the search bar minus half of the search symbol width. 10px is a slight offset inside the search bar. */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    pointer-events: none;  /* Makes the icon non-clickable */
+    z-index: 2; /* Ensure the symbol is above the input field */
+}
 
+#answer-section {
+    width: 40%;
+    margin-top: 20px;
+    margin-left: 930px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    position: relative;
+    border-radius: 15px;
+    background-color: white; /* Add this line */
+}
 
+#suggestions-section {
+    width: 40%; /* Set the desired width for both sections */
+    padding: 20px;
+    border: 1px solid #ccc;
+    position: relative;
+    text-align: center; /* Center text content horizontally */
+}
 
-    #answer-section {
-        width: 40%;
-        margin-top: 20px;
-        margin-left: 930px;
-        padding: 20px;
-        border: 1px solid #ccc;
-        position: relative;
-        border-radius: 15px;
-        background-color: white; /* Add this line */
-    }
+#suggestions-section {
+    width: 80%; /* Double the width of the answer section */
+}
 
+#loading-text {
+    position: absolute;
+    top: 50%;
+    left: 50%; /* Center it horizontally */
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+}
 
-    #loading-text {
-        position: absolute;
-        top: 50%;
-        left: 50%; /* Center it horizontally */
-        transform: translate(-50%, -50%);
-        white-space: nowrap;
-    }
+#timer-section {
+    width: 80%; /* Match the width of the answer section */
+    margin: 10px auto; /* Center it */
+    text-align: right;
+}
 
-    #timer-section {
-        width: 80%; /* Match the width of the answer section */
-        margin: 10px auto; /* Center it */
-        text-align: right;
-    }
+.content-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px; /* Gap between graph and suggestion sections */
+}
 
-    #suggestions-section {
-        margin-top: 20px;
-        flex: 1.8; /* Adjusting this to take up less space */
-        max-width: 52%; /* Decreased to balance the total width */
-    }
-    .content-container {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 20px; /* Gap between graph and suggestion sections */
-    }
-    #main-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center; /* Align items to the center vertically */
-        width: 100%;
-        gap: 20px; /* Gives some space between the graph and the insights */
-    }
-    
-    #graph-section {
-        flex: 1;
-        max-width: 80%;
-        margin-left: 250px;
-        margin-top: 200px; /* Adjust if necessary */
-    }
-    
-    #insight-section {
-        flex: 1;
-        max-width: 48%;
-        border-left: 1px solid #ccc;
-        padding-left: 10px;
-        margin-top: 200px; /* Ensure this is the same as in #graph-section */
-        overflow-y: auto;
-    }
-    
+#main-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Align items to the center vertically */
+    width: 100%;
+    gap: 20px; /* Gives some space between the graph and the insights */
+}
 
+#graph-section {
+    flex: 1;
+    max-width: 80%;
+    margin-left: 250px;
+    margin-top: 20px; /* Adjust if necessary */
+}
+#insight-section {
+    display: none; /* Hide the section by default */
+    width: 40%; /* Set the desired width for both sections */
+    padding: 20px;
+    border: 1px solid #ccc;
+    position: relative;
+    border-radius: 15px;
+    background-color: white; /* Add this line to set the background color to white */
+    text-align: left; /* Left text content horizontally */
+    margin-right:200px;
+}
 
-    .bubble {
-        padding: 10px 20px;
-        background-color: #e0e0e0;
-        border-radius: 25px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
+.bubble {
+    padding: 10px 20px;
+    background-color: #e0e0e0;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: inline-block; /* Display bubbles inline */
+    margin: 5px; /* Add some margin for spacing */
+}
 
-    .bubble:hover {
-        background-color: #d0d0d0;
-    }
+.bubble:hover {
+    background-color: #d0d0d0;
+}
 
+.left-nav {
+    position: fixed; /* This will make the navigation panel stick to the left */
+    top: 0;
+    left: 0;
+    width: 200px; /* Width of the navigation panel */
+    height: 100vh; /* Full height of the viewport */
+    background-color: #333; /* Dark background for the navigation panel */
+    overflow-y: auto; /* Add a scrollbar if the content is too long */
+    padding-top: 60px;
+}
 
-    .left-nav {
-        position: fixed; /* This will make the navigation panel stick to the left */
-        top: 0;
-        left: 0;
-        width: 200px; /* Width of the navigation panel */
-        height: 100vh; /* Full height of the viewport */
-        background-color: #333; /* Dark background for the navigation panel */
-        overflow-y: auto; /* Add a scrollbar if the content is too long */
-        padding-top: 60px;
-    }
+.left-nav a {
+    display: block;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 16px;
+    margin-bottom: 5px;
+    transition: background-color 0.3s;
+}
 
-    .left-nav a {
-        display: block;
-        color: white;
-        padding: 10px 15px;
-        text-decoration: none;
-        font-size: 16px;
-        margin-bottom: 5px;
-        transition: background-color 0.3s;
-    }
+.left-nav a:hover {
+    background-color: #555;
+}
 
-    .left-nav a:hover {
-        background-color: #555;
-    }
+.nav-header {
+    color: white;
+    padding: 10px 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #555;
+    margin-bottom: 60; 
+}
 
-    .nav-header {
-        color: white;
-        padding: 10px 15px;
-        font-size: 18px;
-        font-weight: bold;
-        background-color: #555;
-        margin-bottom: 60; 
-    }
+.nav-header + a {
+    margin-top: 0; /* Ensure no additional margin for the first link after .nav-header */
+}
 
-    .nav-header + a {
-        margin-top: 0; /* Ensure no additional margin for the first link after .nav-header */
-    }
+.icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    vertical-align: middle;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
 
+.icon-home {
+    background-image: url('path_to_home_icon.png');
+}
 
+.icon-about {
+    background-image: url('path_to_about_icon.png');
+}
 
+.icon-services {
+    background-image: url('path_to_services_icon.png');
+}
 
+.icon-contact {
+    background-image: url('path_to_contact_icon.png');
+}
 
-    .icon {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
-        vertical-align: middle;
-        background-size: contain;
-        background-repeat: no-repeat;
-    }
-
-    .icon-home {
-        background-image: url('path_to_home_icon.png');
-    }
-
-    .icon-about {
-        background-image: url('path_to_about_icon.png');
-    }
-
-    .icon-services {
-        background-image: url('path_to_services_icon.png');
-    }
-
-    .icon-contact {
-        background-image: url('path_to_contact_icon.png');
-    }
-
-
-
-
-
-    @keyframes typing {
-        from { width: 0; }
-        to { width: 100%; }
-    }
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
