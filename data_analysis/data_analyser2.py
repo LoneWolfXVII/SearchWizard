@@ -248,15 +248,15 @@ class DataAnalyser:
         system_message += schema_description
         
         # Check the reasonableness of the user's question
-        # response = check_question(
-        #     user_query,
-        #     schema_description,
-        #     model,
-        #     function_descriptions
-        # )
-        # suggestions=[]
-        # if "This is a reasonable question" not in response:
-        #     self.show_answer(response)
+        response = check_question(
+            user_query,
+            schema_description,
+            model,
+            function_descriptions
+        )
+        suggestions=[]
+        if "This is a reasonable question" not in response:
+            self.show_answer(response)
         
 
         answer,react_log=self.generate_answer(user_query,system_message,function_descriptions,model)

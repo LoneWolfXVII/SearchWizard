@@ -29,15 +29,27 @@ $(document).ready(function() {
             });
 
             // Socket listener to handle the insights
+            // Socket listener to handle the insights
             socket.on('show_insight', function(data) {
                 console.log("Received insight data:", data);
                 let insights = data.insights;
                 let insightsHTML = '';
-                for(let insight of insights) {
-                    insightsHTML += `<p>${insight}</p>`;
+
+                // Check if there are insights available
+                if (insights && insights.length > 0) {
+                    for (let insight of insights) {
+                        insightsHTML += `<p>${insight}</p>`;
+                    }
+                    $('#insight-section').html(insightsHTML);
+
+                    // Show the #insight-section
+                    $('#insight-section').show();
+                } else {
+                    // No insights available, hide the #insight-section
+                    $('#insight-section').hide();
                 }
-                $('#insight-section').html(insightsHTML);
             });
+
 
         }
     }
