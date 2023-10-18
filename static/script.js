@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
     let socket;
     let lastQuery = null;
@@ -148,4 +149,26 @@ $(document).ready(function() {
     }
 
     initializeSocket();
+
+    $(document).ready(function() {
+        $.ajax({
+            url: '/get_left_nav_items',
+            method: 'GET',
+            success: function(data) {
+                const leftNav = $(".left-nav");
+                data.forEach(item => {
+                    const itemElement = $(`<div class="nav-item"><a href="#"><span class="icon ${item.class}"></span> ${item.name} </a></div>`);
+                    const dropdownElement = $("<div class='dropdown'></div>");
+                    item.dropdown.forEach(option => {
+                        dropdownElement.append(`<a href="#">${option}</a>`);
+                    });
+                    itemElement.append(dropdownElement);
+                    leftNav.append(itemElement);
+                });
+                
+                
+            }
+        });
+    });
+    
 });
