@@ -24,8 +24,7 @@ def check_question(question: str, context: str, model: Callable, functions_descr
 
 
 
-
-def question_generator(question: str, context: str, model: Callable,functions_descriptions: list[dict]) -> str:
+def question_generator(questions: dict, count : str,context: str, model: Callable,functions_descriptions: list[dict]) -> str:
     print("Generating Questions ....")
     """
     Generates reasonable and relevant questions based on the user's query and context. 
@@ -50,20 +49,60 @@ def question_generator(question: str, context: str, model: Callable,functions_de
     #     f"Here is the context for the question:\n{context}"
     # )
     system_message = (
-        "Analyze the provided user query and database schema.Understand the broader theme or context of the user query.Based on this understanding,provide highly related questions to derive insights from the database that will help in better decision making for Business Growth"
+        f"Analyze the provided user queries and database schema.Understand the broader theme or context of the user queries.Based on this understanding,provide highly related {count} questions to derive insights from the database that will help in better decision making for Business Growth"
         f"Database Schema : \n{context}"
     )
     
-    user_question = f'Question: {question}'
+    user_questions = f'Question: {questions}'
     
     messages = [
         openai.Message('system', system_message),
-        openai.Message('user', user_question)
+        openai.Message('user', user_questions)
     ]
 
     response = model(messages, functions=functions_descriptions)
 
     return response.content
+
+# def question_generator(question: str, context: str, model: Callable,functions_descriptions: list[dict]) -> str:
+#     print("Generating Questions ....")
+#     """
+#     Generates reasonable and relevant questions based on the user's query and context. 
+#     The generated questions aim to provide deeper insights for business growth.
+#     Additionally, the function provides SQL queries to fetch data for the generated questions.
+
+#     Parameters:
+#     - question (str): The user's query.
+#     - context (str): The broader context or theme of the user's query.
+#     - model (Callable): The AI model to generate the questions.
+#     - functions_descriptions (list[dict]): Descriptions of available functions.
+
+#     Returns:
+#     - str: The model's response containing the generated questions and SQL queries.
+#     """
+
+#     # system_message = (
+#     #     "You are a helpful AI assistant. Your job is to understand the broader theme or context "
+#     #     "of the user's query and generate two reasonable and relevant questions in plain english."
+#     #     "Ensure that the generated questions can be answered given the tools."
+#     #     "These questions should help user derive deeper insights based on original question's theme for better decision making."
+#     #     f"Here is the context for the question:\n{context}"
+#     # )
+#     system_message = (
+#         f"Analyze the provided user query and database schema.Understand the broader theme or context of the user query.Based on this understanding,provide highly related questions to derive insights from the database that will help in better decision making for Business Growth"
+#         f"Database Schema : \n{context}"
+#     )
+    
+#     user_question = f'Question: {question}'
+    
+#     messages = [
+#         openai.Message('system', system_message),
+#         openai.Message('user', user_question)
+#     ]
+
+#     response = model(messages, functions=functions_descriptions)
+
+#     return response.content
 
 
 

@@ -56,7 +56,6 @@ body {
 #suggestions-section {
     width: 40%; /* Set the desired width for both sections */
     padding: 20px;
-    border: 1px solid #ccc;
     position: relative;
     text-align: center; /* Center text content horizontally */
 }

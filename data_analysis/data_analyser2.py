@@ -10,6 +10,7 @@ from data_analysis.src.irame_da.agents.react import make_react_agent
 from data_analysis.src.irame_da.agents.helpers import check_question,question_generator,question_generator2
 from data_analysis.src.irame_da.db.sqlite_utils import get_db_creation_sql
 from data_analysis.src.irame_da.db.mysql_utils import get_db_creation_mysql
+from data_analysis.vectordb import VectorStore
 from dotenv import find_dotenv, load_dotenv
 from data_analysis.data_visualisation import DataVisualiser
 from pathlib import Path
@@ -18,6 +19,7 @@ import re
 import io
 import base64
 import json
+
 
 
 
@@ -31,6 +33,7 @@ class DataAnalyser:
         self.db_type = db_type
         self.socketio = socketio
         self.DV=DataVisualiser()
+        self.vdb=VectorStore()
 
         # Set the OpenAI API key from environment variable
         openai.api_key = os.getenv('OPENAI_API_KEY')
@@ -128,34 +131,51 @@ class DataAnalyser:
 
 
     def generate_suggestions(self,user_query,schema_description,model,function_descriptions):
-        questions = question_generator(
-            user_query,
-            schema_description,
-            model,
-            function_descriptions
-        )
-        questions_list = questions.split('\n')
-    
-       # Record each generated question to a CSV
-        valid_questions = []
-        for question in questions_list:
-            response = check_question(
-                question,
+        queries=[user_query]
+        history_suggestions=self.vdb.query_vdb(user_query,n=10,collection_name="travel_sample2_suggestions")
+        history_queries=self.vdb.query_vdb(user_query,n=10,collection_name="travel_sample2")
+        history_suggestions.update(history_queries)
+
+        
+        for hsuggestion in history_suggestions:
+            self.show_suggestions(hsuggestion)
+            queries.append(hsuggestion)
+        
+        suggestions_count=len(history_suggestions)
+
+        if(suggestions_count<8):
+            qcount=str(8-suggestions_count)
+            questions = question_generator(
+                queries,
+                qcount,
                 schema_description,
                 model,
                 function_descriptions
             )
-            if "This is a reasonable question" in response:
-                valid_questions.append(question)
-                # Send the valid question to frontend
-                question=question.split('.')[-1]
-                self.show_suggestions(question)
-                print(valid_questions)
-                # Record the valid question to CSV
-                self.record_to_csv('generated_questions.csv', [question])
-
+            questions_list = questions.split('\n')
+            print(questions_list)
         
-        return valid_questions
+        # Record each generated question to a CSV
+            valid_questions = []
+            for question in questions_list:
+                response = check_question(
+                    question,
+                    schema_description,
+                    model,
+                    function_descriptions
+                )
+                if "This is a reasonable question" in response:
+                    valid_questions.append(question)
+                    # Send the valid question to frontend
+                    question=re.sub(r'^(Question\s*)?(\d+[\.:) ]*)?', '', question).strip()
+                    self.show_suggestions(question)
+                    self.vdb.add_suggestion(question,collection_name="travel_sample2_suggestions")
+                    print(valid_questions)
+                    # Record the valid question to CSV
+                    self.record_to_csv('generated_questions.csv', [question])
+
+            
+            return valid_questions
     
     def generate_answer(self,user_query,system_message,function_descriptions,model):
 
@@ -246,53 +266,78 @@ class DataAnalyser:
         )
 
         system_message += schema_description
-        
-        # Check the reasonableness of the user's question
-        response = check_question(
+        vdb_result = self.vdb.query_vdb(user_query, 1,collection_name="travel_sample2")
+        if vdb_result:
+            print(vdb_result)
+            first_key = list(vdb_result.keys())[0]  # Get the key from the vdb_result
+            data_description = vdb_result[first_key]['data_description']
+            plot_params = eval(vdb_result[first_key]['plot_params'])  # Convert string representation back to dictionary
+            sql_query = vdb_result[first_key]['sql']
+            data= self.execute_sql_query(sql_query)
+            if data:
+                print("SQL query result:", data)
+                base64_image = self.DV.generate_plot(
+                    dict(data),
+                    plot_params.get('plot_title'),
+                    plot_params.get('axis_names'),
+                    plot_params.get('graph_type')
+                )
+                if base64_image:
+                    print("Generated graph successfully!")
+                    self.show_graph(base64_image)
+                    response=self.DV.get_answer_and_insight_function_params(data,data_description,user_query)
+                    self.show_answer(response.get('answer'))
+                    self.show_insight(response)
+                else:
+                    print("Failed to generate graph.")
+            
+            
+        else:
+         # Check the reasonableness of the user's question
+            response = check_question(
             user_query,
             schema_description,
             model,
             function_descriptions
-        )
-        suggestions=[]
-        if "This is a reasonable question" not in response:
-            self.show_answer(response)
-        
-
-        answer,react_log=self.generate_answer(user_query,system_message,function_descriptions,model)
-        self.show_answer(answer)
-        response=self.DV.generate_sql_for_datavisualisation(user_query,react_log,schema_description)
-        sql_query=response.get('SQL_QUERY')
-        data_description=response.get('Data_Description')
-        data= self.execute_sql_query(sql_query)
-        if data:
-            print("SQL query result:", data)
-
-            plot_params=self.DV.get_plot_function_params(data,data_description)
-            base64_image = self.DV.generate_plot(
-                plot_params.get('data'),
-                plot_params.get('plot_title'),
-                plot_params.get('axis_names'),
-                plot_params.get('graph_type')
             )
-            if base64_image:
-                print("Generated graph successfully!")
-                self.show_graph(base64_image)
-            else:
-                print("Failed to generate graph.")
-            
-            insights=self.DV.get_insight_function_params(data, data_description, user_query)
-            print(insights)
-            self.show_insight(insights)
+            suggestions=[]
+            if "This is a reasonable question" not in response:
+                self.show_answer(response)
+            answer,react_log=self.generate_answer(user_query,system_message,function_descriptions,model)
+            self.show_answer(answer)
+            response=self.DV.generate_sql_for_datavisualisation(user_query,react_log,schema_description)
+            sql_query=response.get('SQL_QUERY')
+            data_description=response.get('Data_Description')
+            data= self.execute_sql_query(sql_query)
+            if data:
+                print("SQL query result:", data)
 
+                plot_params=self.DV.get_plot_function_params(data,data_description)
+                base64_image = self.DV.generate_plot(
+                    plot_params.get('data'),
+                    plot_params.get('plot_title'),
+                    plot_params.get('axis_names'),
+                    plot_params.get('graph_type')
+                )
+                if base64_image:
+                    print("Generated graph successfully!")
+                    self.show_graph(base64_image)
+                else:
+                    print("Failed to generate graph.")
+                
+                insights=self.DV.get_insight_function_params(data, data_description, user_query)
+                plot_params.pop('data')
+                self.vdb.add_question(user_query,sql_query,str(plot_params),data_description,collection_name="travel_sample2")
+                self.show_insight(insights)
+
+                
+            else:
+                print("Failed to execute SQL query.")
             
-        else:
-            print("Failed to execute SQL query.")
-        
-        
+            
         suggestions=self.generate_suggestions(user_query,schema_description,model,function_descriptions)
-        
-        
+            
+            
         
 
         

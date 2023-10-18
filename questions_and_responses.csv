@@ -53,3 +53,38 @@ most booked hotel,"The most booked hotel is ""Walker Ltd""."
 most booked hotel,"The most booked hotel is ""Walker Ltd""."
 most booked hotel,The most booked hotel is 'Walker Ltd'.
 most booked hotel,The most booked hotel is 'Walker Ltd'.
+most booked hotel,"The most booked hotel is 'Walker Ltd' located at '4442 Ho Alley, South Rachaelberg, HI 41179' in the city of 'Lake Heather', Australia."
+most booked hotel,The most booked hotel is 'Walker Ltd' with a total of 16 bookings.
+most booked hotel,"The 'Walker Ltd' hotel located at '4442 Ho Alley\nSouth Rachaelberg, HI 41179', in 'Lake Heather', 'Australia' is the most booked hotel."
+most booked hotel,The most booked hotel is 'Walker Ltd' with a total of 16 bookings.
+most booked airline,The most booked airline is SpiceJet.
+most booked airline,The most booked airline is 'SpiceJet' with 20 bookings.
+most booked airline,The most booked airline is SpiceJet.
+most booked airline,"There are currently no flight bookings in the database, so the most booked airline cannot be determined."
+most booked airline,No data available to determine the most booked airline.
+"""What are the top 5 airlines with the most number of flight bookings, and what class types are most popularly booked amongst these airlines?""","The top 5 airlines with the most flight bookings and their most popular flight class are as follows:
+
+1. AirAsia: 
+   Most popular flight class - Economy
+2. Air India: 
+   Most popular flight class - Economy
+3. GoAir: 
+   Most popular flight class - Economy
+4. Indigo: 
+   Most popular flight class - First Class
+5. SpiceJet: 
+   Most popular flight class - Economy"
+". ""Which are the most popular destinations for each of the top 5 airlines?""","The most popular destinations for top 5 airlines are as follows - 
+1. Air India: Mexico
+2. AirAsia: Italy
+3. GoAir: Spain
+4. Indigo: Italy
+5. SpiceJet: Mexico"
+Which are the most popular destinations for each of the top 5 airlines?,"The most popular destinations for the top 5 airlines are:
+- SpiceJet: Mexico
+- AirAsia: Italy
+- Indigo: Italy
+- GoAir: Spain
+- Air India: Mexico"
+most booked hotel,The most booked hotel is 'Walker Ltd'.
+On what days do we see the highest number of flight bookings?,"The day with the highest number of flight bookings is September 21, 2023."
