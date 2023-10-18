@@ -202,9 +202,9 @@ body {
     top: 0;
     right: 0; 
     width: 200px; /* Matches the width of the navigation panel */
-    background-color: #444; /* Slightly darker background for the dropdown */
+    background-color: white; /* Updated background color to white */
     z-index: 10; /* Ensure dropdown appears above other content */
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for the dropdown */
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); /* Retained the subtle shadow for the dropdown */
 }
 
 .nav-item:hover .dropdown {
@@ -214,13 +214,13 @@ body {
 .dropdown a {
     display: block;
     padding: 10px 15px;
-    color: white;
+    color: black; /* Updated text color to black */
     text-decoration: none;
     transition: background-color 0.3s;
 }
 
 .dropdown a:hover {
-    background-color: #555; /* Slightly lighter background on hover */
+    background-color: #f0f0f0; /* Updated hover background color to a light grey for visibility against white */
 }
 
 
