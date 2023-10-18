@@ -129,12 +129,13 @@ body {
     position: fixed; /* This will make the navigation panel stick to the left */
     top: 0;
     left: 0;
-    width: 200px; /* Width of the navigation panel */
+    width: 400px; /* Width of the navigation panel */
     height: 100vh; /* Full height of the viewport */
-    background-color: #333; /* Dark background for the navigation panel */
+    background-image: linear-gradient(to right, #333 0%, #333 200px, transparent 200px); /* Adjusted gradient */
     overflow-y: auto; /* Add a scrollbar if the content is too long */
     padding-top: 60px;
 }
+
 
 .left-nav a {
     display: block;
@@ -152,12 +153,14 @@ body {
 
 .nav-header {
     color: white;
-    padding: 10px 15px;
+    padding: 10px 10px;
     font-size: 18px;
     font-weight: bold;
     background-color: #555;
-    margin-bottom: 60px; 
+    margin-bottom: 60px;
+    width: 180px;  /* Set the width to match non-transparent section */
 }
+
 
 .nav-header + a {
     margin-top: 0; /* Ensure no additional margin for the first link after .nav-header */
@@ -197,7 +200,7 @@ body {
     display: none;
     position: absolute;
     top: 0;
-    left: 0; 
+    right: 0; 
     width: 200px; /* Matches the width of the navigation panel */
     background-color: #444; /* Slightly darker background for the dropdown */
     z-index: 10; /* Ensure dropdown appears above other content */
