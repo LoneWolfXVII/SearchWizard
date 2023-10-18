@@ -222,6 +222,30 @@ body {
 .dropdown a:hover {
     background-color: #f0f0f0; /* Updated hover background color to a light grey for visibility against white */
 }
+.new-btn {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 0px;
+    cursor: pointer;
+    text-align: center;
+    width: 100%; /* Adjust the width to fit just the icon */
+    height: 40px; /* Adjust the height to fit just the icon */
+    position: relative;
+}
+
+.new-btn-icon {
+    position: absolute;
+    left: 50%; /* Center the icon horizontally */
+    top: 50%;
+    transform: translate(-50%, -50%); /* Center the icon both vertically and horizontally */
+    width: 26px;
+    height: 26px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('assets/add.png');
+}
 
 
 @keyframes typing {

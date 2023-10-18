@@ -165,6 +165,13 @@ $(document).ready(function() {
                     itemElement.append(dropdownElement);
                     leftNav.append(itemElement);
                 });
+                leftNav.find(".dropdown").each(function() {
+                    $(this).append('<button class="new-btn"><span class="new-btn-icon"></span></button>');
+
+                });
+                
+
+             
                 
                 
             }
