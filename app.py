@@ -42,6 +42,11 @@ def get_left_nav_items():
     ]
     return jsonify(items)
 
+@app.route('/page/<string:option_name>')
+def serve_option_page(option_name):
+    return render_template('option_page.html', option_name=option_name)
+
+
 if __name__ == '__main__':
     da = DataAnalyser(db_type="mysql", socketio=socketio)
     schema_description = (

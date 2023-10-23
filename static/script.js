@@ -150,6 +150,29 @@ $(document).ready(function() {
 
     initializeSocket();
 
+    let scaleValue = 1;  // Initial scale value for graph images
+  
+    
+    $('.graph-section img').on('wheel', function(event) {
+        // Prevent the default browser behavior
+        event.preventDefault();
+
+        // Increase or decrease the scale value based on the wheel direction
+        if (event.originalEvent.deltaY < 0) {
+            // Scrolling up (zoom in)
+            scaleValue += 0.1;
+        } else {
+            // Scrolling down (zoom out)
+            scaleValue -= 0.1;
+        }
+
+        // Apply the scaling transformation
+        $(this).css('transform', `scale(${scaleValue})`);
+    });
+
+
+
+
     $(document).ready(function() {
         $.ajax({
             url: '/get_left_nav_items',
@@ -160,22 +183,16 @@ $(document).ready(function() {
                     const itemElement = $(`<div class="nav-item"><a href="#"><span class="icon ${item.class}"></span> ${item.name} </a></div>`);
                     const dropdownElement = $("<div class='dropdown'></div>");
                     item.dropdown.forEach(option => {
-                        dropdownElement.append(`<a href="#">${option}</a>`);
+                        // Update the link to point to the new Flask route
+                        dropdownElement.append(`<a href="/page/${option}">${option}</a>`);
                     });
                     itemElement.append(dropdownElement);
                     leftNav.append(itemElement);
                 });
                 leftNav.find(".dropdown").each(function() {
                     $(this).append('<button class="new-btn"><span class="new-btn-icon"></span></button>');
-
                 });
-                
-
-             
-                
-                
             }
         });
     });
-    
 });
