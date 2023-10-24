@@ -256,30 +256,46 @@ body {
 
 .graphs-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Assuming each graph can be between 250px and full available space */
+    grid-template-columns: repeat(auto-fill, minmax(250px, auto)); /* Adjusted to ensure original size */
     gap: 20px;  
-    padding: 0; /* This will add a margin (space) on left and right. Adjust the padding as necessary */
+    margin-left: 200px; /* 200px margin on the left */
+    padding: 20px; /* Adjusted padding */
 }
+
 
 .graph-section {
-    background-color: white;
+    position: relative; /* Added for positioning context */
+    width: 300px;  
+    height: 300px; 
     border-radius: 10px;
-    text-align: center;  /* Center content inside the graph section */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);  /* Optional: add a shadow for a lifted look */
-    margin-left: 200px;
+    text-align: center;
 }
+
 
 .graph-section img {
-    transition: transform 0.3s ease;  /* Smooth transition for scaling */
-    transform-origin: center;  /* Ensuring the graph scales from the center */
-    display: block;
+    max-width: 100%; 
     height: auto;
+    border-radius: 10px;
 }
 
-.graph-section p {
-    margin-top: 10px;
-    font-size: 16px;
-    color: #333;
+
+
+
+.add-dashboard-button {
+    position: absolute; /* Absolute positioning within the graph section */
+    bottom: 10px; /* Adjust this to position the button below the graph */
+    left: 50%; /* Center the button horizontally */
+    transform: translateX(-50%); /* Shifts the button left by half its width to center it */
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px; 
+    cursor: pointer;
+}
+
+.add-dashboard-btn:hover {
+    background-color: #555;
 }
 
 

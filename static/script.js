@@ -2,6 +2,7 @@
 $(document).ready(function() {
     let socket;
     let lastQuery = null;
+    let lastQueryData =null;
 
     function initializeSocket() {
         if (!socket) {
@@ -48,6 +49,13 @@ $(document).ready(function() {
                 } else {
                     // No insights available, hide the #insight-section
                     $('#insight-section').hide();
+                }
+            });
+
+            socket.on('store_last_query_data', function(data) {
+                console.log("Received last query data:", data);
+                if (data.lastQueryData) {
+                    lastQueryData = data.lastQueryData;
                 }
             });
 
