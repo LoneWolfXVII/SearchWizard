@@ -1,0 +1,32 @@
+{
+    "Travel - 1":{
+        "class":"mysql",
+        "dashboards":{
+            "dashboard-1":{
+                "graph_1_description":{
+                    "sql_query":"sql",
+                    "plot_params":"plot_params"
+                },
+                "graph_2_description":{
+                    "sql_query":"sql",
+                    "plot_params":"plot_params"
+                }
+
+            },
+            "dashboard-2":{
+                "graph_1_description":{
+                    "sql_query":"sql",
+                    "plot_params":"plot_params"
+                },
+                "graph_2_description":{
+                    "sql_query":"sql",
+                    "plot_params":"plot_params"
+                }
+
+            }
+
+        }
+        
+    }
+    
+}
