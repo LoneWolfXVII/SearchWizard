@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>{{ option_name }}</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+</head>
+<body>
+    <div class="left-nav">
+        <div class="nav-header">IRAME</div>
+        <!-- Navigation items will be dynamically added here by script.js -->
+    </div>
+    
+    <!-- Added Dashboard Heading Section -->
+    <div class="header">
+        <div class="dashboard-heading-container">
+            <h1>{{ option_name }}</h1>
+        </div>
+    </div>
+    
+    <main>
+        <div class="container">
+            <p>Content for {{ option_name }} will go here.</p>
+        </div>
+        <div class="graphs-container">
+            {% for i in range(1,5) %}
+            <div class="graph-section">
+                <img src="{{ url_for('static', filename='graph' + i|string + '.png') }}" alt="Graph {{ i }}">
+
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
