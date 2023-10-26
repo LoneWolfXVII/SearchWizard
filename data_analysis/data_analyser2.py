@@ -108,9 +108,9 @@ class DataAnalyser:
             try:
                 connection = mysql.connector.connect(
                     host="localhost",
-                    user="sqluser",
-                    passwd="password",
-                    database="travelDB",
+                    user="root",
+                    passwd="root",
+                    database="Travel_01",
                     autocommit=True  # Automatically commit changes
                 )
                 return connection
@@ -310,7 +310,7 @@ class DataAnalyser:
                     self.show_graph(base64_image)
                     dashboard_names = self.get_dashboard_names_for_datasource('Travel - 1')
                     query_data = {
-                    'Data Source Name': 'Travel - 1',  # You can adjust this if you have different data sources
+                    'Data Source Name': 'Travel_01',  # You can adjust this if you have different data sources
                     'class': 'mysql',  # Adjust this as needed
                     'dashboards': dashboard_names,  
                     'graph_description': data_description,  # A simple description

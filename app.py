@@ -115,4 +115,4 @@ if __name__ == '__main__':
     schema_description = (
     "Each user can book one or more flights and hotels. Flights have different classes, and hotels offer various room types..."
     )
-    socketio.run(app, debug=True)
+    socketio.run(app,host="0.0.0.0",debug=True,port=8080)
