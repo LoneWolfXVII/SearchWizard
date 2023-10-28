@@ -6,7 +6,7 @@ $(document).ready(function() {
 
     function initializeSocket() {
         if (!socket) {
-            socket = io.connect('http://localhost:5000');
+            socket = io.connect('http://0.0.0.0:5000');
 
             socket.on('show_answer', function(data) {
                 $('#actual-answer').text(data.answer);
@@ -189,7 +189,7 @@ $(document).ready(function() {
                 const leftNav = $(".left-nav");
                 data.forEach(item => {
                     const itemElement = $(`<div class="nav-item"><a href="#"><span class="icon ${item.class}"></span> ${item.name} </a></div>`);
-                    const dropdownElement = $("<div class='dropdown'></div>");
+                    const dropdownElement = $("<div class='nav-item-sub'></div>");
                     item.dropdown.forEach(option => {
                         // Update the link to point to the new Flask route
                         dropdownElement.append(`<a href="/page/${option}">${option}</a>`);
