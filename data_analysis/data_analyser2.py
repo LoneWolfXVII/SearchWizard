@@ -31,7 +31,7 @@ env_path=Path('.')/'.env'
 load_dotenv(dotenv_path=env_path)
 
 
-class DataAnalyser:
+class SQLDataAnalyser:
     def __init__(self, db_type="sqlite",socketio=None):
         self.db_type = db_type
         self.socketio = socketio
@@ -102,29 +102,39 @@ class DataAnalyser:
             self.socketio.emit('store_last_query_data', {'lastQueryData': query_data})
 
 
-    
-    def connect_to_database(self):
+
+    def connect_to_database(self,datasource_name):
         """Establishes a connection to the database."""
-        if self.db_type == "sqlite":
+        with open("dashboards.json", "r") as file:
+            data = json.load(file)
+
+        datasource_data = data.get(datasource_name)
+        if not datasource_data:
+            print(f"Datasource {datasource_name} not found.")
+            sys.exit(1)
+
+        db_class = datasource_data.get("class")
+        credentials = datasource_data.get("credentials")
+
+        if db_class == "sqlite":
             return sqlite3.connect('data/synthbank.db')
-        elif self.db_type == "mysql":
+        elif db_class == "mysql":
             try:
                 connection = mysql.connector.connect(
-                    host="localhost",
-                    user="sqluser",
-                    passwd="password",
-                    database="travelDB",
+                    host=credentials["host"],
+                    user=credentials["user"],
+                    passwd=credentials["password"],
+                    database=credentials["database"],
                     autocommit=True  # Automatically commit changes
                 )
                 return connection
             except mysql.connector.Error as err:
                 print(f"Database connection failed: {err}")
-                sys.exit(1) 
+                sys.exit(1)
 
-
-    def execute_sql_query(self, sql_query):
+    def execute_sql_query(self, sql_query,datasource_name):
         """Executes the provided SQL query and returns the result."""
-        db_connection = self.connect_to_database()
+        db_connection = self.connect_to_database(datasource_name)
         cursor = db_connection.cursor()
         
         try:
@@ -187,10 +197,10 @@ class DataAnalyser:
             
             return valid_questions
     
-    def generate_answer(self,user_query,system_message,function_descriptions,model):
+    def generate_answer(self,user_query,system_message,function_descriptions,model,datasource_name):
 
         # Build the functions that the agent can use
-        db_connection = self.connect_to_database()
+        db_connection = self.connect_to_database(datasource_name)
         
         if self.db_type == "sqlite":
             query_database, _ = tools.make_sqlite_query_tool(db_connection)
@@ -306,7 +316,7 @@ class DataAnalyser:
         return webp_base64
     
 
-    def process_query(self, user_query, schema_description):
+    def process_query(self, user_query,datasource_name):
         function_descriptions = [
             {
                 'name': 'query_database',
@@ -323,11 +333,15 @@ class DataAnalyser:
                 }
             }
         ]
-
+        with open("dashboards.json", "r") as file:
+            data = json.load(file)
+        
+        # Fetch schema_description for the given datasource_name
+        schema_description = data.get(datasource_name, {}).get("schema_description", "")
         # Setup
         openai.set_api_key(os.getenv('OPENAI_API_KEY'))
         model = openai.start_chat('gpt-4-0613')
-        db_connection = self.connect_to_database()
+        db_connection = self.connect_to_database(datasource_name)
         if not db_connection:
             return "Failed to connect to the database."
         
@@ -345,12 +359,11 @@ class DataAnalyser:
         system_message += schema_description
         vdb_result = self.vdb.query_vdb(user_query, 1,collection_name="travel_sample2")
         if vdb_result:
-            print(vdb_result)
             first_key = list(vdb_result.keys())[0]  # Get the key from the vdb_result
             data_description = vdb_result[first_key]['data_description']
             plot_params = eval(vdb_result[first_key]['plot_params'])  # Convert string representation back to dictionary
             sql_query = vdb_result[first_key]['sql']
-            data= self.execute_sql_query(sql_query)
+            data= self.execute_sql_query(sql_query,datasource_name)
             if data:
                 print("SQL query result:", data)
                 base64_image = self.DV.generate_plot(
@@ -372,9 +385,9 @@ class DataAnalyser:
                     'plot_params': plot_params
                     }
                     self.store_last_query_data(query_data)
-                    # response=self.DV.get_answer_and_insight_function_params(data,data_description,user_query)
-                    # self.show_answer(response.get('answer'))
-                    # self.show_insight(response)
+                    response=self.DV.get_answer_and_insight_function_params(data,data_description,user_query)
+                    self.show_answer(response.get('answer'))
+                    self.show_insight(response)
                 else:
                     print("Failed to generate graph.")
             
@@ -390,12 +403,12 @@ class DataAnalyser:
             suggestions=[]
             if "This is a reasonable question" not in response:
                 self.show_answer(response)
-            answer,react_log=self.generate_answer(user_query,system_message,function_descriptions,model)
+            answer,react_log=self.generate_answer(user_query,system_message,function_descriptions,model,datasource_name)
             self.show_answer(answer)
             response=self.DV.generate_sql_for_datavisualisation(user_query,react_log,schema_description)
             sql_query=response.get('SQL_QUERY')
             data_description=response.get('Data_Description')
-            data= self.execute_sql_query(sql_query)
+            data= self.execute_sql_query(sql_query,datasource_name)
             if data:
                 print("SQL query result:", data)
 
@@ -424,34 +437,23 @@ class DataAnalyser:
                 else:
                     print("Failed to generate graph.")
                 
-                # insights=self.DV.get_insight_function_params(data, data_description, user_query)
-                # self.vdb.add_question(user_query,sql_query,str(plot_params),data_description,collection_name="travel_sample2")
-                # self.show_insight(insights)
+                insights=self.DV.get_insight_function_params(data, data_description, user_query)
+                self.vdb.add_question(user_query,sql_query,str(plot_params),data_description,collection_name="travel_sample2")
+                self.show_insight(insights)
 
                 
             else:
                 print("Failed to execute SQL query.")
             
             
-        suggestions=self.generate_suggestions(user_query,schema_description,model,function_descriptions)
-        
-            
-            
-        
+        self.generate_suggestions(user_query,schema_description,model,function_descriptions)
+
+
+
 
             
+                    
+                    
+                
 
-    # Example usage:
-    # chatbot = GenericDatabaseChatbot(db_type="mysql")
-    # schema_description = (
-    #     "Each user can book one or more flights and hotels. Flights have different classes, and hotels offer various room types..."
-    #     # ... (rest of the schema description)
-    # )
-
-    # while True:
-    #     query = input("Query : ")
-    #     da = DataAnalyser(db_type="mysql")
-    #     schema_description = (
-    #     "Each user can book one or more flights and hotels. Flights have different classes, and hotels offer various room types...") 
-    #     response = da.main(query,schema_description)  
-    #     print(response)
+    

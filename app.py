@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO, emit
-from data_analysis.data_analyser2 import DataAnalyser
+from data_analysis.data_analyser2 import SQLDataAnalyser
 import time
 import json
 
@@ -28,8 +28,8 @@ def get_answer():
 
     last_processed_query = query
     last_processed_time = current_time
-
-    da.process_query(query, schema_description)
+    datasource_name='Travel - 1'
+    da.process_query(query,datasource_name)
     print("Processed query in /get_answer")  # Added logging
     return jsonify({"status": "success"})
 
@@ -121,8 +121,6 @@ def get_dashboard_graphs():
 
 
 if __name__ == '__main__':
-    da = DataAnalyser(db_type="mysql", socketio=socketio)
-    schema_description = (
-    "Each user can book one or more flights and hotels. Flights have different classes, and hotels offer various room types..."
-    )
+    da = SQLDataAnalyser(db_type="mysql", socketio=socketio)
+   
     socketio.run(app, debug=True)
