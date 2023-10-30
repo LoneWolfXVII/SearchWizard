@@ -1,32 +1,20 @@
 {
-    "Travel - 1":{
-        "class":"mysql",
-        "dashboards":{
-            "dashboard-1":{
-                "graph_1_description":{
-                    "sql_query":"sql",
-                    "plot_params":"plot_params"
-                },
-                "graph_2_description":{
-                    "sql_query":"sql",
-                    "plot_params":"plot_params"
+    "Travel - 1": {
+        "class": "mysql",
+        "dashboards": {
+            "dashboard - 1": {
+                "Number of bookings for each hotel": {
+                    "sql_query": "SELECT h.hotel_name, COUNT(hb.booking_id) as bookings_count FROM hotel_bookings hb JOIN hotel_room_types hrt ON hb.room_type_id = hrt.room_type_id JOIN hotels h ON hrt.hotel_id = h.hotel_id GROUP BY h.hotel_id ORDER BY bookings_count DESC",
+                    "plot_params": {
+                        "plot_title": "Number of bookings for each hotel",
+                        "axis_names": [
+                            "Hotel",
+                            "Number of Bookings"
+                        ],
+                        "graph_type": "bar"
+                    }
                 }
-
-            },
-            "dashboard-2":{
-                "graph_1_description":{
-                    "sql_query":"sql",
-                    "plot_params":"plot_params"
-                },
-                "graph_2_description":{
-                    "sql_query":"sql",
-                    "plot_params":"plot_params"
-                }
-
             }
-
         }
-        
     }
-    
 }

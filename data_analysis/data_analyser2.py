@@ -19,6 +19,9 @@ import re
 import io
 import base64
 import json
+from PIL import Image
+
+
 
 
 
@@ -251,6 +254,57 @@ class DataAnalyser:
         except Exception as e:
             print(f"An error occurred: {e}")
             return []
+        
+    def generate_dashboard_graphs(self, data_source_name, dashboard_name):
+        images_list = []
+        error = None  # Initialize error to None
+
+        with open("dashboards.json", "r") as file:
+            json_data = json.load(file)
+
+        if data_source_name in json_data:
+            if dashboard_name in json_data[data_source_name]["dashboards"]:
+                for graph_name, graph_data in json_data[data_source_name]["dashboards"][dashboard_name].items():
+                    sql_query = graph_data["sql_query"]
+                    plot_params = graph_data["plot_params"]
+                    data = self.execute_sql_query(sql_query)
+
+                    if data:
+                        base64_image = self.DV.generate_plot(
+                            dict(data),
+                            plot_params.get('plot_title'),
+                            plot_params.get('axis_names'),
+                            plot_params.get('graph_type')
+                        )
+                        if base64_image:
+                            img_webp_base64 = self._convert_image_to_webp_base64(base64_image)
+                            images_list.append(img_webp_base64)
+            else:
+                error = f"Dashboard {dashboard_name} not found in data source {data_source_name}"
+        else:
+            error = f"Data source {data_source_name} not found"
+
+        # Check if images_list is empty or if there's an error
+        if not images_list or error:
+            return {"status": "error", "message": error}
+
+        return {"status": "success", "graphs": images_list}
+
+
+    def _convert_image_to_webp_base64(self, base64_img):
+        # Convert base64 string to bytes
+        img_bytes = base64.b64decode(base64_img)
+        img = Image.open(io.BytesIO(img_bytes))
+        
+        # Convert image to webp format in memory
+        buffer = io.BytesIO()
+        img.save(buffer, format='WEBP')
+        webp_img_bytes = buffer.getvalue()
+        
+        # Convert back to base64 string and return
+        webp_base64 = base64.b64encode(webp_img_bytes).decode('utf-8')
+        return webp_base64
+    
 
     def process_query(self, user_query, schema_description):
         function_descriptions = [
@@ -318,9 +372,9 @@ class DataAnalyser:
                     'plot_params': plot_params
                     }
                     self.store_last_query_data(query_data)
-                    response=self.DV.get_answer_and_insight_function_params(data,data_description,user_query)
-                    self.show_answer(response.get('answer'))
-                    self.show_insight(response)
+                    # response=self.DV.get_answer_and_insight_function_params(data,data_description,user_query)
+                    # self.show_answer(response.get('answer'))
+                    # self.show_insight(response)
                 else:
                     print("Failed to generate graph.")
             
@@ -370,9 +424,9 @@ class DataAnalyser:
                 else:
                     print("Failed to generate graph.")
                 
-                insights=self.DV.get_insight_function_params(data, data_description, user_query)
-                self.vdb.add_question(user_query,sql_query,str(plot_params),data_description,collection_name="travel_sample2")
-                self.show_insight(insights)
+                # insights=self.DV.get_insight_function_params(data, data_description, user_query)
+                # self.vdb.add_question(user_query,sql_query,str(plot_params),data_description,collection_name="travel_sample2")
+                # self.show_insight(insights)
 
                 
             else:

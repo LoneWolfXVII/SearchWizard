@@ -16,6 +16,7 @@ $(document).ready(function() {
 
             socket.on('show_suggestions', function(data) {
                 console.log("Received suggestions data:", data);
+                console.log("Testing last query data:", lastQueryData);
                 let suggestion = data.suggestions;
                 let bubbleElement = createBubble(suggestion);
                 if (bubbleElement) {  // Only append if the bubble is not a duplicate
@@ -26,6 +27,7 @@ $(document).ready(function() {
             // Socket listener to handle the graph image
             socket.on('show_graph', function(data) {
                 console.log("Received graph data:", data);
+                console.log("Testing last query data:", lastQueryData);
                 let base64Image = data.image;
                 $('#graph-image').attr('src', 'data:image/png;base64,' + base64Image);
             });
@@ -34,6 +36,7 @@ $(document).ready(function() {
             // Socket listener to handle the insights
             socket.on('show_insight', function(data) {
                 console.log("Received insight data:", data);
+                console.log("Testing last query data:", lastQueryData);
                 let insights = data.insights;
                 let insightsHTML = '';
 
@@ -56,9 +59,10 @@ $(document).ready(function() {
                 console.log("Received last query data:", data);
                 if (data.lastQueryData) {
                     lastQueryData = data.lastQueryData;
+                    updateDashboardDropdown(lastQueryData.dashboards);
                 }
             });
-
+            
 
         }
     }
@@ -82,7 +86,92 @@ $(document).ready(function() {
         });
         return bubble;
     }
+
+
+    function updateDashboardDropdown(dashboards) {
+        // clear the dropdown content
+        $('.dropdown-content').empty();
     
+        // Loop through the dashboard names and add them to the dropdown
+        for (let dashboard of dashboards) {
+            let dashboardOption = $('<a href="#"></a>').text(dashboard);
+            
+            // Adding click event for the dashboard option
+            dashboardOption.on('click', function(event) {
+                event.preventDefault();
+    
+                // Extracting data from lastQueryData
+                let dataToSend = {
+                    'Data Source Name': lastQueryData['Data Source Name'],
+                    'class': lastQueryData['class'],
+                    'dashboard name': dashboard,  // Selected dashboard name
+                    'graph_description': lastQueryData.graph_description,
+                    'sql_query': lastQueryData.sql_query,
+                    'plot_params': lastQueryData.plot_params
+                };
+    
+                // AJAX call to send data to the server route
+                $.ajax({
+                    url: '/update_dashboard',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(dataToSend),
+                    success: function(response) {
+                        if (response.status === "success") {
+                            console.log("Dashboard updated successfully!");
+                        } else {
+                            console.log("Failed to update dashboard.");
+                        }
+                    },
+                    error: function() {
+                        console.log("Error occurred while updating dashboard.");
+                    }
+                });
+            });
+    
+            $('.dropdown-content').append(dashboardOption);
+        }
+        let newBtn = $('<button class="new-btn"><span class="new-btn-icon"></span></button>');  // Adjust text or any other attributes as required
+        newBtn.on('click', function(event) {
+            event.preventDefault();
+            // Prompt user for the new dashboard name
+        let newDashboardName = prompt("Enter the name for the new dashboard:");
+
+        // Check if the user provided a name (i.e., didn't cancel and didn't provide an empty string)
+        if (newDashboardName && newDashboardName.trim() !== "") {
+            // Extracting data from lastQueryData
+            let dataToSend = {
+                'Data Source Name': lastQueryData['Data Source Name'],
+                'class': lastQueryData['class'],
+                'dashboard name': newDashboardName,  // Use the new dashboard name entered by the user
+                'graph_description': lastQueryData.graph_description,
+                'sql_query': lastQueryData.sql_query,
+                'plot_params': lastQueryData.plot_params
+            };
+
+            // AJAX call to send data to the server route
+            $.ajax({
+                url: '/update_dashboard',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(dataToSend),
+                success: function(response) {
+                    if (response.status === "success") {
+                        console.log("Dashboard created/updated successfully!");
+                    } else {
+                        console.log("Failed to create/update dashboard.");
+                    }
+                },
+                error: function() {
+                    console.log("Error occurred while creating/updating dashboard.");
+                }
+            });
+        }
+
+        });
+        $('.dropdown-content').append(newBtn);
+    }
+
     function processQuery(query) {
         if (query === lastQuery) {
             return;
@@ -196,9 +285,6 @@ $(document).ready(function() {
                     });
                     itemElement.append(dropdownElement);
                     leftNav.append(itemElement);
-                });
-                leftNav.find(".dropdown").each(function() {
-                    $(this).append('<button class="new-btn"><span class="new-btn-icon"></span></button>');
                 });
             }
         });

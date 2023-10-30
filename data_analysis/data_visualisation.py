@@ -349,8 +349,9 @@ Provide your response in JSON format with keys: 'insight_title' and 'insight_des
 
         base64_image = base64.b64encode(image.getvalue()).decode('utf-8')
         return base64_image
-
     
+
+ 
 
     
 

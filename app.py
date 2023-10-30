@@ -52,6 +52,7 @@ def get_left_nav_items():
             "dropdown": dropdown_options
         }
         items.append(item)
+        print(items)
 
     return jsonify(items)
 
@@ -108,6 +109,15 @@ def update_dashboard():
 
     return jsonify({"status": "success"})
 
+@app.route('/get_dashboard_graphs', methods=['POST'])
+def get_dashboard_graphs():
+    data_source_name = request.json.get('data_source_name')
+    dashboard_name = request.json.get('dashboard_name')
+    response = da.generate_dashboard_graphs(data_source_name, dashboard_name)
+
+    if response["status"] == "error":
+        return jsonify({"status": "error", "message": response["message"]}), 400  # Bad Request
+    return jsonify({"status": "success", "graphs": response["graphs"]})
 
 
 if __name__ == '__main__':
