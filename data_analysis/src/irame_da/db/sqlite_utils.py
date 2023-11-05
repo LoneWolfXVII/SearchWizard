@@ -5,6 +5,8 @@ import sqlite3
 
 import pandas as pd
 
+def get_conn(db_file: str) -> sqlite3.Connection:
+    return sqlite3.connect(db_file)
 
 def get_table_schema(conn: sqlite3.Connection, table_name: str) -> pd.DataFrame:
     """Get a description of a table into a pandas dataframe."""

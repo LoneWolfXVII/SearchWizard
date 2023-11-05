@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO, emit
 from data_analysis.data_analyser2 import SQLDataAnalyser
+from data_analysis.csv_analyser import create_db_and_table_from_csv
+from data_analysis.data_analyser4 import CSVDataAnalyser
 import time
 import json
 
@@ -121,6 +123,18 @@ def get_dashboard_graphs():
 
 
 if __name__ == '__main__':
-    da = SQLDataAnalyser(db_type="mysql", socketio=socketio)
+    ca=CSVDataAnalyser()
+    datasource_name="finance1.sqlite"
+    while True:
+        query=input("Question : ")
+        ca.main(query,datasource_name)
+
+
+
+            
+    
+
+    # create_db_and_table_from_csv("finance1.sqlite", "fin1.csv", "finance_table1")
+    # da = SQLDataAnalyser(db_type="mysql", socketio=socketio)
    
-    socketio.run(app, debug=True)
+    # socketio.run(app, debug=True)
