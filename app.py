@@ -20,6 +20,7 @@ def get_answer():
 
     print("Received request for /get_answer")  # Added logging
     query = request.json.get('query')
+    data_source_name = request.json.get('Data Source Name')
 
     current_time = time.time()
     if query == last_processed_query and (current_time - last_processed_time) < 2:  # 2 seconds threshold
@@ -28,8 +29,7 @@ def get_answer():
 
     last_processed_query = query
     last_processed_time = current_time
-    datasource_name='Travel - 1'
-    da.process_query(query,datasource_name)
+    da.process_query(query,data_source_name)
     print("Processed query in /get_answer")  # Added logging
     return jsonify({"status": "success"})
 
