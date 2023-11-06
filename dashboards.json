@@ -1,7 +1,7 @@
 {
     "Travel - 1": {
         "class": "mysql",
-        "credentials":{"host":"localhost",
+        "credentials":{"host":"52.6.217.167",
         "user":"sqluser",
         "password":"password",
         "database":"travelDB"},
