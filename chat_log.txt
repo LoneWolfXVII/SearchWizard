@@ -460,3 +460,9 @@ Message 2: Message(role='assistant', content='Thought: To answer this question, 
 Message 3: Message(role='function', content="Observation: [(Decimal('1.8900'),)]", name='query_database', function_call=None)
 Message 4: Message(role='assistant', content='Thought: The result obtained from the query is in Decimal format. From the observation, the average number of rooms booked per hotel booking is approximately 1.89.\n\nFinal Answer: The average number of rooms booked per hotel booking is approximately 1.89.', name=None, function_call=None)
 
+User Query: most booked hotel
+Message 1: Message(role='user', content='Question: most booked hotel', name=None, function_call=None)
+Message 2: Message(role='assistant', content='Thought: To find out the most booked hotel, I need to join the `hotel_bookings` and `room_types` tables to get the `hotel_id` associated with each booking. Then I can group by `hotel_id`, count the number of rows for each `hotel_id`, and finally order the result to get the `hotel_id` with the maximum count.\n\nAction: I will write a SQL query to execute these steps.', name=None, function_call={'name': 'query_database', 'arguments': '{\n  "query": "SELECT `hotels`.`hotel_name`, COUNT(*) as `number_of_bookings` FROM `hotel_bookings` LEFT JOIN `room_types` ON `hotel_bookings`.`room_type_id` = `room_types`.`room_type_id` LEFT JOIN `hotels` ON `room_types`.`hotel_id` = `hotels`.`hotel_id` GROUP BY `hotels`.`hotel_name` ORDER BY `number_of_bookings` DESC LIMIT 1"\n}'})
+Message 3: Message(role='function', content="Observation: [('Taj Palace', 40)]", name='query_database', function_call=None)
+Message 4: Message(role='assistant', content="Thought: The result from the query shows that the most booked hotel is the 'Taj Palace' with 40 bookings.\n\nFinal Answer: The most booked hotel is the 'Taj Palace'.", name=None, function_call=None)
+

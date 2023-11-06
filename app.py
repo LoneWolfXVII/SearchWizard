@@ -57,15 +57,7 @@ def get_left_nav_items():
     return jsonify(items)
 
 
-# @app.route('/get_left_nav_items')
-# def get_left_nav_items():
-#     items = [
-#         {"class": "icon-db1", "name": "Travel -1", "dropdown": ["Option 1", "Option 2", "Option 3"]},
-#         {"class": "icon-db2", "name": "Travel -2", "dropdown": ["Option A", "Option B", "Option C"]},
-#         {"class": "db3", "name": "Finance - 1", "dropdown": ["Option X", "Option Y", "Option Z"]},
-#         {"class": "db4", "name": "Finance - 2", "dropdown": ["Option M", "Option N", "Option O"]},
-#     ]
-#     return jsonify(items)
+
 
 @app.route('/page/<string:option_name>')
 def serve_option_page(option_name):
@@ -122,5 +114,4 @@ def get_dashboard_graphs():
 
 if __name__ == '__main__':
     da = SQLDataAnalyser(db_type="mysql", socketio=socketio)
-   
-    socketio.run(app, debug=True)
+    socketio.run(app,host='0.0.0.0',debug=True)
