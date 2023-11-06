@@ -114,4 +114,4 @@ def get_dashboard_graphs():
 
 if __name__ == '__main__':
     da = SQLDataAnalyser(db_type="mysql", socketio=socketio)
-    socketio.run(app,host='0.0.0.0',debug=True)
+    socketio.run(app,host='0.0.0.0',port=5000,debug=True)

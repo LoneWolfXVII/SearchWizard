@@ -6,7 +6,7 @@ $(document).ready(function() {
 
     function initializeSocket() {
         if (!socket) {
-            socket = io.connect('http://localhost:5000');
+            socket = io.connect('http://0.0.0.0:5000');
 
             socket.on('show_answer', function(data) {
                 $('#actual-answer').text(data.answer);

@@ -96,3 +96,32 @@ What is the average number of rooms booked per hotel booking?,The average number
 What is the most frequently booked flight route for our users?,"Currently, there are no booked flight records available to determine the most frequently booked flight route."
 What is the average number of rooms booked per hotel booking?,The average number of rooms booked per hotel booking is approximately 1.89.
 most booked hotel,The most booked hotel is the 'Taj Palace'.
+What is the total revenue generated from hotel bookings in each city?,"The total revenue generated from hotel bookings in each city is as follows:
+
+- Agra: $800.00
+- Goa: $660.00
+- New York: $419.00
+- London: $595.00
+- Udaipur: $586.00
+- Kochi: $543.00
+- Paris: $522.00
+- Dubai: $545.00
+- Shimla: $545.00
+- Sydney: $459.00
+- Singapore: $196.00
+- Jaipur: $246.00"
+What is the total revenue generated from flight bookings on every flight route?,"The total revenue generated from flight bookings on each flight route is:
+
+- Chennai to Agra: $3910.74
+- Delhi to Goa: $4785.76
+- Bengaluru to New York: $6003.09
+- Hyderabad to London: $2791.70
+- Kolkata to New York: $2176.47
+- Chennai to Udaipur: $4917.85
+- Delhi to Kochi: $2512.47
+- Bengaluru to Paris: $4463.05
+- Chennai to New York: $1378.16
+- ...
+
+This list continues for all routes."
+How much of the revenue is contributed by the travel packages compared to individual flights and hotel bookings?,The percentage of revenue contributed by travel packages compared to individual flights and hotel bookings is approximately (302315.68 / 681059.38)*100 = 44.4%.
