@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, emit
 from data_analysis.data_analyser2 import SQLDataAnalyser
 import time
 import json
+import json
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
