@@ -29,10 +29,10 @@ const FollowUpQuestions = ({ followUpQuestions, onQuestionSelect }) => {
         ))}
       </div>
       <button onClick={() => scroll(100)} className="scroll-btn right">&gt;</button>
-      <div className="searchContainer">
-            <input type="text" className="searchInput" placeholder=""/>
-            <div className="searchIconContainer">
-                <img src="/sendIcon.png" alt="Send" className="searchIcon" />
+      <div className="searchContainer2">
+            <input type="text" className="searchInput2" placeholder=""/>
+            <div className="searchIconContainer2">
+                <img src="/sendIcon.png" alt="Send" className="searchIcon2" />
             </div>
       </div>
     </div>

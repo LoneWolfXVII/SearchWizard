@@ -3,7 +3,8 @@ from flask_socketio import SocketIO, emit
 from data_analysis.data_analyser2 import SQLDataAnalyser
 import time
 import json
-import json
+import uuid 
+import threading
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -11,28 +12,42 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 last_processed_query = None
 last_processed_time = 0
 
+
+def process_sql_query(query,data_source_name):
+    da.process_query(query,data_source_name)
+    
+    
+
 @app.route('/')
 def index():
     return render_template('index.html')
-
 @app.route('/get_answer', methods=['POST'])
 def get_answer():
-    global last_processed_query, last_processed_time
+    try:
+        print("Received request for /get_answer")  # Added logging
+        if not request.json:
+            raise ValueError("No JSON payload received")
 
-    print("Received request for /get_answer")  # Added logging
-    query = request.json.get('query')
-    data_source_name = request.json.get('Data Source Name')
+        query = request.json.get('query')
+        if query is None:
+            raise ValueError("No 'query' found in the payload")
 
-    current_time = time.time()
-    if query == last_processed_query and (current_time - last_processed_time) < 2:  # 2 seconds threshold
-        print("Duplicate request detected. Ignoring.")
-        return jsonify({"status": "ignored"})
+        data_source_name = request.json.get('Data Source Name')
+        if data_source_name is None:
+            raise ValueError("No 'Data Source Name' found in the payload")
 
-    last_processed_query = query
-    last_processed_time = current_time
-    da.process_query(query,data_source_name)
-    print("Processed query in /get_answer")  # Added logging
-    return jsonify({"status": "success"})
+        task_id = str(uuid.uuid4())
+        thread = threading.Thread(target=process_sql_query, args=(query, data_source_name))
+        thread.start()
+        return jsonify({"message": "Process initiated", "task_id": task_id}), 202
+
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400  # Bad Request for client-side errors
+    except Exception as e:
+        # Log the exception details for debugging purposes
+        print(f"An error occurred: {e}")
+        return jsonify({"error": "An internal error occurred"}), 500  # Inte
+   
 
 
 @app.route('/get_left_nav_items')
@@ -49,13 +64,15 @@ def get_left_nav_items():
 
         item = {
             "class": class_name,
-            "name": name,
+            "datasource_name": name,
             "dropdown": dropdown_options
         }
         items.append(item)
         print(items)
 
-    return jsonify(items)
+    response = jsonify(items)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 
@@ -106,7 +123,7 @@ def update_dashboard():
 def get_dashboard_graphs():
     data_source_name = request.json.get('data_source_name')
     dashboard_name = request.json.get('dashboard_name')
-    response = da.generate_dashboard_graphs(data_source_name, dashboard_name)
+    response = da.generate_dashboard_graphs(data_source_name,dashboard_name)
 
     if response["status"] == "error":
         return jsonify({"status": "error", "message": response["message"]}), 400  # Bad Request
@@ -115,4 +132,4 @@ def get_dashboard_graphs():
 
 if __name__ == '__main__':
     da = SQLDataAnalyser(db_type="mysql", socketio=socketio)
-    socketio.run(app,host='0.0.0.0',port=5000,debug=True)
+    socketio.run(app,host='0.0.0.0',port=8080,debug=True)

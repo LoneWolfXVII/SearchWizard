@@ -277,7 +277,10 @@ class SQLDataAnalyser:
                 for graph_name, graph_data in json_data[data_source_name]["dashboards"][dashboard_name].items():
                     sql_query = graph_data["sql_query"]
                     plot_params = graph_data["plot_params"]
-                    data = self.execute_sql_query(sql_query)
+                    data = self.execute_sql_query(sql_query,data_source_name)
+                    print("***********************************")
+                    print(plot_params.get('plot_title'))
+                    print(data)
 
                     if data:
                         base64_image = self.DV.generate_plot(

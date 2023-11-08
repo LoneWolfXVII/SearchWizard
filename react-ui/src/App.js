@@ -11,11 +11,25 @@ import HomePage2 from './HomePage2';
 const App = () => {
   const [navItems, setNavItems] = useState([]);
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/get_left_nav_items")
+    fetch("http://3.110.189.211:8080/get_left_nav_items")
         .then(response => response.json())
         .then(data => setNavItems(data))
         .catch(error => console.error("Error fetching left nav items:", error));
-}, []);  
+}, []); 
+
+function populateNavItems(navItems) {
+  const result = {};
+
+  navItems.forEach(item => {
+    const { datasource_name, dropdown } = item;
+    result[datasource_name] = dropdown;
+  });
+
+  return result;
+}
+const dataSources = populateNavItems(navItems); 
+console.log(navItems);
+console.log(dataSources);
 
 const images = [
   "/graph-1.png",
@@ -35,11 +49,12 @@ const [isDataSourceSelected, setDataSourceSelected] = useState(false);
 
 return (
   <div className="app-container">
-      <NavBar onSelectDataSource={() => setDataSourceSelected(true)} />
+      <NavBar dataSources={dataSources} onSelectDataSource={() => setDataSourceSelected(true)} />
       <div className="content">
-        <Header />
-        {isDataSourceSelected ? <ImageGrid images={images} /> : <HomePage2 />}
-      </div>
+      <Header />
+        {isDataSourceSelected ? <ImageGrid images={images} /> : <HomePage />}
+        </div>
+
   </div>
 );
 }

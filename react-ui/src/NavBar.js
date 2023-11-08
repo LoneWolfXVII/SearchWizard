@@ -1,18 +1,14 @@
 import './App.css';
 import React, { Component } from 'react';
 import Dashboard from './Dashboard';
+import { useState, useEffect } from 'react';
 
 class NavBar extends Component {
   state = {
       showDataSources: false,
-      expandedDataSource: null
-  }
-
-
-  dataSources = {
-      'DataSource1': ['Revenue Monitring Board', 'Churn Monitoring Board', 'Option3', 'Option-4'],
-      'DataSource2': ['OptionA', 'OptionB', 'OptionC'],
-      // ... Add more datasources as needed
+      expandedDataSource: null,
+      selectedOption: null,
+      selectedDataSource: null
   }
 
   toggleDataSources = () => {
@@ -29,7 +25,20 @@ class NavBar extends Component {
           this.setState({ expandedDataSource: dataSourceName });
       }
   }
+
+  selectOption = (dataSourceName, option) => {
+    this.setState({
+        selectedDataSource: dataSourceName,
+        selectedOption: option
+    });
+}
+
+   isOptionSelected = (dataSourceName, option) => {
+        return this.state.selectedDataSource === dataSourceName && this.state.selectedOption === option;
+    }
+
     render() {
+        const { dataSources } = this.props; 
         return (
           <>
           {/* <Dashboard optionName= {this.state.selectedOption }/> */}
@@ -56,17 +65,17 @@ class NavBar extends Component {
 
                     {this.state.showDataSources && (
                         <div className="datasources">
-                            {Object.keys(this.dataSources).map(ds => (
+                            {Object.keys(dataSources).map(ds => (
                                 <div key={ds}>
                                     <button className={`datasource-btn ${this.state.expandedDataSource === ds ? 'selected' : ''}`}  onClick={() => this.toggleDataSourceOptions(ds)}>{ds}</button>
                                     
                                     {this.state.expandedDataSource === ds && (
                                         <div className="options">
-                                        {this.dataSources[ds].map(opt => (
+                                        {dataSources[ds].map(opt => (
                                             <button 
                                                 key={opt} 
-                                                className={`option ${this.state.selectedOption === opt ? 'option-selected' : ''}`} 
-                                                onClick={() => this.setState({ selectedOption: opt })}
+                                                className={`option ${this.isOptionSelected(ds, opt) ? 'option-selected' : ''}`} 
+                                                onClick={() => this.selectOption(ds, opt)}
                                             >
                                                 {opt}
                                             </button>
