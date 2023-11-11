@@ -2,8 +2,8 @@ import React from 'react';
 import './HomePage2.css';
 
 const AnswerSection = ({ answerData, onExport, onAddToDashboard }) => {
-
-    const { answerText, graphImage, insightText } = answerData;
+  
+    const { answer, graph_img, insight } = answerData;
   // Function to handle exporting the graph
   // Function to handle exporting the graph
     const handleExport = (graphImage) => {
@@ -32,13 +32,13 @@ const AnswerSection = ({ answerData, onExport, onAddToDashboard }) => {
     <div className="answerSection">
       <div className="answerText">
         <img src="/chat.png" alt="Answer Icon" className="answerIcon" />
-        <div className="textOfAnswer">{answerText}</div>
+        <div className="textOfAnswer">{answer}</div>
       </div>
       <div className="graphSection">
-        <img src={graphImage} alt="Graph" className="graphImage" />
+        <img src={graph_img} alt="Graph" className="graphImage" />
 
         <div className="graphButtons">
-        <button onClick={() => handleExport(graphImage)} className="graphButton">
+        <button onClick={() => handleExport(graph_img)} className="graphButton">
             <img src="/export.png" alt="Export" /> Export
         </button>
           <button onClick={handleAddToDashboard} className="graphButton">
@@ -50,7 +50,7 @@ const AnswerSection = ({ answerData, onExport, onAddToDashboard }) => {
         <img src="/insights.png" alt="Insights Icon" className="insightIcon" />
         <div className="insightText">
           <div className='Insights'>Insights</div>
-          <p>{insightText}</p>
+          <p>{insight}</p>
         </div>
       </div>
     </div>

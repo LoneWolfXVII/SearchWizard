@@ -5,13 +5,12 @@ import Dashboard from './Dashboard';
 import MainComponent from './MainComponent';
 import ImageGrid from './ImageGrid';
 import { useState, useEffect } from 'react';
-import HomePage from './HomePage';
-import HomePage2 from './HomePage2';
+import Body from './Body';
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/get_left_nav_items")
+    fetch("http://3.110.92.208:8080/get_left_nav_items")
         .then(response => response.json())
         .then(data => setNavItems(data))
         .catch(error => console.error("Error fetching left nav items:", error));
@@ -28,17 +27,15 @@ const images = [
   "/graph-8.png",
 ];
 
-// console.log(navItems);
+console.log(navItems);
 // console.log(navItems[0]);
-
-const [isDataSourceSelected, setDataSourceSelected] = useState(false);
 
 return (
   <div className="app-container">
-      <NavBar onSelectDataSource={() => setDataSourceSelected(true)} />
+      <NavBar />
       <div className="content">
         <Header />
-        {isDataSourceSelected ? <ImageGrid images={images} /> : <HomePage2 />}
+        <Body />
       </div>
   </div>
 );

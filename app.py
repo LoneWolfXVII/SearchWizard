@@ -24,14 +24,18 @@ def get_answer():
     current_time = time.time()
     if query == last_processed_query and (current_time - last_processed_time) < 2:  # 2 seconds threshold
         print("Duplicate request detected. Ignoring.")
-        return jsonify({"status": "ignored"})
+        response = jsonify({"status": "ignored"})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
     last_processed_query = query
     last_processed_time = current_time
 
     da.process_query(query, schema_description)
     print("Processed query in /get_answer")  # Added logging
-    return jsonify({"status": "success"})
+    response = jsonify({"status": "success"})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route('/get_left_nav_items')
 def get_left_nav_items():

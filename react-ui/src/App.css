@@ -26,6 +26,18 @@ body, html {
   padding-top: 100px;
 }
 
+.body-container {
+  display: flex;
+  /* flex-direction: column; */
+  height: 100vh;
+  /* margin-top: 100px; */
+  justify-content: center; /* center horizontally */
+  align-items: center;
+  overflow: hidden;
+  /* padding-top: 100px; */
+  /* overflow-y: auto; */
+}
+
 .header {
   /* background-color: #F6F7FB; */
   z-index: 1000;
