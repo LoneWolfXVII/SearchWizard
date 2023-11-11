@@ -92,7 +92,7 @@ handleSearch = async () => {
 fetchAnswer = () => {
   let { taskID } = this.state;
   if (!taskID) return;
-  taskID = '127b66af-5e69-4154-a1e4-ee3015ddcdfc';
+  // taskID = '127b66af-5e69-4154-a1e4-ee3015ddcdfc';
   const requestOptions = {
     method: 'GET',
     redirect: 'follow'
