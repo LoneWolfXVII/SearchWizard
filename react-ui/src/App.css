@@ -9,7 +9,8 @@ body, html {
 .app-container {
   display: flex;
   width: 100%;
-  height: 100vh; /* Full viewport height */
+  height: 100%; /* Full viewport height */
+  overflow: hidden;
 }
 
 .content {
@@ -18,7 +19,7 @@ body, html {
   flex: 1; /* Occupy the remaining space */
   display: flex;
   /* flex-direction: column; */
-  height: 100vh;
+  height: 100%;
   /* margin-top: 100px; */
   justify-content: center; /* center horizontally */
   align-items: center;
@@ -29,13 +30,13 @@ body, html {
 .body-container {
   display: flex;
   /* flex-direction: column; */
-  height: 100vh;
+  height: 100%;
   /* margin-top: 100px; */
   justify-content: center; /* center horizontally */
   align-items: center;
   overflow: hidden;
   /* padding-top: 100px; */
-  /* overflow-y: auto; */
+  overflow-y: auto;
 }
 
 .header {

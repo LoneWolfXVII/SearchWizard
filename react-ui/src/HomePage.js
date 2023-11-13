@@ -18,18 +18,10 @@ const Card = ({ icon, heading, text }) => {
   const HomePage = ({handleSearchValue, onSearch}) => {
 
     const [inputValue, setInputValue] = useState('');
-
-    // Function to handle changes in the input
     const handleInputChange = (event) => {
-      // Update the inputValue state with the current value of the input field
       setInputValue(event.target.value);
       handleSearchValue(event.target.value);
     };
-    // const handler = () =>{
-    //     props.onSearch(inputValue);
-    // };
-  
-    console.log(inputValue);
     return (
         <div className="whiteCard">
             <h1 className="mainHeading">Visual Analytics Engine</h1>

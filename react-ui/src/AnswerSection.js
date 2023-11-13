@@ -1,5 +1,6 @@
 import React from 'react';
 import './HomePage2.css';
+import TypingEffect from './TypingEffect';
 
 const AnswerSection = ({ answerData, onExport, onAddToDashboard }) => {
   
@@ -30,14 +31,14 @@ const AnswerSection = ({ answerData, onExport, onAddToDashboard }) => {
 
   return (
     <div className="answerSection">
-      <div className="answerText">
+      { answer ? <div className="answerText">
         <img src="/chat.png" alt="Answer Icon" className="answerIcon" />
         <div className="textOfAnswer">{answer}</div>
-      </div>
-      <div className="graphSection">
+      </div> : null}
+      {graph_img ? <div className="graphSection">
         <img src={graph_img} alt="Graph" className="graphImage" />
 
-        <div className="graphButtons">
+         <div className="graphButtons">
         <button onClick={() => handleExport(graph_img)} className="graphButton">
             <img src="/export.png" alt="Export" /> Export
         </button>
@@ -45,14 +46,19 @@ const AnswerSection = ({ answerData, onExport, onAddToDashboard }) => {
             <img src="/add.png" alt="Add" /> Add to Dashboard
           </button>
         </div>
-      </div>
-      <div className="insightSection">
-        <img src="/insights.png" alt="Insights Icon" className="insightIcon" />
-        <div className="insightText">
+      </div> : null}
+      { insight ? <div className="insightSection">
+        <div style={{display: 'flex'}}>
+          <img src="/insights.png" alt="Insights Icon" className="insightIcon" />
           <div className='Insights'>Insights</div>
-          <p>{insight}</p>
         </div>
-      </div>
+        <div className="insightText">
+        <p dangerouslySetInnerHTML={{ __html: insight }}></p>
+        {/* <p>
+          <TypingEffect text = {insight} />
+        </p> */}
+        </div>
+        </div>:null}
     </div>
   );
 };
