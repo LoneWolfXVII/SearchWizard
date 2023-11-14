@@ -10,7 +10,7 @@ import Body from './Body';
 const App = () => {
   const [navItems, setNavItems] = useState([]);
   useEffect(() => {
-    fetch("http://3.110.92.208:8080/get_left_nav_items")
+    fetch("http://13.233.201.58:8080/get_left_nav_items")
         .then(response => response.json())
         .then(data => setNavItems(data))
         .catch(error => console.error("Error fetching left nav items:", error));
@@ -51,7 +51,7 @@ return (
       <NavBar dataSources={dataSources} onSelectDataSource={() => setDataSourceSelected(true)} />
       <div className="content">
         <Header />
-        <Body />
+        <Body dataSources={dataSources}/>
       </div>
   </div>
 );
