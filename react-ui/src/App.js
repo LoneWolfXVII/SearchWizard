@@ -16,6 +16,20 @@ const App = () => {
         .catch(error => console.error("Error fetching left nav items:", error));
 }, []);  
 
+function populateNavItems(navItems) {
+  const result = {};
+
+  navItems.forEach(item => {
+    const { datasource_name, dropdown } = item;
+    result[datasource_name] = dropdown;
+  });
+
+  return result;
+}
+const dataSources = populateNavItems(navItems); 
+console.log(navItems);
+console.log(dataSources);
+
 const images = [
   "/graph-1.png",
   "/graph-2.png",
@@ -30,9 +44,11 @@ const images = [
 console.log(navItems);
 // console.log(navItems[0]);
 
+const [isDataSourceSelected, setDataSourceSelected] = useState(false);
+
 return (
   <div className="app-container">
-      <NavBar />
+      <NavBar dataSources={dataSources} onSelectDataSource={() => setDataSourceSelected(true)} />
       <div className="content">
         <Header />
         <Body />

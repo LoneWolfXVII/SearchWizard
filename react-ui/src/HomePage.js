@@ -23,7 +23,16 @@ const Card = ({ icon, heading, text }) => {
       handleSearchValue(event.target.value);
     };
     return (
-        <div className="whiteCard">
+        <div className='HomePage'>
+          <div class="dropdown">
+            <button class="dropbtn" id="selectedOption">Select Option</button>
+            <div class="dropdown-content">
+              <a href="#" onclick="selectOption('Option 1')">Option 1</a>
+              <a href="#" onclick="selectOption('Option 2')">Option 2</a>
+              <a href="#" onclick="selectOption('Option 3')">Option 3</a>
+            </div>
+          </div>
+          <div className="whiteCard">
             <h1 className="mainHeading">Visual Analytics Engine</h1>
 
             <div className="cardsContainer">
@@ -50,6 +59,7 @@ const Card = ({ icon, heading, text }) => {
                         <img src="/sendIcon.png" alt="Send" className="searchIcon" onClick={onSearch}/>
                     </div>
                 </div>
+        </div>
         </div>
     );
 
