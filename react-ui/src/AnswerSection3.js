@@ -1,11 +1,12 @@
 import React from 'react';
 import './HomePage2.css';
 import TypingEffect from './TypingEffect';
+import Modal from './Modal';
+import { useState, useEffect } from 'react';
 
-const AnswerSection = ({ answerData, onExport, onAddToDashboard }) => {
+const AnswerSection = ({ dataSources, taskID, selectedDataSource, modalHandler, answerData, onExport, onAddToDashboard }) => {
   
     const { answer, graph_img, insight } = answerData;
-  // Function to handle exporting the graph
   // Function to handle exporting the graph
     const handleExport = (graphImage) => {
         // Create a new anchor element dynamically
@@ -21,13 +22,35 @@ const AnswerSection = ({ answerData, onExport, onAddToDashboard }) => {
         // Clean up: remove the anchor from the body
         document.body.removeChild(link);
     };
+
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    // Function to toggle the modal's visibility
+    const toggleModal = () => {
+        setModalOpen(!isModalOpen);
+    };
+
+    function getDropdownOptions(apiResponse, datasourceName) {
+      // Check if the datasource name exists in the response object
+      if (apiResponse.hasOwnProperty(datasourceName)) {
+        return apiResponse[datasourceName];
+      }
+    
+      // If the datasource name is not found, return an empty array
+      return [];
+    }
+    
+
     
 
   // Function to handle adding the graph to the dashboard
-  const handleAddToDashboard = () => {
-    // Implement add to dashboard functionality here
-    alert('Graph added to dashboard!');
-  };
+//   const handleAddToDashboard = () => {
+//     // Implement add to dashboard functionality here
+//     alert('Graph added to dashboard!');
+//   };
+
+// getDropdownOptionsForDataSource(dataSources, selectedDataSource)
+    console.log(dataSources, selectedDataSource, getDropdownOptions(dataSources, selectedDataSource));
 
   return (
     <div className="answerSection">
@@ -43,7 +66,7 @@ const AnswerSection = ({ answerData, onExport, onAddToDashboard }) => {
           <button onClick={() => handleExport(graph_img)} className="graphButton">
               <img src="/export.png" alt="Export" /> Export
           </button>
-            <button onClick={handleAddToDashboard} className="graphButton">
+            <button onClick={toggleModal} className="graphButton">
               <img src="/add.png" alt="Add" /> Add to Dashboard
             </button>
           </div>
@@ -60,6 +83,10 @@ const AnswerSection = ({ answerData, onExport, onAddToDashboard }) => {
           </p> */}
           </div>
           </div>:null}
+          {isModalOpen && 
+            <Modal taskID = {taskID} dataSource = {selectedDataSource} options = {getDropdownOptions(dataSources, selectedDataSource)} onClose={toggleModal} />
+            // modalHandler()
+           }
       </div>
     </div>
   );

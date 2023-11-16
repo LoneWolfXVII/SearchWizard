@@ -3,7 +3,7 @@
     width: 80%;
     border-top-left-radius: 2%;
     border-top-right-radius: 2%;
-    margin-top: 7.5%;
+    margin-top: 3%;
     height: auto;
     margin-bottom: 3%;
 }
@@ -46,7 +46,10 @@
     letter-spacing: 0.16px;
 }
 
-
+.graphAndInsight {
+  display: flex;
+  flex-direction: row;
+}
 /* //AnswerSection */
 
 .answerSection {
@@ -90,7 +93,8 @@
   
   .graphSection {
     display: flex;
-    align-items: center; /* Align buttons vertically center */
+    flex-direction: column;
+    /* align-items: center; Align buttons vertically center */
   }
   
   .graphImage {
@@ -103,8 +107,9 @@
   
   .graphButtons {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 25.83px;
+    padding-top: 1.5%;
   }
   
   
@@ -226,7 +231,7 @@
   /* transform: translateX(-50%); */
   display: flex;
   align-items: left;
-  width: 99.9%;
+  width: 99.8%;
   height: 35%;
   border-radius: 1px;
   border: 1px solid #000;
@@ -253,4 +258,209 @@
   /* margin-left: 10px; */
   display: flex;
   cursor: pointer;
+}
+
+
+/* Add these styles to your CSS file */
+.modalContainer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+}
+
+.modalContent {
+  position: relative;
+  width: 40%;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1001;
+}
+
+.modalHeader {
+  margin-bottom: 20px;
+}
+
+.modalTitle {
+  margin: 0;
+  color: #000;
+  text-align: left;
+  font-family: Sora;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px; /* 162.5% */
+}
+
+.modalBody {
+  margin-bottom: 20px;
+}
+
+.dashboardList {
+  list-style: none;
+  padding: 0;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400&display=swap');
+
+.dashboardItem {
+
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #000;
+  font-family: Sora;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px; /* 175% */
+  width: 80%;
+  background: #FFF;
+  border: 25px solid rgba(77, 116, 252, 0.1);
+}
+
+.addNewDashboardButton {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #000;
+  font-family: Sora;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px; /* 175% */
+  width: 100%;
+  background: rgba(77, 116, 252, 0.1);
+  /* border: 25px solid rgba(77, 116, 252, 0.1); */
+  border: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboardItem:hover {
+  background: #e0e0e0;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modalButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #000;
+  text-align: center;
+  font-family: Sora;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px; /* 162.5% */
+  border-radius: 999px;
+  background: #FFF;
+  width: 45%;
+  border: 1px solid #000;
+}
+
+.modalButtonCancel {
+  
+}
+/* .modalButton:hover {
+  background-color: #e0e0e0;
+} */
+
+.modalButtonSave {
+  /* background-color: #007bff; */
+  color: #FFF;
+  text-align: center;
+  font-family: Sora;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px; /* 162.5% */
+  border-radius: 999px;
+  background: #4D74FC;
+  width: 45%;
+  border: 0px;
+}
+
+/* .modalButtonSave:hover {
+  background-color: #0056b3;
+} */
+
+
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  backdrop-filter: blur(5px); /* This blurs the background */
+  z-index: 10; /* Make sure this is higher than other content but lower than the modal box */
+}
+
+.modalBox {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  z-index: 11; /* This should be higher than the overlay */
+  /* Rest of your styling here */
+}
+
+/* This class should be applied to the main content when modal is open to blur it */
+.blurred {
+  filter: blur(5px);
+}
+
+.modalCloseButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modalCloseButton:hover {
+  color: grey;
+}
+
+.modalBody {
+  color: #000;
+  font-family: Sora;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px; /* 175% */
+}
+
+.dashboardList {
+  background: #FFF;
+  /* border: ; */
 }

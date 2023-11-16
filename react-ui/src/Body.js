@@ -3,8 +3,9 @@ import HomePage from './HomePage';
 import HomePage2 from './HomePage2';
 import { useState, useEffect } from 'react';
 import './App.css';
+import Modal from "./Modal";
 
-let options = ['Travel - 1', 'Revenue Monitoring Board', 'trav2'];
+let options = [' - 1', 'Revenue Monitoring Board', 'trav2'];
 class Body extends Component{
 
   state = {
@@ -15,9 +16,19 @@ class Body extends Component{
       answerData: null,
       showHomePage2: false,
       userQuestion: "",
-      selectedOption: 'DataSource',
+      selectedOption: 'Select Data source',
       isDropdownOpen: false,
     };
+    
+  //   toggleModal = () => {
+  //     setModalOpen(!isModalOpen);
+  // };
+
+    // renderModal = () => {
+    //   // Assuming options are associated with the selected data source in your state
+    //   const options = this.state.selectedOptionOptions; // Replace with actual state that holds options
+    //   return <Modal dataSource={this.state.selectedOption} options={options} onClose={this.closeModal} />;
+    // };
 
   selectOption = (option) => {
     this.setState({
@@ -41,7 +52,7 @@ class Body extends Component{
     const button = document.getElementById('dropdownButton');
     if (button) {
       let textWidth = button.offsetWidth;
-      console.log(textWidth);
+      // console.log(textWidth);
       button.style.width = `${textWidth}px`;
     }
   };
@@ -60,7 +71,6 @@ class Body extends Component{
 
   handleInputValue = (event) => {
     // Update the inputValue state with the current value of the input field
-    console.log(this.state.query);
     this.setState({query: event.target.value});
   };
 
@@ -80,7 +90,8 @@ class Body extends Component{
     redirect: 'follow'
     };
 
-    return fetch("http://13.233.201.58:8080/get_answer", requestOptions)
+    return fetch("http://13.232.9.15:8080/get_answer", requestOptions)
+    // return fetch("https://testirame.free.beeceptor.com/get_answer", requestOptions)
     .then(response => response.json())
     .then(data => data.task_id)
     .catch(error => {
@@ -117,17 +128,17 @@ class Body extends Component{
     };
   
     const intervalTime = 1000;
-    const maxRetries = 120;
+    const maxRetries = 10;
     let retries = 0;
   
     // Store the interval ID so you can clear it later
     const intervalId = setInterval(() => {
-      fetch(`http://13.233.201.58:8080/get_query_status?task_id=${taskID}`, requestOptions)
+      fetch(`http://13.232.9.15:8080/get_query_status?task_id=${taskID}`, requestOptions)
+      // fetch(`https://testirame.free.beeceptor.com/get_query_status?task_id=${taskID}`, requestOptions)
         .then(response => response.json())
         .then(data => {
           // Increment the number of retries
           retries++;
-          console.log(retries);
           const formattedAnswerData = {
             answer: data.answer,
             graph_img: data.graph_img,
@@ -169,18 +180,19 @@ render(){
 
   // const [selectedOption, setSelectedOption] = useState('Select Option');
   // const options = ['Option 1', 'Option 2', 'Option 3'];
+  const dropbtnClass = `dropbtn ${this.state.isDropdownOpen ? 'dropbtnActive' : ''}`;
 
   
   const {dataSources} = this.props;
-  console.log(dataSources);
+  // console.log(dataSources);
 
   return(
     <div className="body-container">
       <div className="dropdown" onMouseLeave={this.closeDropdown}>
-        <div className="dropbtn">
+        <div className={dropbtnClass}>
           <div>{this.state.selectedOption}</div>
           <img
-            src='./dropdown1.png'
+            src='./dropdown.svg'
             alt="Dropdown Icon"
             className="dronbtnIcon"
             onClick={this.toggleDropdown}
@@ -192,16 +204,11 @@ render(){
               <a key={ds} href="#" onClick={() => this.selectOption(ds)}>
                 {ds}
             </a>
-                                ))}
-            {/* {options.map((option, index) => (
-              <a key={index} href="#" onClick={() => this.selectOption(option)}>
-                {option}
-              </a>
-            ))} */}
+            ))}
           </div>
         )}
       </div>
-      {this.state.showHomePage2 ? <HomePage2 answerData = {answerData} userQuestion = {userQuestion} onSearch={this.handleSearch} handleSearchValue={this.handleSearchValue}/> : <HomePage handleSearchValue={this.handleSearchValue} onSearch={this.handleSearch} />}
+      {this.state.showHomePage2 ? <HomePage2 taskID = {this.state.taskID} dataSources = {this.props.dataSources} selectedDataSource = {this.state.selectedOption} answerData = {answerData} userQuestion = {userQuestion} onSearch={this.handleSearch} handleSearchValue={this.handleSearchValue}/> : <HomePage handleSearchValue={this.handleSearchValue} onSearch={this.handleSearch} />}
     </div>
   );
 }

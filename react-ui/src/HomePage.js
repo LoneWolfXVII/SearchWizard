@@ -19,9 +19,19 @@ const Card = ({ icon, heading, text }) => {
 
     const [inputValue, setInputValue] = useState('');
     const handleInputChange = (event) => {
+      // console.log(inputValue);
       setInputValue(event.target.value);
       handleSearchValue(event.target.value);
     };
+
+    const handleKeyDown = (event) => {
+      console.log(inputValue);
+      // Check if the Enter key was pressed
+      if (event.key === 'Enter') {
+        onSearch();
+      }
+    };
+
     return (
           <div className="whiteCard">
             <h1 className="mainHeading">Visual Analytics Engine</h1>
@@ -45,7 +55,8 @@ const Card = ({ icon, heading, text }) => {
             </div>
 
                 <div className="searchContainer">
-                    <input type="text" className="searchInput" placeholder="" onChange={handleInputChange}/>
+                    <input type="text" className="searchInput" placeholder="" onChange={handleInputChange} onKeyDown={handleKeyDown}
+                    />
                     <div className="searchIconContainer">
                         <img src="/sendIcon.png" alt="Send" className="searchIcon" onClick={onSearch}/>
                     </div>

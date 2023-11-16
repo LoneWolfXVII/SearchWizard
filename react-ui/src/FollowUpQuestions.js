@@ -22,6 +22,14 @@ const FollowUpQuestions = ({ followUpQuestions, onQuestionSelect, handleSearchVa
     setInputValue(event.target.value);
     handleSearchValue(event.target.value);
   };
+
+  const handleKeyDown = (event) => {
+    // Check if the Enter key was pressed
+    if (event.key === 'Enter') {
+      onSearch();
+    }
+  };
+  
   return (
     <div className="follow-up-container">
       <button onClick={() => scroll(-100)} className="scroll-btn left">&lt;</button>
@@ -35,7 +43,7 @@ const FollowUpQuestions = ({ followUpQuestions, onQuestionSelect, handleSearchVa
       </div>
       <button onClick={() => scroll(100)} className="scroll-btn right">&gt;</button>
       <div className="searchContainer2">
-            <input type="text" className="searchInput2" placeholder="" onChange={handleInputChange}/>
+            <input type="text" className="searchInput2" placeholder="" onChange={handleInputChange} onKeyDown={handleKeyDown}/>
             <div className="searchIconContainer2">
                 <img src="/sendIcon.png" alt="Send" className="searchIcon2" onClick={onSearch} />
             </div>

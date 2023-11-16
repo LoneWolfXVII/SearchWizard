@@ -29,6 +29,32 @@ const AnswerSection = ({ answerData, onExport, onAddToDashboard }) => {
     alert('Graph added to dashboard!');
   };
 
+//   const { answer, graph_img, insight } = answerData;
+  
+//   const [firstPartOfInsight, secondPartOfInsight] = {insight} ? splitInsightText({insight}) : ['', ''];
+  console.log({insight});
+//   function splitInsightText(insightText) {
+//     // Ensure insightText is a string
+//     if (typeof insightText === 'string') {
+//       // A basic example of splitting the text could be to split by sentences or paragraphs.
+//       // Adjust the logic here based on how you want to split your content.
+//       const sentences = insightText.split('. ');
+//       const halfwayIndex = Math.ceil(sentences.length / 2);
+//       const firstPart = sentences.slice(0, halfwayIndex).join('. ');
+//       const secondPart = sentences.slice(halfwayIndex).join('. ');
+//       return [firstPart, secondPart];
+//     }
+//     return ['', '']; // Return empty strings if insightText is not a string
+//   }
+
+const insightsToShowNextToGraph = 2;
+
+    // Slice the insights array to separate the parts to display
+const firstPartOfInsight = Array.isArray({insight}) ? {insight}.slice(0, 2).join(' ') : '';
+const secondPartOfInsight = Array.isArray({insight}) ? {insight}.slice(2).join(' ') : '';
+console.log(Array.isArray({insight}));
+console.log(firstPartOfInsight);
+
   return (
     <div className="answerSection">
       { answer ? <div className="answerText">
@@ -47,19 +73,21 @@ const AnswerSection = ({ answerData, onExport, onAddToDashboard }) => {
               <img src="/add.png" alt="Add" /> Add to Dashboard
             </button>
           </div>
+          <div className="insightSection">
+                    <div className="insightHeader">
+                        <img src="/insights.png" alt="Insights Icon" className="insightIcon" />
+                        <div className="Insights">Insights</div>
+                    </div>
+                    <div className="firstPartInsightText">
+                        <p dangerouslySetInnerHTML={{ __html: firstPartOfInsight }} />
+                    </div>
+                </div>
         </div> : null}
-        { insight ? <div className="insightSection">
-          <div style={{display: 'flex'}}>
-            <img src="/insights.png" alt="Insights Icon" className="insightIcon" />
-            <div className='Insights'>Insights</div>
-          </div>
-          <div className="insightText">
-          <p dangerouslySetInnerHTML={{ __html: insight }}></p>
-          {/* <p>
-            <TypingEffect text = {insight} />
-          </p> */}
-          </div>
-          </div>:null}
+        {secondPartOfInsight && (
+                <div className="secondPartInsightText">
+                    <p dangerouslySetInnerHTML={{ __html: secondPartOfInsight }} />
+                </div>
+            )}
       </div>
     </div>
   );
