@@ -1,13 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './HomePage2.css'; // Ensure you have this CSS file for styling
 import { API_BASE_URL } from './constants';
 
 const Modal = ({ taskID, dataSource, options, onClose }) => {
 
-  console.log(taskID);
+  const [newDashboard, setNewDashboard] = useState('Add to new dashboard');
+  const [isEditable, setIsEditable] = useState(false);
+  const [selectedDashboard, setSelectedDashboard] = useState(null);
+
+  const handleDashboardNameChange = (event) => {
+    setNewDashboard(event.target.value);
+  };
+
+  const handleKeyDown = (event) => {
+    // console.log(newDashboard);
+    if (event.key === 'Enter') {
+      setIsEditable(false);
+      setSelectedDashboard(newDashboard);
+    }
+  };
+
+
+  const enableEditing = () => {
+    setIsEditable(true);
+  };
+  // console.log(taskID);
   function saveToDashboard(dashboardName){
-    var myHeaders = new Headers();
     console.log(dashboardName);
+    var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     
     var raw = JSON.stringify({
@@ -26,6 +46,7 @@ const Modal = ({ taskID, dataSource, options, onClose }) => {
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
+      onClose();
     };
 
   return (
@@ -37,23 +58,31 @@ const Modal = ({ taskID, dataSource, options, onClose }) => {
           <button className="modalCloseButton" onClick={onClose}>&times;</button>
         </div>
         <div className="modalBody">
-            <button className="addNewDashboardButton">
-                <img src="/newDashboard.svg" alt="Add" className="addIcon" /> Add to new dashboard
+            <button className="addNewDashboardButton" onClick={enableEditing}>
+                <img src="/newDashboard.svg" alt="Add" className="addIcon" />
+                {isEditable ? (
+                  <input 
+                    type="text" 
+                    value={newDashboard} 
+                    onChange={handleDashboardNameChange} 
+                    onKeyDown = {handleKeyDown}
+        
+                    // autoFocus
+                  />
+                ) : (
+                  <span>{newDashboard}</span>
+                )}
             </button>
-          {/* <ul className="dashboardList">
-            <li className="dashboardItem">Saved Dashboard name 1</li>
-            <li className="dashboardItem">Saved Dashboard name 2.exe</li>
-            <li className="dashboardItem">Saved Dashboard 3</li>
-          </ul> */}
+
           <ul className="dashboardList">
             {options.map((option, index) => (
-              <li key={index} className="dashboardItem" onClick={() => saveToDashboard(option)}>{option}</li>
+              <li key={index} className="dashboardItem" onClick={() => setSelectedDashboard(option)}>{option}</li>
             ))}
           </ul>
         </div>
         <div className="modalFooter">
           <button className="modalButton modalButtonCancel" onClick={onClose}>Cancel</button>
-          <button className="modalButton modalButtonSave">Save</button>
+          <button className="modalButton modalButtonSave" onClick={() => saveToDashboard(selectedDashboard)}>Save</button>
         </div>
       </div>
     </div>

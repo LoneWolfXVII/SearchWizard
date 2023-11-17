@@ -55,6 +55,7 @@
 .answerSection {
     display: flex;
     flex-direction: column;
+    flex-wrap: column;
     padding: 30px;
     background: rgba(217, 217, 227, 0.2);
   }
@@ -70,6 +71,7 @@
   .answerText{
     display: flex;
     align-items: center;
+    height: auto;
   }
 
   .textOfAnswer{
@@ -80,7 +82,7 @@
     /* border-radius: 4px; Slightly rounded corners for the box */
     /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); A subtle shadow for depth */
     overflow: hidden; /* Ensures content doesn't overflow */
-    white-space: nowrap; /* Keeps the text on a single line */
+    /* white-space: nowrap; Keeps the text on a single line */
     text-overflow: ellipsis; /* Adds an ellipsis if the text is too long */
     color: #1C1C1D;
     font-family: Poppins;

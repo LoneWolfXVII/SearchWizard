@@ -57,7 +57,14 @@ class Body extends Component{
   };
 
   handleSearchValue = (value) => {
-    this.setState({query: value});
+    // console.log(value);
+    // this.setState({query: value});
+    // console.log(this.state.query);
+    return new Promise((resolve) => {
+      this.setState({ query: value }, () => {
+          resolve();
+      });
+     });
   };
 
   handleInputValue = (event) => {
@@ -95,6 +102,7 @@ class Body extends Component{
     const { query } = this.state;
     // const query = "Most booked hotel";
     const dataSourceName = this.state.selectedOption;
+    console.log(query, dataSourceName);
     if(dataSourceName == 'Select Data source'){
       this.setState({showPopUp: true});
       return;
@@ -116,14 +124,15 @@ class Body extends Component{
   fetchAnswer = () => {
     let { taskID } = this.state;
     if (!taskID) return;
+    console.log(taskID);
     // taskID = '127b66af-5e69-4154-a1e4-ee3015ddcdfc';
     const requestOptions = {
       method: 'GET',
       redirect: 'follow'
     };
   
-    const intervalTime = 1000;
-    const maxRetries = 10;
+    const intervalTime = 2000;
+    const maxRetries = 35;
     let retries = 0;
   
     // Store the interval ID so you can clear it later
@@ -134,6 +143,7 @@ class Body extends Component{
         .then(data => {
           // Increment the number of retries
           retries++;
+          // console.log(retries, data);
           const formattedAnswerData = {
             answer: data.answer,
             graph_img: data.graph_img,

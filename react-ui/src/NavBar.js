@@ -39,7 +39,8 @@ class NavBar extends Component {
   }
 
   selectButton = (buttonId) => {
-    this.setState({ selectedButton: buttonId });
+    // this.setState({ selectedButton: buttonId });
+    this.props.showBody();
   }
 
   toggleDataSources = () => {
@@ -62,6 +63,8 @@ class NavBar extends Component {
         selectedDataSource: dataSourceName,
         selectedOption: option
     });
+    console.log(dataSourceName, option);
+    this.props.onSelectDataSource(dataSourceName, option);
 }
 
    isOptionSelected = (dataSourceName, option) => {
@@ -70,7 +73,6 @@ class NavBar extends Component {
 
     render() {
         const { dataSources } = this.props; 
-        console.log(dataSources);
         return (
           <>
           {/* <Dashboard optionName= {this.state.selectedOption }/> */}

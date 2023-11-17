@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 const AnswerSection = ({ dataSources, taskID, selectedDataSource, modalHandler, answerData, onExport, onAddToDashboard }) => {
   
     const { answer, graph_img, insight } = answerData;
+    const jsonString = JSON.stringify(answer)
   // Function to handle exporting the graph
     const handleExport = (graphImage) => {
         // Create a new anchor element dynamically
@@ -39,24 +40,12 @@ const AnswerSection = ({ dataSources, taskID, selectedDataSource, modalHandler, 
       // If the datasource name is not found, return an empty array
       return [];
     }
-    
-
-    
-
-  // Function to handle adding the graph to the dashboard
-//   const handleAddToDashboard = () => {
-//     // Implement add to dashboard functionality here
-//     alert('Graph added to dashboard!');
-//   };
-
-// getDropdownOptionsForDataSource(dataSources, selectedDataSource)
-    console.log(dataSources, selectedDataSource, getDropdownOptions(dataSources, selectedDataSource));
 
   return (
     <div className="answerSection">
       { answer ? <div className="answerText">
         <img src="/chat.png" alt="Answer Icon" className="answerIcon" />
-        <div className="textOfAnswer">{answer}</div>
+        <div className="textOfAnswer">{typeof answer === 'string' ? answer : jsonString}</div>
       </div> : null}
       <div className='graphAndInsight'>
         {graph_img ? <div className="graphSection">

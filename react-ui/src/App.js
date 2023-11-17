@@ -11,53 +11,79 @@ import { API_BASE_URL } from './constants';
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
+  const [showImageGrid, setShowImageGrid] = useState(false);
+  const [images, setImages] = useState([]);
   useEffect(() => {
     fetch(`${API_BASE_URL}/get_left_nav_items`)
     // fetch("https://testirame.free.beeceptor.com/get_left_nav_items")
         .then(response => response.json())
         .then(data => setNavItems(data))
         .catch(error => console.error("Error fetching left nav items:", error));
-}, []);  
+  }, []);  
 
-function populateNavItems(navItems) {
-  const result = {};
+  function populateNavItems(navItems) {
+    const result = {};
 
-  navItems.forEach(item => {
-    const { datasource_name, dropdown } = item;
-    result[datasource_name] = dropdown;
-  });
+    navItems.forEach(item => {
+      const { datasource_name, dropdown } = item;
+      result[datasource_name] = dropdown;
+    });
 
-  return result;
-}
-const dataSources = populateNavItems(navItems); 
-console.log(navItems);
-console.log(dataSources);
+    return result;
+  }
+  const dataSources = populateNavItems(navItems);
 
-const images = [
-  "/graph-1.png",
-  "/graph-2.png",
-  "/graph-3.png",
-  "/graph-4.png",
-  "/graph-5.png",
-  "/graph-6.png",
-  "/graph-7.png",
-  "/graph-8.png",
-];
+  function handleNavItemSelect(selectedDataSource, selectedDashboard) {
+    // console.log(selectedDataSource, selectedDashboard);
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-console.log(navItems);
-// console.log(navItems[0]);
+    var raw = JSON.stringify({
+      "data_source_name": selectedDataSource,
+      "dashboard_name": selectedDashboard
+    });
 
-const [isDataSourceSelected, setDataSourceSelected] = useState(false);
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
 
-return (
-  <div className="app-container">
-      <NavBar dataSources={dataSources} onSelectDataSource={() => setDataSourceSelected(true)} />
-      <div className="content">
-        <Header />
-        <Body dataSources={dataSources}/>
-      </div>
-  </div>
-);
+    fetch(`${API_BASE_URL}/get_dashboard_graphs`, requestOptions)
+      .then(response => response.json())
+      .then(data => setImages(data))
+      .catch(error => console.log('error', error));
+    setShowImageGrid(true);
+  }
+
+  function extractImageFileNames(apiResponse) {
+    if (!apiResponse || !apiResponse.graphs) {
+      return [];
+    }
+  
+    return apiResponse.graphs.map(url => {
+      // Extract the file name from the URL
+      // const urlParts = url.split('/');
+      return url;
+    });
+  }
+
+  function toggleBody() {
+    setShowImageGrid(false);
+  }
+
+  console.log(images);
+
+  return (
+    <div className="app-container">
+        <NavBar dataSources={dataSources} onSelectDataSource ={handleNavItemSelect} showBody = {toggleBody}/>
+        <div className="content">
+          <Header />
+          {showImageGrid ? <ImageGrid images = {extractImageFileNames(images)}/> : <Body dataSources={dataSources}/>}
+        </div>
+    </div>
+  );
 }
 
 export default App;

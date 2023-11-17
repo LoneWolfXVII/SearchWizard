@@ -15,7 +15,14 @@ const FollowUpQuestions = ({ followUpQuestions, onQuestionSelect, handleSearchVa
 
   // Handler when a follow-up question is selected
   const handleQuestionClick = (questionText) => {
-    onQuestionSelect(questionText);
+    console.log(questionText);
+    handleSearchValue(questionText).then(() => {
+      onSearch();
+  })
+  .catch(error => {
+      console.error('Error updating query:', error);
+  });
+    // onSearch();
   };
 
   const handleInputChange = (event) => {
