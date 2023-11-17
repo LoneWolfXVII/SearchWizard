@@ -7,11 +7,12 @@ import ImageGrid from './ImageGrid';
 import { useState, useEffect } from 'react';
 import Body from './Body';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { API_BASE_URL } from './constants';
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
   useEffect(() => {
-    fetch("http://13.232.9.15:8080/get_left_nav_items")
+    fetch(`${API_BASE_URL}/get_left_nav_items`)
     // fetch("https://testirame.free.beeceptor.com/get_left_nav_items")
         .then(response => response.json())
         .then(data => setNavItems(data))

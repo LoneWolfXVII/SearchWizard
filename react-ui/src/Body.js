@@ -4,6 +4,7 @@ import HomePage2 from './HomePage2';
 import { useState, useEffect } from 'react';
 import './App.css';
 import Modal from "./Modal";
+import { API_BASE_URL } from './constants';
 
 let options = [' - 1', 'Revenue Monitoring Board', 'trav2'];
 class Body extends Component{
@@ -18,7 +19,9 @@ class Body extends Component{
       userQuestion: "",
       selectedOption: 'Select Data source',
       isDropdownOpen: false,
+      showPopUp: false,
     };
+    
     
   //   toggleModal = () => {
   //     setModalOpen(!isModalOpen);
@@ -48,18 +51,6 @@ class Body extends Component{
     });
   };
 
-  calculateButtonWidth = () => {
-    const button = document.getElementById('dropdownButton');
-    if (button) {
-      let textWidth = button.offsetWidth;
-      // console.log(textWidth);
-      button.style.width = `${textWidth}px`;
-    }
-  };
-
-  componentDidUpdate() {
-    this.calculateButtonWidth();
-  }
 
   handleShowHomePage2 = () => {
     this.setState({ShowHomePage2: true});
@@ -90,7 +81,7 @@ class Body extends Component{
     redirect: 'follow'
     };
 
-    return fetch("http://13.232.9.15:8080/get_answer", requestOptions)
+    return fetch(`${API_BASE_URL}/get_answer`, requestOptions)
     // return fetch("https://testirame.free.beeceptor.com/get_answer", requestOptions)
     .then(response => response.json())
     .then(data => data.task_id)
@@ -103,7 +94,11 @@ class Body extends Component{
   handleSearch = async () => {
     const { query } = this.state;
     // const query = "Most booked hotel";
-    const dataSourceName = "Travel - 1";
+    const dataSourceName = this.state.selectedOption;
+    if(dataSourceName == 'Select Data source'){
+      this.setState({showPopUp: true});
+      return;
+    }
     this.setState({ isLoading: true, error: null });
 
     const { onSearch } = this.props;
@@ -133,8 +128,8 @@ class Body extends Component{
   
     // Store the interval ID so you can clear it later
     const intervalId = setInterval(() => {
-      fetch(`http://13.232.9.15:8080/get_query_status?task_id=${taskID}`, requestOptions)
-      // fetch(`https://testirame.free.beeceptor.com/get_query_status?task_id=${taskID}`, requestOptions)
+      fetch(`${API_BASE_URL}/get_query_status?task_id=${taskID} `, requestOptions)
+      // fetch(https://testirame.free.beeceptor.com/get_query_status?task_id=${taskID}, requestOptions)
         .then(response => response.json())
         .then(data => {
           // Increment the number of retries
@@ -180,14 +175,24 @@ render(){
 
   // const [selectedOption, setSelectedOption] = useState('Select Option');
   // const options = ['Option 1', 'Option 2', 'Option 3'];
+  // const dropbtnClass = dropbtn `${this.state.isDropdownOpen ? 'dropbtnActive' : ''}`;
   const dropbtnClass = `dropbtn ${this.state.isDropdownOpen ? 'dropbtnActive' : ''}`;
+
 
   
   const {dataSources} = this.props;
   // console.log(dataSources);
-
+  console.log(this.state.showPopUp);
   return(
-    <div className="body-container">
+    <>
+      {this.state.showPopUp ? (
+      <div>
+        <p>Select data source before making the API call</p>
+        {/* Add a button or other UI elements to close the pop-up */}
+        <button onClick={() => this.setState({showPopUp: false})}>Close</button>
+      </div>
+    ) :
+    (<div className="body-container">
       <div className="dropdown" onMouseLeave={this.closeDropdown}>
         <div className={dropbtnClass}>
           <div>{this.state.selectedOption}</div>
@@ -209,7 +214,9 @@ render(){
         )}
       </div>
       {this.state.showHomePage2 ? <HomePage2 taskID = {this.state.taskID} dataSources = {this.props.dataSources} selectedDataSource = {this.state.selectedOption} answerData = {answerData} userQuestion = {userQuestion} onSearch={this.handleSearch} handleSearchValue={this.handleSearchValue}/> : <HomePage handleSearchValue={this.handleSearchValue} onSearch={this.handleSearch} />}
-    </div>
+    </div>)
+    }
+    </>
   );
 }
 }

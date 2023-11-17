@@ -1,5 +1,6 @@
 import React from 'react';
 import './HomePage2.css'; // Ensure you have this CSS file for styling
+import { API_BASE_URL } from './constants';
 
 const Modal = ({ taskID, dataSource, options, onClose }) => {
 
@@ -21,7 +22,7 @@ const Modal = ({ taskID, dataSource, options, onClose }) => {
       redirect: 'follow'
     };
     
-    fetch("http://13.232.9.15:8080/update_dashboard", requestOptions)
+    fetch(`${ API_BASE_URL }/update_dashboard`, requestOptions)
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.log('error', error));
