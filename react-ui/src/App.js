@@ -4,10 +4,12 @@ import Header from './Header';
 import Dashboard from './Dashboard';
 import MainComponent from './MainComponent';
 import ImageGrid from './ImageGrid';
+
 import { useState, useEffect } from 'react';
 import Body from './Body';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { API_BASE_URL } from './constants';
+import BarGraph from './BarGraph'; // Adjust the path as necessary
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
@@ -76,12 +78,23 @@ const App = () => {
   console.log(images);
 
   return (
-    <div className="app-container">
-        <NavBar dataSources={dataSources} onSelectDataSource ={handleNavItemSelect} showBody = {toggleBody}/>
+<div className="app-container">
+      <Router>
+        <NavBar dataSources={dataSources} onSelectDataSource={handleNavItemSelect} showBody={toggleBody} />
         <div className="content">
           <Header />
-          {showImageGrid ? <ImageGrid images = {extractImageFileNames(images)}/> : <Body dataSources={dataSources}/>}
+          <Routes>
+            {/* Define your routes here */}
+            <Route path="/bar-graph" element={<BarGraph />} />
+            {/* Add other routes as needed */}
+            {/* Example route for ImageGrid or Body */}
+            <Route path="/image-grid" element={<ImageGrid images={extractImageFileNames(images)} />} />
+            <Route path="/body" element={<Body dataSources={dataSources} />} />
+          </Routes>
+          {/* Conditional rendering outside of Routes */}
+          {showImageGrid ? <ImageGrid images={extractImageFileNames(images)} /> : <Body dataSources={dataSources} />}
         </div>
+      </Router>
     </div>
   );
 }
