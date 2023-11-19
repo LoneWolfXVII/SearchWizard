@@ -18,89 +18,73 @@ const Card = ({ icon, heading, text }) => {
     );
 };
 
+
 const HomePage = ({ handleSearchValue, onSearch }) => {
     const [inputValue, setInputValue] = useState('');
     const [chartData, setChartData] = useState(null);
 
-    useEffect(() => {
-      fetch(`${API_BASE_URL}/get_search_data`)
-          .then(response => response.json())
-          .then(data => {
-              console.log(data)
-              setChartData({
-                labels: data.labels, // Assuming 'labels' is part of the API response
-                datasets: [{
-                    label: 'Your Label',
-                    data: data.values, // Assuming 'values' is part of the API response
-                    backgroundColor: 'rgba(68,108,255, 0.4)',
-                    // ...other dataset properties
-                }]
-            });
-        })
-        .catch(error => console.error('Error fetching data:', error));
-}, [API_BASE_URL]);
+    const fetchChartData = () => {
+        fetch(`${API_BASE_URL}/get_search_data`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setChartData({
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Your Label',
+                        data: data.values,
+                        backgroundColor: 'rgba(68,108,255, 0.4)',
+                        // ...other dataset properties
+                    }]
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    };
 
-  useEffect(() => {
-    if (chartData) {
-        const config = {
-            type: 'bar',
-            data: chartData,
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Your Chart Title'
+    const renderChart = () => {
+        if (chartData) {
+            const config = {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Your Chart Title'
+                        }
                     }
-                }
-            },
-        };
+                },
+            };
 
-        new Chart(document.getElementById('myChart'), config);
-    }
-}, [chartData]);
-    // useEffect(() => {
-    //     const data = {
-    //         labels: ['Label1', 'Label2', 'Label3','Label4'], // Example labels
-    //         datasets: [{
-    //             label: 'Dataset 1',
-    //             data: [10, 20, 30, 50 ], // Example data
-    //             backgroundColor: 'rgba(68,108,255, 0.4)',
-    //             // ... (other dataset properties)
-    //         }]
-    //     };
+            new Chart(document.getElementById('myChart'), config);
+        }
+    };
 
-    //     const config = {
-    //         type: 'bar',
-    //         data: data,
-    //         options: {
-    //             responsive: true,
-    //             plugins: {
-    //                 legend: {
-    //                     position: 'top',
-    //                 },
-    //                 title: {
-    //                     display: true,
-    //                     text: 'most booked hotel'
-    //                 }
-    //             }
-    //         },
-    //     };
+    useEffect(() => {
+        fetchChartData();
+    }, []);
 
-    //     new Chart(document.getElementById('myChart'), config);
-    // }, []);
+    useEffect(() => {
+        renderChart();
+    }, [chartData]);
 
+    
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
-        handleSearchValue(event.target.value);
+    };
+
+    const handleSearch = () => {
+        fetchChartData();
     };
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-            onSearch();
+            event.preventDefault(); 
+            handleSearch();
         }
     };
 
@@ -126,9 +110,8 @@ const HomePage = ({ handleSearchValue, onSearch }) => {
                 />
             </div>
             
-            <canvas id="myChart"></canvas>
+            <canvas id="myChart" style={{ marginBottom: '100px' }}></canvas>
             
-
             <div className="searchContainer">
                 <input type="text" className="searchInput" placeholder="" onChange={handleInputChange} onKeyDown={handleKeyDown}/>
                 <div className="searchIconContainer">
