@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import React from 'react';
 import { Chart, registerables } from 'chart.js';
 import './HomePage.css';
+import { API_BASE_URL } from './constants';
 
 Chart.register(...registerables);
 
@@ -19,21 +20,31 @@ const Card = ({ icon, heading, text }) => {
 
 const HomePage = ({ handleSearchValue, onSearch }) => {
     const [inputValue, setInputValue] = useState('');
+    const [chartData, setChartData] = useState(null);
 
     useEffect(() => {
-        const data = {
-            labels: ['Label1', 'Label2', 'Label3','Label4'], // Example labels
-            datasets: [{
-                label: 'Dataset 1',
-                data: [10, 20, 30, 50 ], // Example data
-                backgroundColor: 'rgba(68,108,255, 0.4)',
-                // ... (other dataset properties)
-            }]
-        };
+      fetch(`${API_BASE_URL}/get_search_data`)
+          .then(response => response.json())
+          .then(data => {
+              console.log(data)
+              setChartData({
+                labels: data.labels, // Assuming 'labels' is part of the API response
+                datasets: [{
+                    label: 'Your Label',
+                    data: data.values, // Assuming 'values' is part of the API response
+                    backgroundColor: 'rgba(68,108,255, 0.4)',
+                    // ...other dataset properties
+                }]
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}, [API_BASE_URL]);
 
+  useEffect(() => {
+    if (chartData) {
         const config = {
             type: 'bar',
-            data: data,
+            data: chartData,
             options: {
                 responsive: true,
                 plugins: {
@@ -42,14 +53,45 @@ const HomePage = ({ handleSearchValue, onSearch }) => {
                     },
                     title: {
                         display: true,
-                        text: 'most booked hotel'
+                        text: 'Your Chart Title'
                     }
                 }
             },
         };
 
         new Chart(document.getElementById('myChart'), config);
-    }, []);
+    }
+}, [chartData]);
+    // useEffect(() => {
+    //     const data = {
+    //         labels: ['Label1', 'Label2', 'Label3','Label4'], // Example labels
+    //         datasets: [{
+    //             label: 'Dataset 1',
+    //             data: [10, 20, 30, 50 ], // Example data
+    //             backgroundColor: 'rgba(68,108,255, 0.4)',
+    //             // ... (other dataset properties)
+    //         }]
+    //     };
+
+    //     const config = {
+    //         type: 'bar',
+    //         data: data,
+    //         options: {
+    //             responsive: true,
+    //             plugins: {
+    //                 legend: {
+    //                     position: 'top',
+    //                 },
+    //                 title: {
+    //                     display: true,
+    //                     text: 'most booked hotel'
+    //                 }
+    //             }
+    //         },
+    //     };
+
+    //     new Chart(document.getElementById('myChart'), config);
+    // }, []);
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
