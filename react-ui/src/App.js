@@ -8,18 +8,22 @@ import { useState, useEffect } from 'react';
 import Body from './Body';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { API_BASE_URL } from './constants';
+import DocumentVerification from './DocumentVerification';
+import DocumentVerified from './DocumentVerified';
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
   const [showImageGrid, setShowImageGrid] = useState(false);
   const [images, setImages] = useState([]);
+  const [triggerReload, setTriggerReload] = useState(false);
+
   useEffect(() => {
     fetch(`${API_BASE_URL}/get_left_nav_items`)
     // fetch("https://testirame.free.beeceptor.com/get_left_nav_items")
         .then(response => response.json())
         .then(data => setNavItems(data))
         .catch(error => console.error("Error fetching left nav items:", error));
-  }, []);  
+  }, [triggerReload]);  
 
   function populateNavItems(navItems) {
     const result = {};
@@ -57,6 +61,10 @@ const App = () => {
     setShowImageGrid(true);
   }
 
+  const reloadApp = () => {
+    setTriggerReload(!triggerReload);
+  }
+
   function extractImageFileNames(apiResponse) {
     if (!apiResponse || !apiResponse.graphs) {
       return [];
@@ -80,7 +88,8 @@ const App = () => {
         <NavBar dataSources={dataSources} onSelectDataSource ={handleNavItemSelect} showBody = {toggleBody}/>
         <div className="content">
           <Header />
-          {showImageGrid ? <ImageGrid images = {extractImageFileNames(images)}/> : <Body dataSources={dataSources}/>}
+          {/* {showImageGrid ? <ImageGrid images = {extractImageFileNames(images)}/> : <Body reloadApp = {reloadApp} dataSources={dataSources}/>} */}
+          <DocumentVerified />
         </div>
     </div>
   );

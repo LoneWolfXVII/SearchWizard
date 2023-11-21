@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import Modal from "./Modal";
 import { API_BASE_URL } from './constants';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 let options = [' - 1', 'Revenue Monitoring Board', 'trav2'];
 class Body extends Component{
@@ -152,7 +154,7 @@ class Body extends Component{
           };
         
           this.setState({ userQuestion: this.state.query, answerData: formattedAnswerData, isLoading: false, showHomePage2: true});
-          if (data.status === "Done" || retries > maxRetries) {
+          if (data.status === "Done") {
             // If the status is "Done" or max retries exceeded, clear the interval
             clearInterval(intervalId);
   
@@ -195,6 +197,7 @@ render(){
   console.log(this.state.showPopUp);
   return(
     <>
+      <ToastContainer/>
       {this.state.showPopUp ? (
       <div>
         <p>Select data source before making the API call</p>
@@ -223,7 +226,7 @@ render(){
           </div>
         )}
       </div>
-      {this.state.showHomePage2 ? <HomePage2 taskID = {this.state.taskID} dataSources = {this.props.dataSources} selectedDataSource = {this.state.selectedOption} answerData = {answerData} userQuestion = {userQuestion} onSearch={this.handleSearch} handleSearchValue={this.handleSearchValue}/> : <HomePage handleSearchValue={this.handleSearchValue} onSearch={this.handleSearch} />}
+      {this.state.showHomePage2 ? <HomePage2 reloadApp = {this.props.reloadApp} taskID = {this.state.taskID} dataSources = {this.props.dataSources} selectedDataSource = {this.state.selectedOption} answerData = {answerData} userQuestion = {userQuestion} onSearch={this.handleSearch} handleSearchValue={this.handleSearchValue}/> : <HomePage handleSearchValue={this.handleSearchValue} onSearch={this.handleSearch} />}
     </div>)
     }
     </>

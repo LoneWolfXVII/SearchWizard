@@ -49,6 +49,7 @@ const HomePage2 = (props) => {
                 answerData={props.answerData}
                 onExport={handleExport}
                 onAddToDashboard={handleAddToDashboard}
+                reloadApp = {props.reloadApp}
               /> : null
             }
             <FollowUpQuestions followUpQuestions={formattedFollowUpQuestions} onSearch={props.onSearch} handleSearchValue={props.handleSearchValue}/>

@@ -4,7 +4,7 @@ import TypingEffect from './TypingEffect';
 import Modal from './Modal';
 import { useState, useEffect } from 'react';
 
-const AnswerSection = ({ dataSources, taskID, selectedDataSource, modalHandler, answerData, onExport, onAddToDashboard }) => {
+const AnswerSection = ({ reloadApp, dataSources, taskID, selectedDataSource, modalHandler, answerData, onExport, onAddToDashboard }) => {
   
     const { answer, graph_img, insight } = answerData;
     const jsonString = JSON.stringify(answer)
@@ -73,7 +73,7 @@ const AnswerSection = ({ dataSources, taskID, selectedDataSource, modalHandler, 
           </div>
           </div>:null}
           {isModalOpen && 
-            <Modal taskID = {taskID} dataSource = {selectedDataSource} options = {getDropdownOptions(dataSources, selectedDataSource)} onClose={toggleModal} />
+            <Modal reloadApp = {reloadApp} taskID = {taskID} dataSource = {selectedDataSource} options = {getDropdownOptions(dataSources, selectedDataSource)} onClose={toggleModal} />
             // modalHandler()
            }
       </div>

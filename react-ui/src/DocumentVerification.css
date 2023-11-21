@@ -1,0 +1,505 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:275&display=swap');
+
+.document-verification {
+    /* max-width: 800px; */
+    width: 100%;
+    margin: auto;
+    padding: 20px;
+    /* border: 1px solid #ccc; */
+    /* border-radius: 5px; */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .doc-ver-heading {
+    color: #446CFF;
+    font-family: Poppins;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 32px; /* 80% */
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .doc-ver-white-card {
+    border-radius: 5px;
+    background: #FFF;
+    padding: 5%;
+    margin-top: 1%;
+  }
+
+  .merchant-id,
+  .upload-section,
+  .criteria {
+    margin-bottom: 20px;
+  }
+
+  .criteria {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .criteria-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .acceptance-criteria,
+  .rejection-criteria {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+    overflow-y: auto;
+  }
+
+  .acceptance-criteria {
+    border-radius: 10px;
+    background: #F3FFF0;
+    width: 525px;
+    height: 314px;
+    /* flex-shrink: 0; */
+  }
+
+  .rejection-criteria {
+    border-radius: 10px;
+    background: #FFF4F4;
+    width: 525px;
+    height: 313px;
+    /* flex-shrink: 0; */
+  }
+
+  .acceptance-criteria h2 {
+    color: #3A9900;
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+
+  .rejection-criteria h2{
+    color: #FA0000;
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+  
+  .analyze-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    background: #446CFF;
+    color: #FFF;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; /* 150% */
+    letter-spacing: 0.16px;
+  }
+  
+  .analyze-btn:hover {
+    /* background-color: #45a049; */
+  }
+  
+  .icon-button {
+    border-radius: 5px;
+    border: 1px solid #000;
+    background: #000;
+    color: white; /* Assuming you want the text in white */
+    padding: 1% 1%; /* Adjust padding as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFF;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px; /* 225% */
+    width: 13%;
+    height: 39px;
+    flex-shrink: 0;
+  }
+  
+  .button-icon {
+    margin-right: 8px; /* Space between icon and text */
+  }
+  
+
+  /* .dropdown-container {
+    position: relative;
+    display: inline-block;
+    width: 15%;
+    height: 39px;
+  }
+  
+  .dropdown-button {
+    width: 100%;
+    margin-left: 10%;
+    border-radius: 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.50);
+    background: #EEF0F4;
+    color: #000;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px; 
+  }
+  
+  .dropdown-icon {
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  
+  .dropdown-list {
+    width: 100%;
+    margin-left: 10%;
+    position: absolute;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #000;
+    background: #FFF;
+    border-radius: 5px;
+    z-index: 1000;
+  }
+  
+  .dropdown-list li {
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  
+  .dropdown-list li:hover {
+    background-color: #f2f2f2;
+  }
+   */
+
+   .dropdown-container {
+    position: relative;
+    display: inline-block;
+    width: 15%;
+    height: 39px;
+    margin-left: 2%;
+  }
+  
+  .dropdown-button {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.50);
+    background: #EEF0F4;
+    color: #000;
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 36px; /* 225% */
+  }
+  
+  .dropdown-icon {
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  
+  .dropdown-list {
+    width: 100%; /* This ensures that the dropdown list matches the button's width */
+    position: absolute;
+    top: 100%; /* Positions the list right below the button */
+    left: 0; /* Aligns the list to the left edge of the dropdown button */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #000;
+    background: #FFF;
+    border-radius: 5px;
+    z-index: 1000;
+  }
+  
+  .dropdown-list li {
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  
+  .dropdown-list li:hover {
+    background-color: #f2f2f2;
+  }
+  
+
+  .upload-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+
+  .upload-container {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .file-input {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+  
+  .upload-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    /* background-color: #000; /* Black background */
+    /* color: #fff; White text */
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    text-align: center;
+    margin-left: 10%;
+    border-radius: 5px;
+    background: #FFF;
+    color: #000;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px; /* 225% */
+    border-radius: 19px;
+    border: 1px solid rgba(0, 0, 0, 0.50);
+    width: 342px;
+    height: 218.907px;
+    cursor: pointer;
+  }
+  
+  .upload-icon-container {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  .upload-icon {
+    /* width: 24px; /* Size of the icon image */
+    /* height: 24px; */ 
+  }
+  
+  .uploaded-files-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust the space between the file boxes */ 
+    margin-left: 5%;
+  }
+
+  .files-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .file-box {
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.50);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 7%;
+    width: 77px;
+    height: 58.008px;  
+  }
+  
+  .file-background-image {
+    border-radius: 5px;
+    background: lightgray 50% / cover no-repeat;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border-radius: 5px;
+    border-radius: 5px;
+  }
+  
+  .delete-icon-button {
+    /* position: absolute; */
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .file-name {
+    /* position: absolute; */
+    color: #000;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px; /* 225% */
+    margin-left: 7%;
+  }
+  
+  .criteria-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .add-condition-button {
+    border: 1px solid #F3FFF0;
+    background: rgba(243, 243, 243, 0.80);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    color: #000;
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 275;
+    line-height: 16px; /* 133.333% */
+    width: 32%;
+    height: 32px;
+    flex-shrink: 0;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .criteria-item {
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+    margin-bottom: 10px;
+  }
+  
+  .criteria-item input[type="text"] {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .criteria-item img {
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  
+  /* Add other styles as needed */
+  .criteria-text{
+    color: #000;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }  
+
+  .criteria-list input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .criteria-input-field {
+    border: 1px solid #000;
+    background: #FFF;
+    width: 284px;
+    height: 42px;
+    /* flex-shrink: 0; */
+    color: #000;
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 275;
+    line-height: normal;
+    margin-bottom: 3%;
+    padding: 1% 1%;
+  }
+
+  .merchant-id {
+    display: flex;
+    flex-direction: row;
+  }
+
+  
+  .merchant-id-label {
+    color: #000;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px; /* 180% */
+  }
+
+  .merchant-id-input {
+    margin-left: 1%;
+    width: 300px;
+    height: 30px;
+    /* flex-shrink: 0; */
+    border-radius: 1px;
+    background: #FFF;
+    border: 1px solid #000;
+    color: #000;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 200;
+    line-height: 36px; /* 180% */
+    justify-content: start;
+  }
+
+  .merchant-id-display {
+    margin-left: 1%;
+    /* width: 300px;
+    height: 30px; */
+    /* flex-shrink: 0; */
+    /* border-radius: 1px; */
+    background: #FFF;
+    /* border: 1px solid #000; */
+    color: #000;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 100;
+    line-height: 36px; /* 180% */
+    justify-content: start;
+  }
+
+  /* asdfg */
+  .criteria-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: flex-start;
+    color: #000;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  .criteria-item-container{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 3%;
+  }
