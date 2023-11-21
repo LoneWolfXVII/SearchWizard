@@ -1,48 +1,26 @@
-// import React, { useState, useRef } from 'react';
-// import './DocumentVerification.css'; // Make sure to define your styles in this file
-
-// const DropdownButton = () => {
-//   const [isOpen, setIsOpen] = useState(false);
-//   const dropdownRef = useRef(null);
-
-//   // This function toggles the dropdown's visibility
-//   const toggleDropdown = () => setIsOpen(!isOpen);
-
-//   // This function closes the dropdown when the mouse leaves the area
-//   const closeDropdown = () => setIsOpen(false);
-
-//   return (
-//     <div className="dropdown-container" ref={dropdownRef} onMouseLeave={closeDropdown}>
-//       <button className="dropdown-button">
-//         Document type
-//         <img
-//           src='./dv-d1.svg'
-//           alt="Open dropdown"
-//           className="dropdown-icon"
-//           onClick={toggleDropdown}
-//         />
-//       </button>
-//       {isOpen && (
-//         <ul className="dropdown-list">
-//           <li>Option 1</li>
-//           <li>Option 2</li>
-//           <li>Option 3</li>
-//           {/* Add more hardcoded options as needed */}
-//         </ul>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default DropdownButton;
-
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './DocumentVerification.css'; // Make sure to define your styles in this file
+import { API_BASE_URL } from './constants';
 
 const DropdownButton = ({ onOptionSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [options, setOptions] = useState([]); // State to hold the list of options
   const [selectedOption, setSelectedOption] = useState('Document type');
   const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+
+    fetch(`${API_BASE_URL}/get_document_list`, requestOptions)
+      .then(response => response.json()) // Assuming the response is in JSON
+      .then(result => {
+        setOptions(result); // Update the state with the fetched result
+      })
+      .catch(error => console.log('error', error));
+  }, []); // The empty array ensures this effect runs only once when the component mounts
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -51,7 +29,7 @@ const DropdownButton = ({ onOptionSelect }) => {
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     onOptionSelect(option);
-    setIsOpen(false); // Optionally close the dropdown
+    setIsOpen(false);
   };
 
   return (
@@ -66,10 +44,11 @@ const DropdownButton = ({ onOptionSelect }) => {
       </button>
       {isOpen && (
         <ul className="dropdown-list">
-          <li onClick={() => handleOptionClick('Aadhar')}>Aadhar</li>
-          <li onClick={() => handleOptionClick('PAN')}>PAN</li>
-          <li onClick={() => handleOptionClick('License')}>License</li>
-          {/* Add more hardcoded options as needed */}
+          {options.map((option, index) => (
+            <li key={index} onClick={() => handleOptionClick(option)}>
+              {option}
+            </li>
+          ))}
         </ul>
       )}
     </div>

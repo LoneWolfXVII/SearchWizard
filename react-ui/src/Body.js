@@ -59,9 +59,6 @@ class Body extends Component{
   };
 
   handleSearchValue = (value) => {
-    // console.log(value);
-    // this.setState({query: value});
-    // console.log(this.state.query);
     return new Promise((resolve) => {
       this.setState({ query: value }, () => {
           resolve();

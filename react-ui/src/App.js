@@ -89,7 +89,7 @@ const App = () => {
         <div className="content">
           <Header />
           {/* {showImageGrid ? <ImageGrid images = {extractImageFileNames(images)}/> : <Body reloadApp = {reloadApp} dataSources={dataSources}/>} */}
-          <DocumentVerified />
+          <DocumentVerification />
         </div>
     </div>
   );

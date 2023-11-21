@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const MerchantId = () => {
+const MerchantId = (props) => {
   const [merchantId, setMerchantId] = useState("#12345678");
   const [isEditing, setIsEditing] = useState(true);
 
@@ -11,6 +11,7 @@ const MerchantId = () => {
   const handleInputKeyDown = (event) => {
     if (event.key === 'Enter') {
       setIsEditing(false);  // Exit editing mode
+      props.onChange(merchantId);
       console.log("Merchant ID saved:", merchantId); // For demonstration purposes
     }
   };
