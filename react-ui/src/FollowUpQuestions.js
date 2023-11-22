@@ -21,14 +21,16 @@ const FollowUpQuestions = ({
   // Handler when a follow-up question is selected
   const handleQuestionClick = (questionText) => {
     console.log(questionText);
-    handleSearchValue(questionText)
-      .then(() => {
-        onSearch();
-      })
-      .catch((error) => {
-        console.error("Error updating query:", error);
-      });
+    // handleSearchValue(questionText)
+    //   .then(() => {
+    //     onSearch();
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error updating query:", error);
+    //   });
     // onSearch();
+    setInputValue(questionText);
+    onSearch(questionText);
   };
 
   const handleInputChange = (event) => {
@@ -39,7 +41,7 @@ const FollowUpQuestions = ({
   const handleKeyDown = (event) => {
     // Check if the Enter key was pressed
     if (event.key === "Enter") {
-      onSearch();
+      onSearch(inputValue);
     }
   };
 
@@ -53,13 +55,14 @@ const FollowUpQuestions = ({
             placeholder=""
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
+            value={inputValue}
           />
           <div className="searchIconContainer2">
             <img
               src="/sendIcon.png"
               alt="Send"
               className="searchIcon2"
-              onClick={onSearch}
+              onClick={() => onSearch(inputValue)}
             />
           </div>
         </div>
@@ -73,10 +76,10 @@ const FollowUpQuestions = ({
             <button
               key={index}
               className="question-btn"
-              onClick={() => handleQuestionClick(question.text)}
+              onClick={() => handleQuestionClick(question)}
             >
               <img src={sharedIconPath} alt="Q" className="question-icon" />
-              {question.text}
+              {question?.text || question?.toString()}
             </button>
           ))}
         </div>

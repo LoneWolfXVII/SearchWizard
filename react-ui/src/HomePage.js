@@ -84,7 +84,8 @@ const HomePage = ({ handleSearchValue, onSearch }) => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      handleSearch();
+      //   handleSearch();
+      onSearch(inputValue);
     }
   };
 
@@ -104,7 +105,7 @@ const HomePage = ({ handleSearchValue, onSearch }) => {
               src="/sendIcon.png"
               alt="Send"
               className="searchIcon2"
-              onClick={onSearch}
+              onClick={() => onSearch(inputValue)}
             />
           </div>
         </div>

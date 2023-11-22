@@ -280,6 +280,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transform: rotate(45deg);
 }
 
 .searchIcon2 {

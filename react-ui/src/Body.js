@@ -3,6 +3,7 @@ import HomePage from "./HomePage";
 import HomePage2 from "./HomePage2";
 import "./App.css";
 import { API_BASE_URL } from "./constants";
+import { useSearchParams } from "react-router-dom";
 
 class Body extends Component {
   state = {
@@ -11,12 +12,14 @@ class Body extends Component {
     error: null,
     taskID: null,
     answerData: null,
-    showHomePage2: true,
+    showHomePage2: false,
     userQuestion: "",
     selectedOption: "Select Data source",
     isDropdownOpen: false,
     showPopUp: false,
   };
+
+  //   setSearchParams = useSearchParams()[1];
 
   selectOption = (option) => {
     this.setState({
@@ -57,9 +60,32 @@ class Body extends Component {
     console.log("Fetching chart data...");
   };
 
-  handleSearch = () => {
+  handleSearch = (query = "") => {
     // Now this method only calls fetchChartData
-    this.fetchChartData();
+    // this.fetchChartData();
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      query: query,
+      "Data Source Name": this.state.selectedOption,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://3.111.174.29:8080/get_answer2", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result?.task_id) {
+          this.setState({ showHomePage2: true, taskID: result.task_id });
+        }
+      })
+      .catch((error) => console.log("error", error));
   };
 
   render() {
@@ -119,6 +145,7 @@ class Body extends Component {
                 userQuestion={userQuestion}
                 onSearch={this.handleSearch}
                 handleSearchValue={this.handleSearchValue}
+                dashboard_name={this.state.selectedOption}
               />
             ) : (
               <HomePage

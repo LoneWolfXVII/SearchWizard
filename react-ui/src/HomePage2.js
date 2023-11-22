@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import UserQuestion from "./UserQuestion";
+import React, { useEffect, useState } from "react";
 import AnswerSection from "./AnswerSection3"; // Import the AnswerSection component you created
 import FollowUpQuestions from "./FollowUpQuestions"; // Import the FollowUpQuestions component
 
 const HomePage2 = (props) => {
+  const [followUpQuestions, setFollorUpQuestions] = useState([]);
   const userQuestion = props.userQuestion;
   let formattedFollowUpQuestions = null;
   if (props.answerData && props.answerData.follow_up_questions) {
@@ -40,17 +40,17 @@ const HomePage2 = (props) => {
     console.log("Adding graph to dashboard...");
   };
   // Dummy data for follow up questions
-  const dummyFollowUpQuestions = [
-    {
-      text: "Dummy Follow-up Question 1 Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1",
-    },
-    { text: "Dummy Follow-up Question 2" },
-    { text: "Dummy Follow-up Question 3" },
-    { text: "Dummy Follow-up Question 4" },
-    { text: "Dummy Follow-up Question 5" },
-    { text: "Dummy Follow-up Question 5" },
-    { text: "Dummy Follow-up Question 5" },
-  ];
+  // const dummyFollowUpQuestions = [
+  //   {
+  //     text: "Dummy Follow-up Question 1 Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1Dummy Follow-up Question 1",
+  //   },
+  //   { text: "Dummy Follow-up Question 2" },
+  //   { text: "Dummy Follow-up Question 3" },
+  //   { text: "Dummy Follow-up Question 4" },
+  //   { text: "Dummy Follow-up Question 5" },
+  //   { text: "Dummy Follow-up Question 5" },
+  //   { text: "Dummy Follow-up Question 5" },
+  // ];
   // Dummy data for AnswerSection component
   const dummyAnswerData = {
     dataSources: "Dummy Data Source",
@@ -63,21 +63,78 @@ const HomePage2 = (props) => {
   };
 
   // Dummy data for UserQuestion component
-  const dummyUserQuestion = {
-    profileImage: "/dummy_profile.png",
-    question: "Dummy User Question",
+  // const dummyUserQuestion = {
+  //   profileImage: "/dummy_profile.png",
+  //   question: "Dummy User Question",
+  // };
+
+  const [answer, setAnswer] = useState("");
+  const [question, setQuestion] = useState("");
+  const [labels, setLabels] = useState([]);
+  const [chartData, setChartData] = useState([]);
+
+  const onAddToDashboardHandler = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      task_id: props?.taskID,
+      dashboard_name: props?.dashboard_name,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://3.111.174.29:8080/update_dashboard", requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
   };
+
+  useEffect(() => {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    const fetchStatus = async () => {
+      try {
+        const response = await fetch(
+          `http://3.111.174.29:8080/get_query_status?task_id=${props?.taskID}`,
+          requestOptions
+        );
+        const result = await response.json();
+        if (result?.status?.toLowerCase() !== "done") {
+          setTimeout(fetchStatus, 1000);
+        } else {
+          setFollorUpQuestions(result?.follow_up_questions);
+          setAnswer(result?.answer);
+          setQuestion(result?.query);
+          setLabels(result?.query_data?.labels);
+          setChartData(result?.query_data?.values);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchStatus();
+  }, [props?.taskID]);
 
   return (
     <div className="HomePage2Container">
-      {userQuestion ? (
+      {/* {userQuestion ? (
         <UserQuestion
           profileImage={"/profile.png"}
           question={dummyUserQuestion}
         />
-      ) : null}
+      ) : null} */}
       <FollowUpQuestions
-        followUpQuestions={dummyFollowUpQuestions}
+        followUpQuestions={followUpQuestions}
         onSearch={props.onSearch}
         handleSearchValue={props.handleSearchValue}
       />
@@ -105,7 +162,11 @@ const HomePage2 = (props) => {
         modalHandler={dummyAnswerData.modalHandler}
         answerData={dummyAnswerData.answerData}
         onExport={dummyAnswerData.onExport}
-        onAddToDashboard={dummyAnswerData.onAddToDashboard}
+        onAddToDashboard={onAddToDashboardHandler}
+        answerReceived={answer}
+        question={question}
+        labels={labels}
+        data={chartData}
       />
       {/* {props?.answerData && (
         <AnswerSection

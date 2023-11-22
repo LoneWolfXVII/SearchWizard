@@ -12,6 +12,10 @@ const AnswerSection = ({
   answerData,
   onExport,
   onAddToDashboard,
+  question,
+  answerReceived,
+  labels,
+  data,
 }) => {
   const { answer, graph_img, insight } = answerData;
   const jsonString = JSON.stringify(answer);
@@ -56,7 +60,8 @@ const AnswerSection = ({
       </div> : null} */}
 
       <div className="answerBox">
-        Most booked hotel: <span style={{ fontWeight: "800" }}> EBOWLA </span>
+        {question}:{" "}
+        <span style={{ fontWeight: "800" }}> {answerReceived} </span>
       </div>
 
       <div className="graphAndInsight">
@@ -112,7 +117,7 @@ const AnswerSection = ({
         className="bar-graph-container"
         style={{ width: "90%", height: "40rem" }}
       >
-        <BarGraph />
+        <BarGraph labels={labels} data={data} />
       </div>
       <div
         style={{
@@ -122,7 +127,12 @@ const AnswerSection = ({
           paddingTop: "2rem",
         }}
       >
-        <button className="addDashboard">
+        <button
+          onClick={() => {
+            onAddToDashboard();
+          }}
+          className="addDashboard"
+        >
           <img src={addIcon} alt="add icon" /> Add to dashboard
         </button>
       </div>
