@@ -6,24 +6,34 @@ import { API_BASE_URL } from "./constants";
 import { useSearchParams } from "react-router-dom";
 
 class Body extends Component {
-  state = {
-    query: "",
-    isLoading: false,
-    error: null,
-    taskID: null,
-    answerData: null,
-    showHomePage2: false,
-    userQuestion: "",
-    selectedOption: "Select Data source",
-    isDropdownOpen: false,
-    showPopUp: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      query: "",
+      isLoading: false,
+      error: null,
+      taskID: null,
+      answerData: null,
+      showHomePage2: false,
+      userQuestion: "",
+      selectedOption: "Select Data source",
+      isDropdownOpen: false,
+      showPopUp: false,
+      currentDashboardList: this.props.fetchedData,
+    };
+  }
 
   //   setSearchParams = useSearchParams()[1];
 
   selectOption = (option) => {
     this.setState({
       selectedOption: option,
+    });
+    this.props.fetchedData?.forEach((item) => {
+      debugger;
+      if (option === item?.datasource_name) {
+        this.setState({ currentDashboardList: [...item.dropdown] });
+      }
     });
   };
 
@@ -146,6 +156,7 @@ class Body extends Component {
                 onSearch={this.handleSearch}
                 handleSearchValue={this.handleSearchValue}
                 dashboard_name={this.state.selectedOption}
+                currentDashboardList={this.state.currentDashboardList}
               />
             ) : (
               <HomePage

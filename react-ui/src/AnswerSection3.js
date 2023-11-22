@@ -16,6 +16,7 @@ const AnswerSection = ({
   answerReceived,
   labels,
   data,
+  currentDashboardList,
 }) => {
   const { answer, graph_img, insight } = answerData;
   const jsonString = JSON.stringify(answer);
@@ -127,14 +128,19 @@ const AnswerSection = ({
           paddingTop: "2rem",
         }}
       >
-        <button
-          onClick={() => {
-            onAddToDashboard();
+        <select
+          placeholder="Add to Dashboard"
+          onChange={(e) => {
+            onAddToDashboard(e.target.value);
           }}
           className="addDashboard"
         >
-          <img src={addIcon} alt="add icon" /> Add to dashboard
-        </button>
+          {currentDashboardList?.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );

@@ -1,15 +1,15 @@
-import './App.css';
-import NavBar from './NavBar';
-import Header from './Header';
-import Dashboard from './Dashboard';
-import MainComponent from './MainComponent';
-import ImageGrid from './ImageGrid';
+import "./App.css";
+import NavBar from "./NavBar";
+import Header from "./Header";
+import Dashboard from "./Dashboard";
+import MainComponent from "./MainComponent";
+import ImageGrid from "./ImageGrid";
 
-import { useState, useEffect } from 'react';
-import Body from './Body';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { API_BASE_URL } from './constants';
-import BarGraph from './BarGraph'; // Adjust the path as necessary
+import { useState, useEffect } from "react";
+import Body from "./Body";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { API_BASE_URL } from "./constants";
+import BarGraph from "./BarGraph"; // Adjust the path as necessary
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
@@ -17,23 +17,27 @@ const App = () => {
   const [images, setImages] = useState([]);
   useEffect(() => {
     fetch(`${API_BASE_URL}/get_left_nav_items`)
-    // fetch("https://testirame.free.beeceptor.com/get_left_nav_items")
-        .then(response => response.json())
-        .then(data => setNavItems(data))
-        .catch(error => console.error("Error fetching left nav items:", error));
-  }, []);  
+      // fetch("https://testirame.free.beeceptor.com/get_left_nav_items")
+      .then((response) => response.json())
+      .then((data) => setNavItems(data))
+      .catch((error) => console.error("Error fetching left nav items:", error));
+  }, []);
 
-  function populateNavItems(navItems) {
-    const result = {};
+  const [dataSources, setDataSources] = useState({});
 
-    navItems.forEach(item => {
-      const { datasource_name, dropdown } = item;
-      result[datasource_name] = dropdown;
-    });
+  useEffect(() => {
+    const populateNavItems = (navItems) => {
+      const result = {};
 
-    return result;
-  }
-  const dataSources = populateNavItems(navItems);
+      navItems.forEach((item) => {
+        const { datasource_name, dropdown } = item;
+        result[datasource_name] = dropdown;
+      });
+
+      return result;
+    };
+    setDataSources(populateNavItems(navItems));
+  }, [navItems]);
 
   function handleNavItemSelect(selectedDataSource, selectedDashboard) {
     // console.log(selectedDataSource, selectedDashboard);
@@ -41,21 +45,21 @@ const App = () => {
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-      "data_source_name": selectedDataSource,
-      "dashboard_name": selectedDashboard
+      data_source_name: selectedDataSource,
+      dashboard_name: selectedDashboard,
     });
 
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: myHeaders,
       body: raw,
-      redirect: 'follow'
+      redirect: "follow",
     };
 
     fetch(`${API_BASE_URL}/get_dashboard_graphs`, requestOptions)
-      .then(response => response.json())
-      .then(data => setImages(data))
-      .catch(error => console.log('error', error));
+      .then((response) => response.json())
+      .then((data) => setImages(data))
+      .catch((error) => console.log("error", error));
     setShowImageGrid(true);
   }
 
@@ -63,8 +67,8 @@ const App = () => {
     if (!apiResponse || !apiResponse.graphs) {
       return [];
     }
-  
-    return apiResponse.graphs.map(url => {
+
+    return apiResponse.graphs.map((url) => {
       // Extract the file name from the URL
       // const urlParts = url.split('/');
       return url;
@@ -78,9 +82,13 @@ const App = () => {
   console.log(images);
 
   return (
-<div className="app-container">
+    <div className="app-container">
       <Router>
-        <NavBar dataSources={dataSources} onSelectDataSource={handleNavItemSelect} showBody={toggleBody} />
+        <NavBar
+          dataSources={dataSources}
+          onSelectDataSource={handleNavItemSelect}
+          showBody={toggleBody}
+        />
         <div className="content">
           <Header />
           <Routes>
@@ -88,16 +96,27 @@ const App = () => {
             <Route path="/bar-graph" element={<BarGraph />} />
             {/* Add other routes as needed */}
             {/* Example route for ImageGrid or Body */}
-            <Route path="/image-grid" element={<ImageGrid images={extractImageFileNames(images)} />} />
-            <Route path="/body" element={<Body dataSources={dataSources} />} />
+            <Route
+              path="/image-grid"
+              element={<ImageGrid images={extractImageFileNames(images)} />}
+            />
+            <Route
+              path="/body"
+              element={
+                <Body fetchedData={navItems} dataSources={dataSources} />
+              }
+            />
           </Routes>
           {/* Conditional rendering outside of Routes */}
-          {showImageGrid ? <ImageGrid images={extractImageFileNames(images)} /> : <Body dataSources={dataSources} />}
+          {showImageGrid ? (
+            <ImageGrid images={extractImageFileNames(images)} />
+          ) : (
+            <Body fetchedData={navItems} dataSources={dataSources} />
+          )}
         </div>
       </Router>
     </div>
   );
-}
+};
 
 export default App;
-

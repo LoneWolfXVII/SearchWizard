@@ -95,6 +95,8 @@ const HomePage2 = (props) => {
       .catch((error) => console.log("error", error));
   };
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const requestOptions = {
       method: "GET",
@@ -103,6 +105,7 @@ const HomePage2 = (props) => {
 
     const fetchStatus = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch(
           `http://3.111.174.29:8080/get_query_status?task_id=${props?.taskID}`,
           requestOptions
@@ -116,14 +119,23 @@ const HomePage2 = (props) => {
           setQuestion(result?.query);
           setLabels(result?.query_data?.labels);
           setChartData(result?.query_data?.values);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error:", error);
+        setIsLoading(false);
       }
     };
 
     fetchStatus();
   }, [props?.taskID]);
+
+  if (isLoading)
+    return (
+      <div style={{ color: "#000", fontSize: "20px", textAlign: "center" }}>
+        Loading...
+      </div>
+    );
 
   return (
     <div className="HomePage2Container">
@@ -167,6 +179,7 @@ const HomePage2 = (props) => {
         question={question}
         labels={labels}
         data={chartData}
+        currentDashboardList={props.currentDashboardList}
       />
       {/* {props?.answerData && (
         <AnswerSection
