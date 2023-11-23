@@ -65,11 +65,25 @@ class NavBar extends Component {
     });
     console.log(dataSourceName, option);
     this.props.onSelectDataSource(dataSourceName, option);
+    
 }
 
    isOptionSelected = (dataSourceName, option) => {
         return this.state.selectedDataSource === dataSourceName && this.state.selectedOption === option;
     }
+
+    handleNewQueryClick = () => {
+      this.props.onNewQuerySelect(); // Call the callback provided by App
+    };
+  
+    handleDashboardClick = () => {
+      this.toggleDataSources(); // Continue to toggle the visibility of the datasources
+      // this.props.onDashboardSelect(); // Call the callback provided by App
+    };
+  
+    handleAutomationClick = () => {
+      this.props.onAutomationSelect(); // Call the callback provided by App
+    };
 
     render() {
         const { dataSources } = this.props; 
@@ -81,10 +95,10 @@ class NavBar extends Component {
                     <div className='irameLogo'>
                         <img src="/irame.ai.svg" alt="Irame Logo" />
                     </div>
-                    <a className="no-padding" href="/">
+                    <div className="no-padding">
                       <button
                         className={`nav-item-button ${this.state.selectedButton === 'query' ? 'selected' : ''}`}
-                        onClick={() => this.selectButton('query')}
+                        onClick={this.handleNewQueryClick}
                         >
                         <img src="/icon_1.svg" alt="Icon 1" />
                         New Query
@@ -92,7 +106,7 @@ class NavBar extends Component {
                             <img src="/dropdown1.png" alt="Selected" className="selected-icon" />
                         )}
                       </button>
-                    </a>
+                    </div>
                     
                     <button
                         className={`dashboard-btn ${this.state.selectedButton === 'dashboard' ? 'selected' : ''}`}
@@ -144,7 +158,20 @@ class NavBar extends Component {
                         </div>
                         )}
 
-                {/* </div> */}
+                        <div className="no-padding">
+                          <button
+                            className={`nav-item-button ${this.state.selectedButton === 'automation' ? 'selected' : ''}`}
+                            onClick={this.handleAutomationClick}
+                            >
+                            <img src="/left-nav-automation.svg" alt="Auto" />
+                            Automation
+                            {this.state.selectedButton === 'automation' && (
+                                <img src="/dropdown1.png" alt="Selected" className="selected-icon" />
+                            )}
+                          </button>
+                        </div>
+
+                    {/* </div> */}
             </div>
             </>
         );

@@ -558,17 +558,25 @@ a.no-padding {
 
 .datasources {
   margin-left: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .options {
   margin-left: 30%;
 }
 
+/* .datasource-row-container {
+  display: flex;
+  justify-content: center;
+} */
+
 .datasource-row {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .datasource-item {
@@ -630,7 +638,7 @@ a.no-padding {
 
 .option {
   display: flex;
-  justify-content: center; 
+  justify-content: flex-start; 
   align-items: center; 
   width: 100%;
   height: 100%;

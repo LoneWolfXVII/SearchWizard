@@ -167,7 +167,7 @@ const DocumentVerification = () => {
     !documentVerified ?
       <>
         <div className="document-verification">
-          <div className='doc-ver-heading'>Document Verification</div>
+          <div className='doc-ver-heading'>Data Matching</div>
           <div className='doc-ver-white-card'>
             <MerchantId onChange={handleMerchantIdChange} />
 

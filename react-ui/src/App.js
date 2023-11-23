@@ -16,6 +16,7 @@ const App = () => {
   const [showImageGrid, setShowImageGrid] = useState(false);
   const [images, setImages] = useState([]);
   const [triggerReload, setTriggerReload] = useState(false);
+  const [currentView, setCurrentView] = useState('');
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/get_left_nav_items`)
@@ -57,8 +58,10 @@ const App = () => {
     fetch(`${API_BASE_URL}/get_dashboard_graphs`, requestOptions)
       .then(response => response.json())
       .then(data => setImages(data))
+      .then(setCurrentView('Dashboard'))
       .catch(error => console.log('error', error));
     setShowImageGrid(true);
+
   }
 
   const reloadApp = () => {
@@ -66,6 +69,7 @@ const App = () => {
   }
 
   function extractImageFileNames(apiResponse) {
+    console.log(apiResponse);
     if (!apiResponse || !apiResponse.graphs) {
       return [];
     }
@@ -78,20 +82,59 @@ const App = () => {
   }
 
   function toggleBody() {
-    setShowImageGrid(false);
+      console.log('test')
   }
 
-  console.log(images);
+  // function handleNavItemSelect(selectedDataSource, selectedDashboard) {
+  //   // ... existing logic
+  //   setCurrentView('Dashboard');
+  // }
+
+  function handleNewQuerySelect() {
+    console.log('query1')
+    setCurrentView('NewQuery');
+  }
+
+  function handleAutomationSelect() {
+    setCurrentView('Automation');
+  }
+
+  function renderContent() {
+    switch(currentView) {
+      case 'NewQuery':
+        return <Body reloadApp={reloadApp} dataSources={dataSources} />;
+      case 'Dashboard':
+        return <ImageGrid images={extractImageFileNames(images)} />;
+      case 'Automation':
+        return <DocumentVerification />;
+      default:
+        return null; // or any default view
+    }
+  }
+
 
   return (
+    // <div className="app-container">
+    //     <NavBar dataSources={dataSources} onSelectDataSource ={handleNavItemSelect} showBody = {toggleBody}/>
+    //     <div className="content">
+    //       <Header />
+    //       {/* {showImageGrid ? <ImageGrid images = {extractImageFileNames(images)}/> : <Body reloadApp = {reloadApp} dataSources={dataSources}/>} */}
+    //       <DocumentVerification />
+    //     </div>
+    // </div>
     <div className="app-container">
-        <NavBar dataSources={dataSources} onSelectDataSource ={handleNavItemSelect} showBody = {toggleBody}/>
-        <div className="content">
-          <Header />
-          {/* {showImageGrid ? <ImageGrid images = {extractImageFileNames(images)}/> : <Body reloadApp = {reloadApp} dataSources={dataSources}/>} */}
-          <DocumentVerification />
-        </div>
+    <NavBar 
+      dataSources={dataSources} 
+      onSelectDataSource={handleNavItemSelect} 
+      onNewQuerySelect={handleNewQuerySelect}
+      onAutomationSelect={handleAutomationSelect}
+      showBody={toggleBody}
+    />
+    <div className="content">
+      <Header />
+      {renderContent()}
     </div>
+  </div>
   );
 }
 

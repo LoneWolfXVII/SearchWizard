@@ -6,7 +6,7 @@ import './App.css';
 const ImageGrid = ({ images }) => {
   const [isResizeActive, setIsResizeActive] = useState(false);
   const [draggableIndex, setDraggableIndex] = useState(null);
-
+  console.log(images);
   const handleDragStart = (index) => {
     setDraggableIndex(index);
   };

@@ -12,7 +12,7 @@ const colorMapping = {
 const DocumentVerified = (props) => {
   return (
     <div className="document-verification">
-      <div className='doc-ver-heading'>Document Verification</div>
+      <div className='doc-ver-heading'>Data Matching</div>
       <div className='doc-ver-white-card2'>
         <div className='doc-ver-card-middle'>
           <div className='merchantCard'>
@@ -25,8 +25,8 @@ const DocumentVerified = (props) => {
         </div>
 
         <div className="criteria">
-          <div className='criteria-heading'>Select validation rules</div>
-          <div className='criteria-card'>
+          <div className='criteria-heading'>VALIDATION RESULT</div>
+          <div className='criteria-card2'>
             <div>
               <div className="criteria-item">
                 {Object.entries(props.conditions).map(([condition, colorName], index) => {
