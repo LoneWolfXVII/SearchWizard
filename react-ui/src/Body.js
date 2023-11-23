@@ -94,7 +94,7 @@ class Body extends Component {
       redirect: "follow",
     };
 
-    fetch("http://3.111.174.29:8080/get_answer2", requestOptions)
+    fetch("https://api.irame.ai/get_answer2", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         if (result?.task_id) {
