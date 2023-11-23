@@ -1,42 +1,47 @@
-import './App.css';
-import NavBar from './NavBar';
-import Header from './Header';
-import Dashboard from './Dashboard';
-import MainComponent from './MainComponent';
-import ImageGrid from './ImageGrid';
-import { useState, useEffect } from 'react';
-import Body from './Body';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { API_BASE_URL } from './constants';
-import DocumentVerification from './DocumentVerification';
-import DocumentVerified from './DocumentVerified';
+import { useEffect, useState } from "react";
+import { Route, BrowserRouter as Router } from "react-router-dom";
+import "./App.css";
+import Body from "./Body";
+import DocumentVerification from "./DocumentVerification";
+import Header from "./Header";
+import ImageGrid from "./ImageGrid";
+import NavBar from "./NavBar";
+import { API_BASE_URL } from "./constants";
+
+import { Routes } from "react-router-dom";
+import BarGraph from "./BarGraph"; // Adjust the path as necessary
+import GraphPage from "./GraphPage";
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
   const [showImageGrid, setShowImageGrid] = useState(false);
   const [images, setImages] = useState([]);
   const [triggerReload, setTriggerReload] = useState(false);
-  const [currentView, setCurrentView] = useState('');
+  const [currentView, setCurrentView] = useState("");
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/get_left_nav_items`)
-    // fetch("https://testirame.free.beeceptor.com/get_left_nav_items")
-        .then(response => response.json())
-        .then(data => setNavItems(data))
-        .catch(error => console.error("Error fetching left nav items:", error));
-  }, [triggerReload]);  
+      // fetch("https://testirame.free.beeceptor.com/get_left_nav_items")
+      .then((response) => response.json())
+      .then((data) => setNavItems(data))
+      .catch((error) => console.error("Error fetching left nav items:", error));
+  }, [triggerReload]);
 
-  function populateNavItems(navItems) {
-    const result = {};
+  const [dataSources, setDataSources] = useState({});
 
-    navItems.forEach(item => {
-      const { datasource_name, dropdown } = item;
-      result[datasource_name] = dropdown;
-    });
+  useEffect(() => {
+    const populateNavItems = (navItems) => {
+      const result = {};
 
-    return result;
-  }
-  const dataSources = populateNavItems(navItems);
+      navItems.forEach((item) => {
+        const { datasource_name, dropdown } = item;
+        result[datasource_name] = dropdown;
+      });
+
+      return result;
+    };
+    setDataSources(populateNavItems(navItems));
+  }, [navItems]);
 
   function handleNavItemSelect(selectedDataSource, selectedDashboard) {
     // console.log(selectedDataSource, selectedDashboard);
@@ -44,37 +49,35 @@ const App = () => {
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-      "data_source_name": selectedDataSource,
-      "dashboard_name": selectedDashboard
+      data_source_name: selectedDataSource,
+      dashboard_name: selectedDashboard,
     });
 
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: myHeaders,
       body: raw,
-      redirect: 'follow'
+      redirect: "follow",
     };
 
     fetch(`${API_BASE_URL}/get_dashboard_graphs`, requestOptions)
-      .then(response => response.json())
-      .then(data => setImages(data))
-      .then(setCurrentView('Dashboard'))
-      .catch(error => console.log('error', error));
+      .then((response) => response.json())
+      .then((data) => setImages(data))
+      .catch((error) => console.log("error", error));
     setShowImageGrid(true);
-
   }
 
   const reloadApp = () => {
     setTriggerReload(!triggerReload);
-  }
+  };
 
   function extractImageFileNames(apiResponse) {
     console.log(apiResponse);
     if (!apiResponse || !apiResponse.graphs) {
       return [];
     }
-  
-    return apiResponse.graphs.map(url => {
+
+    return apiResponse.graphs.map((url) => {
       // Extract the file name from the URL
       // const urlParts = url.split('/');
       return url;
@@ -82,7 +85,7 @@ const App = () => {
   }
 
   function toggleBody() {
-      console.log('test')
+    console.log("test");
   }
 
   // function handleNavItemSelect(selectedDataSource, selectedDashboard) {
@@ -91,27 +94,26 @@ const App = () => {
   // }
 
   function handleNewQuerySelect() {
-    console.log('query1')
-    setCurrentView('NewQuery');
+    console.log("query1");
+    setCurrentView("NewQuery");
   }
 
   function handleAutomationSelect() {
-    setCurrentView('Automation');
+    setCurrentView("Automation");
   }
 
   function renderContent() {
-    switch(currentView) {
-      case 'NewQuery':
+    switch (currentView) {
+      case "NewQuery":
         return <Body reloadApp={reloadApp} dataSources={dataSources} />;
-      case 'Dashboard':
+      case "Dashboard":
         return <ImageGrid images={extractImageFileNames(images)} />;
-      case 'Automation':
+      case "Automation":
         return <DocumentVerification />;
       default:
         return null; // or any default view
     }
   }
-
 
   return (
     // <div className="app-container">
@@ -123,20 +125,53 @@ const App = () => {
     //     </div>
     // </div>
     <div className="app-container">
-    <NavBar 
-      dataSources={dataSources} 
-      onSelectDataSource={handleNavItemSelect} 
-      onNewQuerySelect={handleNewQuerySelect}
-      onAutomationSelect={handleAutomationSelect}
-      showBody={toggleBody}
-    />
-    <div className="content">
-      <Header />
-      {renderContent()}
+      <Router>
+        <NavBar
+          dataSources={dataSources}
+          onSelectDataSource={handleNavItemSelect}
+          showBody={toggleBody}
+        />
+        <div className="content">
+          <Header />
+          <Routes>
+            {/* Define your routes here */}
+
+            <Route
+              path="/"
+              element={
+                showImageGrid ? (
+                  <ImageGrid images={extractImageFileNames(images)} />
+                ) : (
+                  <Body fetchedData={navItems} dataSources={dataSources} />
+                )
+              }
+            />
+
+            <Route path="/bar-graph" element={<BarGraph />} />
+            {/* Add other routes as needed */}
+            {/* Example route for ImageGrid or Body */}
+            <Route
+              path="/image-grid"
+              element={<ImageGrid images={extractImageFileNames(images)} />}
+            />
+            <Route
+              path="/body"
+              element={
+                <Body fetchedData={navItems} dataSources={dataSources} />
+              }
+            />
+            <Route
+              path="/sidebar"
+              element={<GraphPage fetchedData={images} />}
+            />
+
+            <Route path="/automation" element={<DocumentVerification />} />
+          </Routes>
+          {/* Conditional rendering outside of Routes */}
+        </div>
+      </Router>
     </div>
-  </div>
   );
-}
+};
 
 export default App;
-

@@ -1,68 +1,139 @@
-import { useState } from 'react';
-import React, { Component } from 'react';
+import { useState, useEffect } from "react";
+import React from "react";
+import { Chart, registerables } from "chart.js";
+import "./HomePage.css";
+import { API_BASE_URL } from "./constants";
 
-import './HomePage.css';
+Chart.register(...registerables);
 
 const Card = ({ icon, heading, text }) => {
-    return (
-      <div className="card">
-        <div className="circle">
-          <img src={icon} alt={heading} className="cardIcon" />
-        </div>
-        <h2 className="cardHeading">{heading}</h2>
-        <p className="cardText">{text}</p>
+  return (
+    <div className="card">
+      <div className="circle">
+        <img src={icon} alt={heading} className="cardIcon" />
       </div>
-    );
+      <h2 className="cardHeading">{heading}</h2>
+      <p className="cardText">{text}</p>
+    </div>
+  );
+};
+
+const HomePage = ({ handleSearchValue, onSearch }) => {
+  const [inputValue, setInputValue] = useState("");
+  const [chartData, setChartData] = useState(null);
+
+  const fetchChartData = () => {
+    fetch(`${API_BASE_URL}/get_search_data`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setChartData({
+          labels: data.labels,
+          datasets: [
+            {
+              label: "Your Label",
+              data: data.values,
+              backgroundColor: "rgba(68,108,255, 0.4)",
+              // ...other dataset properties
+            },
+          ],
+        });
+      })
+      .catch((error) => console.error("Error fetching data:", error));
   };
 
-  const HomePage = ({handleSearchValue, onSearch}) => {
+  const renderChart = () => {
+    if (chartData) {
+      const config = {
+        type: "bar",
+        data: chartData,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: "top",
+            },
+            title: {
+              display: true,
+              text: "Your Chart Title",
+            },
+          },
+        },
+      };
 
-    const [inputValue, setInputValue] = useState('');
-    const handleInputChange = (event) => {
-      // console.log(inputValue);
-      setInputValue(event.target.value);
-      handleSearchValue(event.target.value);
-    };
+      new Chart(document.getElementById("myChart"), config);
+    }
+  };
 
-    const handleKeyDown = (event) => {
-      console.log(inputValue);
-      // Check if the Enter key was pressed
-      if (event.key === 'Enter') {
-        onSearch();
-      }
-    };
+  useEffect(() => {
+    fetchChartData();
+  }, []);
 
-    return (
-          <div className="whiteCard">
-            <h1 className="mainHeading">Visual Analytics Engine</h1>
+  useEffect(() => {
+    renderChart();
+  }, [chartData]);
 
-            <div className="cardsContainer">
-                <Card 
-                    icon="/home_i1.png"
-                    heading="Connect data source"
-                    text="The Romans used a type of ancient concrete called opus caementicium."
-                />
-                <Card 
-                    icon="/home_i2.png"
-                    heading="Analyse data"
-                    text="The Romans used a type of ancient concrete called opus caementicium."
-                />
-                <Card 
-                    icon="/home_i3.png"
-                    heading="Visualise on dashboard"
-                    text="The Romans used a type of ancient concrete called opus caementicium."
-                />
-            </div>
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
 
-                <div className="searchContainer">
-                    <input type="text" className="searchInput" placeholder="" onChange={handleInputChange} onKeyDown={handleKeyDown}
-                    />
-                    <div className="searchIconContainer">
-                        <img src="/sendIcon.png" alt="Send" className="searchIcon" onClick={onSearch}/>
-                    </div>
-                </div>
+  const handleSearch = () => {
+    fetchChartData();
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      //   handleSearch();
+      onSearch(inputValue);
+    }
+  };
+
+  return (
+    <>
+      <div className="whiteCard">
+        <div className="searchContainer">
+          <input
+            type="text"
+            className="searchInput"
+            placeholder=""
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+          />
+          <div className="searchIconContainer2">
+            <img
+              src="/sendIcon.png"
+              alt="Send"
+              className="searchIcon2"
+              onClick={() => onSearch(inputValue)}
+            />
+          </div>
         </div>
-    );
 
-}
+        <h1 className="mainHeading">Visual Analytics Engine</h1>
+
+        <div className="cardsContainer">
+          <Card
+            icon="/home_i1.png"
+            heading="Connect data source"
+            text="The Romans used a type of ancient concrete called opus caementicium."
+          />
+          <Card
+            icon="/home_i2.png"
+            heading="Analyse data"
+            text="The Romans used a type of ancient concrete called opus caementicium."
+          />
+          <Card
+            icon="/home_i3.png"
+            heading="Visualise on dashboard"
+            text="The Romans used a type of ancient concrete called opus caementicium."
+          />
+        </div>
+
+        {/* <canvas id="myChart" style={{ marginBottom: "100px" }}></canvas> */}
+      </div>
+    </>
+  );
+};
+
 export default HomePage;
