@@ -15,6 +15,7 @@ const AnswerSection = ({
   question,
   answerReceived,
   labels,
+  label,
   data,
   currentDashboardList,
 }) => {
@@ -124,7 +125,7 @@ const AnswerSection = ({
           className="bar-graph-container"
           style={{ width: "90%", height: "35rem" }}
         >
-          <BarGraph labels={labels} data={data} />
+          <BarGraph labels={labels} label={label} data={data} />
         </div>
       ) : (
         <div style={{ width: "80rem" }} />

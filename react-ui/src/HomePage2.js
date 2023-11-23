@@ -13,7 +13,7 @@ const HomePage2 = (props) => {
     formattedFollowUpQuestions = originalFollowUpQuestions.map(
       (question, index) => ({
         text: question,
-      })
+      }),
     );
 
     // Now you can use formattedFollowUpQuestions in your component
@@ -45,6 +45,7 @@ const HomePage2 = (props) => {
   const [answer, setAnswer] = useState("");
   const [question, setQuestion] = useState("");
   const [labels, setLabels] = useState([]);
+  const [label, setlabel] = useState("");
   const [chartData, setChartData] = useState([]);
 
   const onAddToDashboardHandler = () => {
@@ -81,6 +82,7 @@ const HomePage2 = (props) => {
     setAnswer("");
     setQuestion("");
     setLabels([]);
+    setlabel("");
     setChartData([]);
     setFollorUpQuestions([]);
 
@@ -88,9 +90,11 @@ const HomePage2 = (props) => {
       try {
         const response = await fetch(
           `http://3.111.174.29:8080/get_query_status?task_id=${props?.taskID}`,
-          requestOptions
+          requestOptions,
         );
         const result = await response.json();
+
+        console.log("result :>> ", result?.query_data?.label);
 
         if (result?.status?.toLowerCase() !== "done") {
           if (result?.answer) setAnswer(result?.answer);
@@ -109,6 +113,7 @@ const HomePage2 = (props) => {
             setChartData(result?.query_data?.values);
           if (result?.follow_up_questions?.length)
             setFollorUpQuestions(result?.follow_up_questions);
+          if (result?.query_data?.label) setlabel(result?.query_data?.label);
         }
       } catch (error) {
         setIsLoading(false);
@@ -170,6 +175,7 @@ const HomePage2 = (props) => {
         answerReceived={answer}
         question={question}
         labels={labels}
+        label={label}
         data={chartData}
         currentDashboardList={props.currentDashboardList}
       />
