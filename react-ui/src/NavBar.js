@@ -164,15 +164,16 @@ class NavBar extends Component {
             </div>
           )}
 
-          <div className="no-padding">
+          
             <Link
-              className={`nav-item-button ${
+              className={`no-padding ${
                 this.state.selectedButton === "automation" ? "selected" : ""
               }`}
               to="/automation"
             >
+            <div className="nav-item-button">
               <img src="/left-nav-automation.svg" alt="Auto" />
-              Automation
+              <div>Automation</div>
               {this.state.selectedButton === "automation" && (
                 <img
                   src="/dropdown1.png"
@@ -180,8 +181,9 @@ class NavBar extends Component {
                   className="selected-icon"
                 />
               )}
+              </div>
             </Link>
-          </div>
+          
 
           {/* </div> */}
         </div>

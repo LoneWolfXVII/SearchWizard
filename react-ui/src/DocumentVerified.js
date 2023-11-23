@@ -1,6 +1,7 @@
 import React from 'react';
 import './DocumentVerified.css';
 import HistoricalMatch from './DVHistoricalMatch';
+import { API_BASE_URL } from './constants';
 
 const colorMapping = {
   green: '#D9FFD0',
@@ -10,6 +11,29 @@ const colorMapping = {
 
 
 const DocumentVerified = (props) => {
+  const handleRedirect = (status) => {
+    console.log(status);
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var formdata = new FormData();
+    formdata.append("merchant_id", props.merchantId);
+    formdata.append("status", status);
+
+    var requestOptions = {
+      method: 'POST',
+      // headers: myHeaders,
+      body: formdata,
+      redirect: 'follow'
+    };
+    console.log(formdata);
+
+    fetch(`${API_BASE_URL}/data_validation/submit_decision`, requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+    props.redirect();
+  }
   return (
     <div className="document-verification">
       <div className='doc-ver-heading'>Data Matching</div>
@@ -58,8 +82,8 @@ const DocumentVerified = (props) => {
         </div>
 
         <div className='dv-buttons'>
-          <button className="reject-btn">REJECT</button>
-          <button className="approve-btn">MARK APPROVE</button>
+          <button className="reject-btn" onClick={() => handleRedirect(false)}>REJECT</button>
+          <button className="approve-btn" onClick={() => handleRedirect(true)}>MARK APPROVE</button>
         </div>
       </div>
     </div>

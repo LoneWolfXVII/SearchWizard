@@ -48,6 +48,7 @@ const DocumentVerification = () => {
         setP2(response.historical_match.Rejection);
         setConditions(response.matched_conditions);
         setDocumentVerified(true);
+        setLoading(false);
         console.log(response, p1, p2)})
       .catch(error => console.log('error', error));
       // setDocumentVerified(true);
@@ -165,6 +166,16 @@ const DocumentVerification = () => {
       });
   };
 
+  const redirect = () => {
+    setDocumentVerified(false);
+  }
+
+  if(loading) return (
+    <div>
+      Analyzing
+    </div>
+  )
+
   return (
     !documentVerified ?
       <>
@@ -224,7 +235,7 @@ const DocumentVerification = () => {
         </div>
       </> :
 
-      <DocumentVerified p1 = {p1} p2 = {p2} merchantId = {merchantId} conditions = {conditions}/>
+      <DocumentVerified p1 = {p1} p2 = {p2} merchantId = {merchantId} conditions = {conditions} redirect = {redirect}/>
   );
 };
 
