@@ -36,6 +36,7 @@ const GraphPage = ({ fetchedData }) => {
             title={key}
             labels={fetchedData[key]?.labels}
             data={fetchedData[key]?.values}
+            label={fetchedData[key]?.label}
           />
         </div>
       ))}
