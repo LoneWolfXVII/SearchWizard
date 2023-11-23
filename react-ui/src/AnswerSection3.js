@@ -119,14 +119,16 @@ const AnswerSection = ({
         }
       </div>
 
-      <div
-        className="bar-graph-container"
-        style={{ width: "90%", height: "40rem" }}
-      >
-        {labels?.length && data?.length && (
+      {labels?.length ? (
+        <div
+          className="bar-graph-container"
+          style={{ width: "73rem", height: "40rem" }}
+        >
           <BarGraph labels={labels} data={data} />
-        )}
-      </div>
+        </div>
+      ) : (
+        <div style={{ width: "80rem" }} />
+      )}
       <footer style={{ display: "flex", justifyContent: "flex-end" }}>
         <div
           style={{
@@ -143,7 +145,10 @@ const AnswerSection = ({
             currentDashboardList?.map((option, index) => (
               <div
                 className="graphButton"
-                onClick={() => onAddToDashboard(option)}
+                onClick={() => {
+                  toggleDropdown();
+                  onAddToDashboard(option);
+                }}
                 key={index}
               >
                 {option}
