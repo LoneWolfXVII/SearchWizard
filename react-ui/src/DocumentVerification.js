@@ -18,6 +18,7 @@ const DocumentVerification = () => {
   const [p1, setP1] = useState(null);
   const [p2, setP2] = useState(null);
   const [conditions, setConditions] = useState([]);
+  const [loading, setLoading] = useState(false);
   // ... other states and useEffect for fetching criteria
 
   const handleCriteriaChange = (criteriaName, isChecked) => {
@@ -29,6 +30,7 @@ const DocumentVerification = () => {
   };
 
   const submitValidationParams = () => {
+    setLoading(true);
     var formdata = new FormData();
     formdata.append("merch_id", merchantId);
     formdata.append("validation_params", JSON.stringify(selectedCriteria));

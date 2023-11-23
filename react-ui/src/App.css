@@ -589,7 +589,7 @@ a.no-padding {
 .datasource-icon {
   width: 10px; /* Size of the square */
   height: 10px; /* Size of the square */
-  margin-right: 5%; /* Space between the square and the button */
+  margin-right: 8px; /* Space between the square and the button */
   display: inline-block;
 }
 
@@ -610,7 +610,7 @@ a.no-padding {
 
 .datasource-btn {
   display: flex;
-  justify-content: center; 
+  justify-content: flex-start; 
   align-items: center; 
   width: auto;
   height: 100%;
@@ -628,7 +628,12 @@ a.no-padding {
   font-weight: 400;
   line-height: 24px; /* 150% */
   letter-spacing: 0.16px;
+  max-width: 100%; /* Adjust this as per the width of your nav bar */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
 
 .options {
   /* padding-left: 20px; */
@@ -660,7 +665,12 @@ a.no-padding {
   cursor: pointer;
   font-size: 14px;
   margin-left: 0%;
+  max-width: 100%; /* Adjust this as per the width of your nav bar */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
 
 .option.option-selected {
   color: #446CFF;
@@ -1060,3 +1070,4 @@ a.no-padding {
   margin-right: 5px;
   background-color: #777; /* Default color, will be overridden by inline styles */
 }
+
