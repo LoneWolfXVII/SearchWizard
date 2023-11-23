@@ -1,10 +1,10 @@
 import React from 'react';
 import './DocumentVerified.css'; // Make sure to define your styles in this file
 
-const HistoricalMatch = () => {
+const HistoricalMatch = (props) => {
   // These could be props or state if they need to be dynamic
-  const acceptanceRate = '75%';
-  const rejectionRate = '75%';
+  const acceptanceRate = `${props.p1.toString()}%`;
+  const rejectionRate = `${props.p2.toString()}%`;
 
   return (
     <div className="historical-match-container">

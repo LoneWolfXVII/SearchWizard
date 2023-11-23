@@ -20,6 +20,7 @@
     line-height: 32px; /* 80% */
     justify-content: center;
     align-items: center;
+    display: flex;
   }
   
   .doc-ver-white-card {
@@ -30,63 +31,8 @@
   }
 
   .merchant-id,
-  .upload-section,
-  .criteria {
+  .upload-section {
     margin-bottom: 20px;
-  }
-
-  .criteria {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  
-  .criteria-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .acceptance-criteria,
-  .rejection-criteria {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 20px;
-    overflow-y: auto;
-  }
-
-  .acceptance-criteria {
-    border-radius: 10px;
-    background: #F3FFF0;
-    width: 525px;
-    height: 314px;
-    /* flex-shrink: 0; */
-  }
-
-  .rejection-criteria {
-    border-radius: 10px;
-    background: #FFF4F4;
-    width: 525px;
-    height: 313px;
-    /* flex-shrink: 0; */
-  }
-
-  .acceptance-criteria h2 {
-    color: #3A9900;
-    font-family: Poppins;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-  }
-
-  .rejection-criteria h2{
-    color: #FA0000;
-    font-family: Poppins;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
   }
   
   .analyze-btn {
@@ -103,10 +49,6 @@
     font-weight: 400;
     line-height: 24px; /* 150% */
     letter-spacing: 0.16px;
-  }
-  
-  .analyze-btn:hover {
-    /* background-color: #45a049; */
   }
   
   .icon-button {
@@ -294,11 +236,6 @@
     margin-right: 10px;
   }
   
-  .upload-icon {
-    /* width: 24px; /* Size of the icon image */
-    /* height: 24px; */ 
-  }
-  
   .uploaded-files-container {
     display: flex;
     flex-wrap: wrap;
@@ -355,13 +292,6 @@
     margin-left: 7%;
   }
   
-  .criteria-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
   .add-condition-button {
     border: 1px solid #F3FFF0;
     background: rgba(243, 243, 243, 0.80);
@@ -378,14 +308,13 @@
     justify-content: space-between;
     align-items: center;
   }
-
+/* 
   .criteria-item {
     display: flex;
     align-items: center;
-    /* justify-content: space-between; */
     margin-bottom: 10px;
-  }
-  
+  } */
+/*   
   .criteria-item input[type="text"] {
     flex-grow: 1;
     padding: 8px;
@@ -398,7 +327,7 @@
     cursor: pointer;
   }
   
-  /* Add other styles as needed */
+
   .criteria-text{
     color: #000;
     font-family: Poppins;
@@ -421,7 +350,6 @@
     background: #FFF;
     width: 284px;
     height: 42px;
-    /* flex-shrink: 0; */
     color: #000;
     font-family: Poppins;
     font-size: 12px;
@@ -430,7 +358,7 @@
     line-height: normal;
     margin-bottom: 3%;
     padding: 1% 1%;
-  }
+  } */
 
   .merchant-id {
     display: flex;
@@ -484,7 +412,7 @@
     justify-content: start;
   }
 
-  /* asdfg */
+
   .criteria-item {
     display: flex;
     flex-direction: column;
@@ -496,10 +424,106 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-  }
+      }
 
   .criteria-item-container{
     display: flex;
     flex-direction: row;
-    margin-bottom: 3%;
+    margin-bottom: 10%;
   }
+
+  .criteria-card {
+    border-radius: 10px;
+    background: #EFE9F5;
+    width: 70%;
+    height: auto;
+    padding: 3%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .criteria-heading {
+    color: #000;
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 4%;
+    margin-top: 1%;
+  }
+
+  
+  .criteria {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .criteria-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .criteria-checkbox {
+    background: #EFE9F5;
+  }
+
+.criteria-item-container input[type="checkbox"] {
+  /* Add your styles here */
+  accent-color: #446CFF; /* Example: change the color of the checkbox */
+  background: #EFE9F5;
+}
+
+/* Style for the label */
+.criteria-item-container label {
+  /* Add your styles here */
+  /* background-color: lightgray; Example: change the background color */
+  padding: 5px 5px;
+  margin-left: 10px;
+  border-radius: 4px;
+  display: inline-block; /* To ensure padding and border-radius are applied */
+}
+
+.criteria-icon {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 5%;
+}
+
+
+/* Custom checkbox style */
+.criteria-item-container input[type="checkbox"] {
+  display: none; /* Hide the actual checkbox */
+}
+
+.criteria-item-container label {
+  position: relative;
+  padding-left: 35px; /* Space for the custom checkbox */
+  cursor: pointer;
+}
+
+/* Custom checkbox unchecked style */
+.criteria-item-container label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 25px; /* Size of the custom checkbox */
+  height: 25px;
+  border-radius: 5px; /* Rounded corners */
+  background-color: #EFE9F5; /* Unchecked background color */
+  border: 1px solid #000; /* Border for the custom checkbox */
+}
+
+.criteria-item-container input[type="checkbox"]:checked + label::before {
+  background-color: #446CFF; /* Checked background color */
+  /* Adding a tick mark */
+  content: '✔';
+  color: white;
+  text-align: center;
+  line-height: 25px; /* Vertically center the tick mark */
+}
