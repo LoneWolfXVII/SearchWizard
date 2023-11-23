@@ -1,9 +1,6 @@
-import "./App.css";
 import React, { Component } from "react";
-import Dashboard from "./Dashboard";
-import { useState, useEffect } from "react";
-import HomePage from "./HomePage";
 import { Link } from "react-router-dom";
+import "./App.css";
 
 class NavBar extends Component {
   state = {
