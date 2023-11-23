@@ -117,13 +117,10 @@ const HomePage2 = (props) => {
           requestOptions
         );
         const result = await response.json();
+
         if (result?.status?.toLowerCase() !== "done") {
           if (result?.answer) setAnswer(result?.answer);
           if (result?.query) setQuestion(result?.query);
-          if (result?.query_data?.labels?.length)
-            setLabels(result?.query_data?.labels);
-          if (result?.query_data?.values?.length)
-            setChartData(result?.query_data?.values);
           if (result?.follow_up_questions?.length)
             setFollorUpQuestions(result?.follow_up_questions);
           setTimeout(fetchStatus, 1000);

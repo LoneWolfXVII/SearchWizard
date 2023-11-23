@@ -7,14 +7,21 @@ import ImageGrid from "./ImageGrid";
 
 import { useState, useEffect } from "react";
 import Body from "./Body";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import { API_BASE_URL } from "./constants";
 import BarGraph from "./BarGraph"; // Adjust the path as necessary
+import GraphPage from "./GraphPage";
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
   const [showImageGrid, setShowImageGrid] = useState(false);
   const [images, setImages] = useState([]);
+
   useEffect(() => {
     fetch(`${API_BASE_URL}/get_left_nav_items`)
       // fetch("https://testirame.free.beeceptor.com/get_left_nav_items")
@@ -79,8 +86,6 @@ const App = () => {
     setShowImageGrid(false);
   }
 
-  console.log(images);
-
   return (
     <div className="app-container">
       <Router>
@@ -93,6 +98,18 @@ const App = () => {
           <Header />
           <Routes>
             {/* Define your routes here */}
+
+            <Route
+              path="/"
+              element={
+                showImageGrid ? (
+                  <ImageGrid images={extractImageFileNames(images)} />
+                ) : (
+                  <Body fetchedData={navItems} dataSources={dataSources} />
+                )
+              }
+            />
+
             <Route path="/bar-graph" element={<BarGraph />} />
             {/* Add other routes as needed */}
             {/* Example route for ImageGrid or Body */}
@@ -106,13 +123,12 @@ const App = () => {
                 <Body fetchedData={navItems} dataSources={dataSources} />
               }
             />
+            <Route
+              path="/sidebar"
+              element={<GraphPage fetchedData={images} />}
+            />
           </Routes>
           {/* Conditional rendering outside of Routes */}
-          {showImageGrid ? (
-            <ImageGrid images={extractImageFileNames(images)} />
-          ) : (
-            <Body fetchedData={navItems} dataSources={dataSources} />
-          )}
         </div>
       </Router>
     </div>

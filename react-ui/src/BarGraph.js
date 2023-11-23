@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import Chart from "chart.js/auto";
 
-const BarGraph = ({ labels, data }) => {
+const BarGraph = ({ labels, data, title = "#" }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ const BarGraph = ({ labels, data }) => {
         labels: labels,
         datasets: [
           {
-            label: "# of Votes",
+            label: title !== "#" ? title : "# of Votes",
             data: data,
             backgroundColor: [
               "rgba(255, 99, 132, 0.5)",

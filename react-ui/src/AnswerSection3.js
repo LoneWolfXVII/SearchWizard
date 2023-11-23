@@ -122,7 +122,7 @@ const AnswerSection = ({
       {labels?.length ? (
         <div
           className="bar-graph-container"
-          style={{ width: "73rem", height: "35rem" }}
+          style={{ width: "90%", minWidth: "68rem", height: "35rem" }}
         >
           <BarGraph labels={labels} data={data} />
         </div>
