@@ -113,7 +113,7 @@ const DocumentVerification = () => {
     };
 
     // Update the state with the new file
-    setUploadedFiles(prevFiles => [...prevFiles, fileObject]);
+    
 
     // Call handleSubmit immediately after file selection
     handleSubmit(fileObject);
@@ -149,7 +149,7 @@ const DocumentVerification = () => {
     formData.append("doc_img", fileObject.file, fileObject.name);
 
     console.log(`Sending request with Merchant ID: ${merchantId}, Document Type: ${fileObject.docType}, File Name: ${fileObject.name}`);
-
+    console.log('test');
     const requestOptions = {
       method: 'POST',
       body: formData,
@@ -160,6 +160,7 @@ const DocumentVerification = () => {
       .then(response => response.text())
       .then(result => {
         console.log('API Response:', result);
+        setUploadedFiles(prevFiles => [...prevFiles, fileObject]);
       })
       .catch(error => {
         console.log('API Error:', error);
