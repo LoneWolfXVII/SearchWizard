@@ -28,7 +28,6 @@ class Body extends Component {
       selectedOption: option,
     });
     this.props.fetchedData?.forEach((item) => {
-      debugger;
       if (option === item?.datasource_name) {
         this.setState({ currentDashboardList: [...item.dropdown] });
       }
@@ -71,6 +70,15 @@ class Body extends Component {
   handleSearch = (query = "") => {
     // Now this method only calls fetchChartData
     // this.fetchChartData();
+
+    if (
+      !this.state.selectedOption ||
+      this.state.selectedOption === "Select Data source"
+    ) {
+      alert("Please select a data source first");
+      return;
+    }
+
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 

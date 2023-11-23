@@ -104,6 +104,12 @@ const HomePage2 = (props) => {
     };
     setIsLoading(true);
 
+    setAnswer("");
+    setQuestion("");
+    setLabels([]);
+    setChartData([]);
+    setFollorUpQuestions([]);
+
     const fetchStatus = async () => {
       try {
         const response = await fetch(

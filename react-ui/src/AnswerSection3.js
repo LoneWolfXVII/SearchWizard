@@ -18,7 +18,10 @@ const AnswerSection = ({
   data,
   currentDashboardList,
 }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const { answer, graph_img, insight } = answerData;
+
   const jsonString = JSON.stringify(answer);
   // Function to handle exporting the graph
   const handleExport = (graphImage) => {
@@ -51,6 +54,9 @@ const AnswerSection = ({
 
     // If the datasource name is not found, return an empty array
     return [];
+  }
+  function toggleDropdown() {
+    setIsDropdownOpen((prev) => !prev);
   }
 
   return (
@@ -117,30 +123,34 @@ const AnswerSection = ({
         className="bar-graph-container"
         style={{ width: "90%", height: "40rem" }}
       >
-        <BarGraph labels={labels} data={data} />
+        {labels?.length && data?.length && (
+          <BarGraph labels={labels} data={data} />
+        )}
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          paddingRight: "3rem",
-          paddingTop: "2rem",
-        }}
-      >
-        <select
-          placeholder="Add to Dashboard"
-          onChange={(e) => {
-            onAddToDashboard(e.target.value);
+      <footer style={{ display: "flex", justifyContent: "flex-end" }}>
+        <div
+          style={{
+            display: "flex",
+            paddingRight: "3rem",
+            paddingTop: "2rem",
+            flexDirection: "column",
           }}
-          className="addDashboard"
         >
-          {currentDashboardList?.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
+          <button onClick={toggleDropdown} className="graphButton">
+            <img src="/add.png" alt="Add" /> Add to Dashboard
+          </button>
+          {isDropdownOpen &&
+            currentDashboardList?.map((option, index) => (
+              <div
+                className="graphButton"
+                onClick={() => onAddToDashboard(option)}
+                key={index}
+              >
+                {option}
+              </div>
+            ))}
+        </div>
+      </footer>
     </div>
   );
 };
