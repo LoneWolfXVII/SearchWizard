@@ -1,9 +1,7 @@
 import { Component } from "react";
+import "./App.css";
 import HomePage from "./HomePage";
 import HomePage2 from "./HomePage2";
-import "./App.css";
-import { API_BASE_URL } from "./constants";
-import { useSearchParams } from "react-router-dom";
 
 class Body extends Component {
   constructor(props) {

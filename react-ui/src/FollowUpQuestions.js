@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./HomePage.css";
 
 // Define the path to the shared icon for follow-up questions outside the component
@@ -9,6 +9,7 @@ const FollowUpQuestions = ({
   onQuestionSelect,
   handleSearchValue,
   onSearch,
+  query,
 }) => {
   const scrollContainerRef = useRef(null);
   const [inputValue, setInputValue] = useState("");
@@ -44,6 +45,10 @@ const FollowUpQuestions = ({
       onSearch(inputValue);
     }
   };
+
+  useEffect(() => {
+    setInputValue(query);
+  }, [query]);
 
   return (
     <>

@@ -61,7 +61,6 @@ const AnswerSection = ({
       </div> : null} */}
 
       <div className="answerBox">
-        {question}:{" "}
         <span style={{ fontWeight: "800" }}> {answerReceived} </span>
       </div>
 

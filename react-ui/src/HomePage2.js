@@ -102,43 +102,62 @@ const HomePage2 = (props) => {
       method: "GET",
       redirect: "follow",
     };
+    setIsLoading(true);
 
     const fetchStatus = async () => {
       try {
-        setIsLoading(true);
         const response = await fetch(
           `http://3.111.174.29:8080/get_query_status?task_id=${props?.taskID}`,
           requestOptions
         );
         const result = await response.json();
         if (result?.status?.toLowerCase() !== "done") {
+          if (result?.answer) setAnswer(result?.answer);
+          if (result?.query) setQuestion(result?.query);
+          if (result?.query_data?.labels?.length)
+            setLabels(result?.query_data?.labels);
+          if (result?.query_data?.values?.length)
+            setChartData(result?.query_data?.values);
+          if (result?.follow_up_questions?.length)
+            setFollorUpQuestions(result?.follow_up_questions);
           setTimeout(fetchStatus, 1000);
         } else {
-          setFollorUpQuestions(result?.follow_up_questions);
-          setAnswer(result?.answer);
-          setQuestion(result?.query);
-          setLabels(result?.query_data?.labels);
-          setChartData(result?.query_data?.values);
           setIsLoading(false);
+
+          if (result?.answer) setAnswer(result?.answer);
+          if (result?.query) setQuestion(result?.query);
+          if (result?.query_data?.labels?.length)
+            setLabels(result?.query_data?.labels);
+          if (result?.query_data?.values?.length)
+            setChartData(result?.query_data?.values);
+          if (result?.follow_up_questions?.length)
+            setFollorUpQuestions(result?.follow_up_questions);
         }
       } catch (error) {
-        console.error("Error:", error);
         setIsLoading(false);
+        console.error("Error:", error);
       }
     };
 
     fetchStatus();
   }, [props?.taskID]);
 
-  if (isLoading)
-    return (
-      <div style={{ color: "#000", fontSize: "20px", textAlign: "center" }}>
-        Loading...
-      </div>
-    );
-
   return (
     <div className="HomePage2Container">
+      {isLoading ? (
+        <div
+          style={{
+            color: "blue",
+            fontSize: "20px",
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          Loading...
+        </div>
+      ) : (
+        ""
+      )}
       {/* {userQuestion ? (
         <UserQuestion
           profileImage={"/profile.png"}
@@ -148,6 +167,7 @@ const HomePage2 = (props) => {
       <FollowUpQuestions
         followUpQuestions={followUpQuestions}
         onSearch={props.onSearch}
+        query={question}
         handleSearchValue={props.handleSearchValue}
       />
       <aside
