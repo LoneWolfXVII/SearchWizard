@@ -64,7 +64,7 @@ const HomePage2 = (props) => {
       redirect: "follow",
     };
 
-    fetch("http://3.111.174.29:8080/update_dashboard", requestOptions)
+    fetch("https://api.irame.ai/update_dashboard", requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
@@ -89,7 +89,7 @@ const HomePage2 = (props) => {
     const fetchStatus = async () => {
       try {
         const response = await fetch(
-          `http://3.111.174.29:8080/get_query_status?task_id=${props?.taskID}`,
+          `https://api.irame.ai/get_query_status?task_id=${props?.taskID}`,
           requestOptions,
         );
         const result = await response.json();

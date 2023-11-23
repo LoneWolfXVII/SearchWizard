@@ -116,17 +116,17 @@ const HomePage = ({ handleSearchValue, onSearch }) => {
           <Card
             icon="/home_i1.png"
             heading="Connect data source"
-            text="The Romans used a type of ancient concrete called opus caementicium."
+            text="Seamlessly Integrate and Analyze Data from Any Data Source"
           />
           <Card
             icon="/home_i2.png"
             heading="Analyse data"
-            text="The Romans used a type of ancient concrete called opus caementicium."
+            text="Simply Speak Your Search in Plain English Below"
           />
           <Card
             icon="/home_i3.png"
             heading="Visualise on dashboard"
-            text="The Romans used a type of ancient concrete called opus caementicium."
+            text="Dashboards Galore: Monitor Daily with Unlimited Customization"
           />
         </div>
 
