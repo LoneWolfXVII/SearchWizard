@@ -143,23 +143,31 @@ const DocumentVerification = () => {
       return;
     }
 
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "multipart/form-data");
+    // myHeaders.append("Access-Control-Allow-Origin", "true");
     const formData = new FormData();
-    formData.append("merch_id", merchantId);
-    formData.append("doc_type", fileObject.docType);
-    formData.append("doc_img", fileObject.file, fileObject.name);
+    // formData.append("merch_id", merchantId);
+    // formData.append("doc_type", fileObject.docType);
+    // formData.append("doc_img", fileObject.file, fileObject.name);
+    formData.append("file", fileObject.file[0], fileObject.name);
+    console.log(fileObject);
 
     console.log(`Sending request with Merchant ID: ${merchantId}, Document Type: ${fileObject.docType}, File Name: ${fileObject.name}`);
     console.log('test');
     const requestOptions = {
       method: 'POST',
+      header: myHeaders,
       body: formData,
       redirect: 'follow'
     };
 
-    fetch(`${API_BASE_URL}/paytm/update_merchant_data`, requestOptions)
+    // fetch(`${API_BASE_URL}/paytm/update_merchant_data`, requestOptions)
+    fetch(`${API_BASE_URL}/upload_to_s3`, requestOptions)
       .then(response => response.text())
       .then(result => {
         console.log('API Response:', result);
+        console.log('test2')
         setUploadedFiles(prevFiles => [...prevFiles, fileObject]);
       })
       .catch(error => {
