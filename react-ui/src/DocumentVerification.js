@@ -96,9 +96,7 @@ const DocumentVerification = () => {
 
   const onDrop = useCallback(acceptedFiles => {
     console.log(acceptedFiles); // Add this line to debug
-    acceptedFiles.forEach(file => {
-      handleSubmit({ file, docType: selectedDocumentType, name: file.name });
-    });
+      handleSubmit({ file: acceptedFiles, docType: selectedDocumentType, name: acceptedFiles.name });
   }, [selectedDocumentType]);
   
 
@@ -111,7 +109,7 @@ const DocumentVerification = () => {
 
   const handleFileDelete = (fileName) => {
     // Remove the file from the uploadedFiles array
-    setUploadedFiles(uploadedFiles.filter(file => file.name !== fileName));
+    setUploadedFiles(uploadedFiles.filter(file => file !== fileName));
   };
 
   const handleMerchantIdChange = (id) => {
@@ -138,10 +136,35 @@ const DocumentVerification = () => {
     const formData = new FormData();
     formData.append("merch_id", merchantId);
     formData.append("doc_type", fileObject.docType);
-    formData.append("doc_img", fileObject.file, fileObject.name);
+    formData.append("file", fileObject.file, fileObject.name);
 
-    console.log(`Sending request with Merchant ID: ${merchantId}, Document Type: ${fileObject.docType}, File Name: ${fileObject.name}`);
+    console.log(`Sending request to upload to s3 with Merchant ID: ${merchantId}, Document Type: ${fileObject.docType}, File Name: ${fileObject.name}`);
     console.log('test');
+    const requestOptions = {
+      method: 'POST',
+      body: formData,
+      redirect: 'follow'
+    };
+
+    fetch(`http://3.111.174.29:8080/upload_to_s3`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        console.log('API Response:', result.url);
+        callBackendAPI(result.url, fileObject.docType);
+      })
+      .catch(error => {
+        console.log('API Error:', error);
+      });
+  };
+
+  const callBackendAPI = async (fileUrl, docType) => {
+    const formData = new FormData();
+    formData.append("merch_id", merchantId);
+    formData.append("doc_type", docType);
+    formData.append("doc_img", fileUrl);
+
+
+    console.log(`Sending request to backend with Merchant ID: ${merchantId}, Document Type: ${docType}, File Url: ${fileUrl}`);
     const requestOptions = {
       method: 'POST',
       body: formData,
@@ -152,12 +175,12 @@ const DocumentVerification = () => {
       .then(response => response.text())
       .then(result => {
         console.log('API Response:', result);
-        setUploadedFiles(prevFiles => [...prevFiles, fileObject]);
+        setUploadedFiles(prevFiles => [...prevFiles, fileUrl]);
       })
       .catch(error => {
         console.log('API Error:', error);
       });
-  };
+  }
 
   const redirect = () => {
     setDocumentVerified(false);
@@ -190,12 +213,12 @@ const DocumentVerification = () => {
                     <div key={index} className="file-box">
                       <div className="file-background-image">
                         <img src='./dv-verified.svg' alt="Verified" className="verified-icon" />
-                        <button onClick={() => handleFileDelete(file.name)} className="delete-icon-button">
+                        <button onClick={() => handleFileDelete(file)} className="delete-icon-button">
                           <img src='./dv-delete.svg' alt="Delete" className="delete-icon" />
                         </button>
                       </div>
                     </div>
-                    <div className="file-name">{file.docType}</div>
+                    <div className="file-name">{file}</div>
                   </div>
                 ))}
               </div>
