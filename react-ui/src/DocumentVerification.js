@@ -1,8 +1,9 @@
 import React from 'react';
+import { useDropzone } from 'react-dropzone';
 import './DocumentVerification.css'; // Assume you have a corresponding CSS file
 import DropdownButton from './DropdownButton';
 import UploadButton from './DVUploadButton';
-import { useState, useEffect } from 'react';
+import { useState,useCallback, useEffect } from 'react';
 import MerchantId from './DVMerchantID';
 import { API_BASE_URL } from './constants';
 import DocumentVerified from './DocumentVerified';
@@ -93,31 +94,16 @@ const DocumentVerification = () => {
       .catch(error => console.log('error', error));
   }, []);
 
-  const handleFileSelect = (file) => {
-    if (!file) {
-      console.log('No file selected');
-      return;
-    }
+  const onDrop = useCallback(acceptedFiles => {
+    console.log(acceptedFiles); // Add this line to debug
+    acceptedFiles.forEach(file => {
+      handleSubmit({ file, docType: selectedDocumentType, name: file.name });
+    });
+  }, [selectedDocumentType]);
+  
 
-    if (!selectedDocumentType) {
-      console.log('Document type not selected');
-      alert('Please select a document type first.');
-      return;
-    }
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-    // Create a file object with the necessary properties
-    const fileObject = {
-      file: file,
-      docType: selectedDocumentType,
-      name: file.name
-    };
-
-    // Update the state with the new file
-    
-
-    // Call handleSubmit immediately after file selection
-    handleSubmit(fileObject);
-  };
 
   const handleOptionSelect = (option) => {
     setSelectedDocumentType(option);
@@ -197,7 +183,7 @@ const DocumentVerification = () => {
                 Document
               </button>
               <DropdownButton onOptionSelect={handleOptionSelect} />
-              <UploadButton onFileSelect={handleFileSelect} />
+              <UploadButton onFileSelect={onDrop} />
               <div className="uploaded-files-container">
                 {uploadedFiles.map((file, index) => (
                   <div className='files-div'>
@@ -247,3 +233,5 @@ const DocumentVerification = () => {
 };
 
 export default DocumentVerification;
+
+
