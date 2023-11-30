@@ -146,7 +146,7 @@ const DocumentVerification = () => {
       redirect: 'follow'
     };
 
-    fetch(`http://3.111.174.29:8080/upload_to_s3`, requestOptions)
+    fetch(`${API_BASE_URL}/upload_to_s3`, requestOptions)
       .then(response => response.json())
       .then(result => {
         console.log('API Response:', result.url);
