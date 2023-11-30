@@ -143,6 +143,12 @@ const DocumentVerification = () => {
       return;
     }
 
+     // Ensure the file is a Blob or File object
+     if (!(fileObject.file instanceof Blob) && !(fileObject.file instanceof File)) {
+      console.error('The file is not a Blob or File object');
+      return;
+  }
+
     const formData = new FormData();
     formData.append("merch_id", merchantId);
     formData.append("doc_type", fileObject.docType);
