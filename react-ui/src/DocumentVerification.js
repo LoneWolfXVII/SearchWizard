@@ -1,16 +1,16 @@
-import React from 'react';
-import './DocumentVerification.css'; // Assume you have a corresponding CSS file
-import DropdownButton from './DropdownButton';
-import UploadButton from './DVUploadButton';
-import { useState, useEffect } from 'react';
-import MerchantId from './DVMerchantID';
-import { API_BASE_URL } from './constants';
-import DocumentVerified from './DocumentVerified';
+import React from "react";
+import "./DocumentVerification.css"; // Assume you have a corresponding CSS file
+import DropdownButton from "./DropdownButton";
+import UploadButton from "./DVUploadButton";
+import { useState, useEffect } from "react";
+import MerchantId from "./DVMerchantID";
+import { API_BASE_URL } from "./constants";
+import DocumentVerified from "./DocumentVerified";
+import axios from "axios";
 
 const DocumentVerification = () => {
-
-  const [merchantId, setMerchantId] = useState(''); // State for merchant ID
-  const [selectedDocumentType, setSelectedDocumentType] = useState('');
+  const [merchantId, setMerchantId] = useState(""); // State for merchant ID
+  const [selectedDocumentType, setSelectedDocumentType] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState([]); // Handling multiple files
   const [criteria, setCriteria] = useState([]); // State to store criteria
   const [documentVerified, setDocumentVerified] = useState(false);
@@ -25,7 +25,7 @@ const DocumentVerification = () => {
     if (isChecked) {
       setSelectedCriteria([...selectedCriteria, criteriaName]);
     } else {
-      setSelectedCriteria(selectedCriteria.filter(item => item !== criteriaName));
+      setSelectedCriteria(selectedCriteria.filter((item) => item !== criteriaName));
     }
   };
 
@@ -36,22 +36,23 @@ const DocumentVerification = () => {
     formdata.append("validation_params", JSON.stringify(selectedCriteria));
 
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       body: formdata,
-      redirect: 'follow'
+      redirect: "follow",
     };
 
     fetch(`${API_BASE_URL}/analyse_merchant_data`, requestOptions)
-      .then(response => response.json())
-      .then(response =>{ 
+      .then((response) => response.json())
+      .then((response) => {
         setP1(response.historical_match.Acceptance);
         setP2(response.historical_match.Rejection);
         setConditions(response.matched_conditions);
         setDocumentVerified(true);
         setLoading(false);
-        console.log(response, p1, p2)})
-      .catch(error => console.log('error', error));
-      // setDocumentVerified(true);
+        console.log(response, p1, p2);
+      })
+      .catch((error) => console.log("error", error));
+    // setDocumentVerified(true);
   };
 
   //   const submitValidationParams = () => {
@@ -78,30 +79,30 @@ const DocumentVerification = () => {
   // Fetch criteria from API on component mount
   useEffect(() => {
     fetch(`${API_BASE_URL}/paytm/get_param_list`, {
-      method: 'GET',
-      redirect: 'follow'
+      method: "GET",
+      redirect: "follow",
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         if (data.success && Array.isArray(data.data)) {
-          console.log('Criteria fetched:', data.data);
+          console.log("Criteria fetched:", data.data);
           setCriteria(data.data);
         } else {
-          console.error('Invalid response format:', data);
+          console.error("Invalid response format:", data);
         }
       })
-      .catch(error => console.log('error', error));
+      .catch((error) => console.log("error", error));
   }, []);
 
   const handleFileSelect = (file) => {
     if (!file) {
-      console.log('No file selected');
+      console.log("No file selected");
       return;
     }
 
     if (!selectedDocumentType) {
-      console.log('Document type not selected');
-      alert('Please select a document type first.');
+      console.log("Document type not selected");
+      alert("Please select a document type first.");
       return;
     }
 
@@ -109,14 +110,15 @@ const DocumentVerification = () => {
     const fileObject = {
       file: file,
       docType: selectedDocumentType,
-      name: file.name
+      name: file.name,
+      fileUrl: URL.createObjectURL(file),
     };
+    // Create a new blob for the image file
 
     // Update the state with the new file
-    
 
     // Call handleSubmit immediately after file selection
-    handleSubmit(fileObject);
+    handleSubmit(fileObject, file);
   };
 
   const handleOptionSelect = (option) => {
@@ -125,124 +127,123 @@ const DocumentVerification = () => {
 
   const handleFileDelete = (fileName) => {
     // Remove the file from the uploadedFiles array
-    setUploadedFiles(uploadedFiles.filter(file => file.name !== fileName));
+    setUploadedFiles(uploadedFiles.filter((file) => file.name !== fileName));
   };
 
   const handleMerchantIdChange = (id) => {
-    console.log('test');
+    console.log("test");
     console.log(id);
     setMerchantId(id);
   };
 
-  const handleSubmit = (fileObject) => {
+  const handleSubmit = (fileObject, file) => {
     console.log(merchantId);
     console.log(fileObject);
     if (!merchantId || !fileObject.docType || !fileObject.file) {
-      console.log('Missing data: Merchant ID, Document Type, or File is not provided.');
-      alert('Please fill all the fields.');
+      console.log("Missing data: Merchant ID, Document Type, or File is not provided.");
+      alert("Please fill all the fields.");
       return;
     }
 
-     // Ensure the file is a Blob or File object
-     if (!(fileObject.file instanceof Blob) && !(fileObject.file instanceof File)) {
-      console.error('The file is not a Blob or File object');
+    // Ensure the file is a Blob or File object
+    if (!(fileObject.file instanceof Blob) && !(fileObject.file instanceof File)) {
+      console.error("The file is not a Blob or File object");
       return;
-  }
+    }
 
+    // const fileBlob = new Blob([file], { type: "image/png" });
+    // const fileBlob = window.dataURLtoBlob(file);
+    // console.log(fileBlob);
     const formData = new FormData();
     formData.append("merch_id", merchantId);
     formData.append("doc_type", fileObject.docType);
-    formData.append("doc_img", fileObject.file, fileObject.name);
+
+    formData.append("doc_img", file, fileObject.name);
 
     console.log(`Sending request with Merchant ID: ${merchantId}, Document Type: ${fileObject.docType}, File Name: ${fileObject.name}`);
-    console.log('test');
-    const requestOptions = {
-      method: 'POST',
-      body: formData,
-      redirect: 'follow'
-    };
+    console.log("test");
 
-    fetch(`${API_BASE_URL}/paytm/update_merchant_data`, requestOptions)
-      .then(response => response.text())
-      .then(result => {
-        console.log('API Response:', result);
-        setUploadedFiles(prevFiles => [...prevFiles, fileObject]);
+    // const requestOptions = {
+    //   method: "POST",
+    //   body: formData,
+    //   Headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    // };
+
+    axios
+      .post(`${API_BASE_URL}/paytm/update_merchant_data`, formData)
+      .then((result) => {
+        console.log("API Response:", result);
+        setUploadedFiles((prevFiles) => [...prevFiles, fileObject]);
       })
-      .catch(error => {
-        console.log('API Error:', error);
+      .catch((error) => {
+        console.log("API Error:", error);
       });
   };
 
   const redirect = () => {
     setDocumentVerified(false);
-  }
+  };
 
-  if(loading) return (
-    <div>
-      Analyzing
-    </div>
-  )
+  if (loading) return <div>Analyzing</div>;
 
-  return (
-    !documentVerified ?
-      <>
-        <div className="document-verification">
-          <div className='doc-ver-heading'>Data Matching</div>
-          <div className='doc-ver-white-card'>
-            <MerchantId onChange={handleMerchantIdChange} />
+  return !documentVerified ? (
+    <>
+      <div className="document-verification">
+        <div className="doc-ver-heading">Data Matching</div>
+        <div className="doc-ver-white-card">
+          <MerchantId onChange={handleMerchantIdChange} />
 
-            <div className="upload-section">
-              <button className="icon-button">
-                <img src='./dv-b1.svg' alt="Icon" className="button-icon" />
-                Document
-              </button>
-              <DropdownButton onOptionSelect={handleOptionSelect} />
-              <UploadButton onFileSelect={handleFileSelect} />
-              <div className="uploaded-files-container">
-                {uploadedFiles.map((file, index) => (
-                  <div className='files-div'>
-                    <div key={index} className="file-box">
-                      <div className="file-background-image">
-                        <img src='./dv-verified.svg' alt="Verified" className="verified-icon" />
-                        <button onClick={() => handleFileDelete(file.name)} className="delete-icon-button">
-                          <img src='./dv-delete.svg' alt="Delete" className="delete-icon" />
-                        </button>
-                      </div>
+          <div className="upload-section">
+            <button className="icon-button">
+              <img src="./dv-b1.svg" alt="Icon" className="button-icon" />
+              Document
+            </button>
+            <DropdownButton onOptionSelect={handleOptionSelect} />
+            <UploadButton onFileSelect={handleFileSelect} />
+            <div className="uploaded-files-container">
+              {uploadedFiles.map((file, index) => (
+                <div className="files-div">
+                  <div key={index} className="file-box">
+                    <div className="file-background-image">
+                      <img src="./dv-verified.svg" alt="Verified" className="verified-icon" />
+                      <button onClick={() => handleFileDelete(file.name)} className="delete-icon-button">
+                        <img src="./dv-delete.svg" alt="Delete" className="delete-icon" />
+                      </button>
                     </div>
-                    <div className="file-name">{file.docType}</div>
+                  </div>
+                  <div className="file-name">{file.docType}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="criteria">
+            <div className="criteria-heading">Select validation rules</div>
+            <div className="criteria-card">
+              <div>
+                {criteria.map((item, index) => (
+                  <div className="criteria-item-container" key={index}>
+                    <input type="checkbox" id={`criteria${index}`} style={{ display: "none" }} onChange={(e) => handleCriteriaChange(item, e.target.checked)} />
+                    <label htmlFor={`criteria${index}`}>{item}</label>
                   </div>
                 ))}
               </div>
-            </div>
-
-            <div className="criteria">
-              <div className='criteria-heading'>Select validation rules</div>
-              <div className='criteria-card'>
-                <div>
-                  {criteria.map((item, index) => (
-                    <div className='criteria-item-container' key={index}>
-                      <input
-                        type="checkbox"
-                        id={`criteria${index}`}
-                        style={{ display: 'none' }}
-                        onChange={(e) => handleCriteriaChange(item, e.target.checked)}
-                      />
-                      <label htmlFor={`criteria${index}`}>{item}</label>
-                    </div>
-                  ))}
-                </div>
-                <img src='./dv-verification.png' alt="Verified" className="criteria-icon" />
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button className="analyze-btn" onClick={submitValidationParams}>Analyze</button>
+              <img src="./dv-verification.png" alt="Verified" className="criteria-icon" />
             </div>
           </div>
-        </div>
-      </> :
 
-      <DocumentVerified p1 = {p1} p2 = {p2} merchantId = {merchantId} conditions = {conditions} redirect = {redirect}/>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <button className="analyze-btn" onClick={submitValidationParams}>
+              Analyze
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  ) : (
+    <DocumentVerified p1={p1} p2={p2} merchantId={merchantId} conditions={conditions} redirect={redirect} />
   );
 };
 

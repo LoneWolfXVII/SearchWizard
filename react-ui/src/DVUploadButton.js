@@ -1,10 +1,13 @@
-import React from 'react';
-import './DocumentVerification.css';
+import React from "react";
+import "./DocumentVerification.css";
 
 const UploadButton = ({ onFileSelect }) => {
   // This function is called when a file is selected
   const handleFileInput = (e) => {
     // Pass the selected file up to the parent component
+
+    localStorage.mainFile = e.target.files[0];
+
     onFileSelect(e.target.files[0]);
   };
 
@@ -18,7 +21,7 @@ const UploadButton = ({ onFileSelect }) => {
         hidden // This hides the default file input
       />
       <label htmlFor="file-upload" className="upload-button">
-          <img src="./dv-upload.svg" alt="Upload" className="upload-icon" />
+        <img src="./dv-upload.svg" alt="Upload" className="upload-icon" />
         Upload document
       </label>
     </div>

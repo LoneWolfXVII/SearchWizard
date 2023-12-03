@@ -11,6 +11,7 @@ import { API_BASE_URL } from "./constants";
 import { Routes } from "react-router-dom";
 import BarGraph from "./BarGraph"; // Adjust the path as necessary
 import GraphPage from "./GraphPage";
+import ConfigurationPage from "./features/configuration/configuration.component";
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
@@ -126,11 +127,7 @@ const App = () => {
     // </div>
     <div className="app-container">
       <Router>
-        <NavBar
-          dataSources={dataSources}
-          onSelectDataSource={handleNavItemSelect}
-          showBody={toggleBody}
-        />
+        <NavBar dataSources={dataSources} onSelectDataSource={handleNavItemSelect} showBody={toggleBody} />
         <div className="content">
           <Header />
           <Routes>
@@ -138,32 +135,16 @@ const App = () => {
 
             <Route
               path="/"
-              element={
-                showImageGrid ? (
-                  <ImageGrid images={extractImageFileNames(images)} />
-                ) : (
-                  <Body fetchedData={navItems} dataSources={dataSources} />
-                )
-              }
+              element={showImageGrid ? <ImageGrid images={extractImageFileNames(images)} /> : <Body fetchedData={navItems} dataSources={dataSources} />}
             />
 
             <Route path="/bar-graph" element={<BarGraph />} />
             {/* Add other routes as needed */}
             {/* Example route for ImageGrid or Body */}
-            <Route
-              path="/image-grid"
-              element={<ImageGrid images={extractImageFileNames(images)} />}
-            />
-            <Route
-              path="/body"
-              element={
-                <Body fetchedData={navItems} dataSources={dataSources} />
-              }
-            />
-            <Route
-              path="/sidebar"
-              element={<GraphPage fetchedData={images} />}
-            />
+            <Route path="/image-grid" element={<ImageGrid images={extractImageFileNames(images)} />} />
+            <Route path="/body" element={<Body fetchedData={navItems} dataSources={dataSources} />} />
+            <Route path="/sidebar" element={<GraphPage fetchedData={images} />} />
+            <Route path="/configuration" element={<ConfigurationPage />} />
 
             <Route path="/automation" element={<DocumentVerification />} />
           </Routes>
