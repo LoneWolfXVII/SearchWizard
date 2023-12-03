@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import BarGraph from "./BarGraph";
 import "./HomePage2.css";
 import Modal from "./Modal";
+const EyeIcon = "/bx_show.svg";
+const BlueEyeIcon = "/bx_show_blue.svg";
 const addIcon = "/add.png";
 
 const AnswerSection = ({
@@ -18,9 +20,15 @@ const AnswerSection = ({
   label,
   data,
   currentDashboardList,
-  currentDashboardType
+  currentDashboardType,
+  fileData
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [dataToShow, setDataToShow] = useState(
+    fileData && Object.keys(fileData).length > 0
+      ? fileData[Object.keys(fileData)[0]]
+      : null
+  );
 
   const { answer, graph_img, insight } = answerData;
 
@@ -69,8 +77,43 @@ const AnswerSection = ({
       </div> : null} */}
 
       <div className="answerBox">
-        <span style={{ fontWeight: "800" }}> {answerReceived} </span>
+        <span className="font-bold">
+          Original Answer:
+          <span className="font-medium"> {answerReceived}</span>
+        </span>
       </div>
+
+      {currentDashboardType === "text_docs" && (
+        <div className="my-5 answerBox">
+          <div>
+            <span className="flex flex-wrap font-bold text-blue-500">
+              Source Name:{" "}
+              <div className="flex flex-wrap">
+                {Object.keys(fileData).map((key) => (
+                  <button
+                    onClick={() => setDataToShow(fileData[key])}
+                    key={key}
+                    className={`flex flex-wrap gap-3 mx-4 font-medium text-black`}
+                  >
+                    {key}{" "}
+                    <img
+                      src={fileData[key] === dataToShow ? BlueEyeIcon : EyeIcon}
+                      className="text-blue-500 fill-current"
+                      alt="eye"
+                    />
+                  </button>
+                ))}
+              </div>
+            </span>
+          </div>
+          <div>
+            <span className="font-bold text-blue-500">
+              Source Text:
+              <span className="font-medium text-black"> {dataToShow}</span>
+            </span>
+          </div>
+        </div>
+      )}
 
       <div className="graphAndInsight">
         {graph_img ? (

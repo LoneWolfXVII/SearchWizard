@@ -47,6 +47,7 @@ const HomePage2 = (props) => {
   const [labels, setLabels] = useState([]);
   const [label, setlabel] = useState("");
   const [chartData, setChartData] = useState([]);
+  const [fileData, setFileData] = useState({});
 
   const onAddToDashboardHandler = (option) => {
     console.log("option :>> ", option);
@@ -86,6 +87,7 @@ const HomePage2 = (props) => {
     setlabel("");
     setChartData([]);
     setFollorUpQuestions([]);
+    setFileData({});
 
     const fetchStatus = async () => {
       try {
@@ -115,6 +117,13 @@ const HomePage2 = (props) => {
           if (result?.follow_up_questions?.length)
             setFollorUpQuestions(result?.follow_up_questions);
           if (result?.query_data?.label) setlabel(result?.query_data?.label);
+          if (
+            typeof result?.query_data === "object" &&
+            !result?.query_data?.label &&
+            !result?.query_data?.values
+          ) {
+            setFileData(result?.query_data);
+          }
         }
       } catch (error) {
         setIsLoading(false);
@@ -180,6 +189,7 @@ const HomePage2 = (props) => {
         data={chartData}
         currentDashboardList={props.currentDashboardList}
         currentDashboardType={props.currentDashboardType}
+        fileData={fileData}
       />
     </div>
   );
