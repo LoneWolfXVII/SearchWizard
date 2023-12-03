@@ -10,11 +10,9 @@ const HomePage2 = (props) => {
     const originalFollowUpQuestions = props.answerData.follow_up_questions;
 
     // Convert the original follow-up questions array to the desired format
-    formattedFollowUpQuestions = originalFollowUpQuestions.map(
-      (question, index) => ({
-        text: question,
-      }),
-    );
+    formattedFollowUpQuestions = originalFollowUpQuestions.map((question, index) => ({
+      text: question,
+    }));
 
     // Now you can use formattedFollowUpQuestions in your component
   } else {
@@ -48,13 +46,14 @@ const HomePage2 = (props) => {
   const [label, setlabel] = useState("");
   const [chartData, setChartData] = useState([]);
 
-  const onAddToDashboardHandler = () => {
+  const onAddToDashboardHandler = (option) => {
+    console.log("option :>> ", option);
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
       task_id: props?.taskID,
-      dashboard_name: props?.dashboard_name,
+      dashboard_name: option,
     });
 
     var requestOptions = {
@@ -88,10 +87,7 @@ const HomePage2 = (props) => {
 
     const fetchStatus = async () => {
       try {
-        const response = await fetch(
-          `https://api.irame.ai/get_query_status?task_id=${props?.taskID}`,
-          requestOptions,
-        );
+        const response = await fetch(`https://api.irame.ai/get_query_status?task_id=${props?.taskID}`, requestOptions);
         const result = await response.json();
 
         console.log("result :>> ", result?.query_data?.label);
@@ -99,20 +95,16 @@ const HomePage2 = (props) => {
         if (result?.status?.toLowerCase() !== "done") {
           if (result?.answer) setAnswer(result?.answer);
           if (result?.query) setQuestion(result?.query);
-          if (result?.follow_up_questions?.length)
-            setFollorUpQuestions(result?.follow_up_questions);
+          if (result?.follow_up_questions?.length) setFollorUpQuestions(result?.follow_up_questions);
           setTimeout(fetchStatus, 1000);
         } else {
           setIsLoading(false);
 
           if (result?.answer) setAnswer(result?.answer);
           if (result?.query) setQuestion(result?.query);
-          if (result?.query_data?.labels?.length)
-            setLabels(result?.query_data?.labels);
-          if (result?.query_data?.values?.length)
-            setChartData(result?.query_data?.values);
-          if (result?.follow_up_questions?.length)
-            setFollorUpQuestions(result?.follow_up_questions);
+          if (result?.query_data?.labels?.length) setLabels(result?.query_data?.labels);
+          if (result?.query_data?.values?.length) setChartData(result?.query_data?.values);
+          if (result?.follow_up_questions?.length) setFollorUpQuestions(result?.follow_up_questions);
           if (result?.query_data?.label) setlabel(result?.query_data?.label);
         }
       } catch (error) {
@@ -141,12 +133,7 @@ const HomePage2 = (props) => {
         ""
       )}
 
-      <FollowUpQuestions
-        followUpQuestions={followUpQuestions}
-        onSearch={props.onSearch}
-        query={question}
-        handleSearchValue={props.handleSearchValue}
-      />
+      <FollowUpQuestions followUpQuestions={followUpQuestions} onSearch={props.onSearch} query={question} handleSearchValue={props.handleSearchValue} />
       <aside
         style={{
           display: "flex",
