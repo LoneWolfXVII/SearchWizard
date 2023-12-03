@@ -18,6 +18,7 @@ const AnswerSection = ({
   label,
   data,
   currentDashboardList,
+  currentDashboardType
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -120,7 +121,7 @@ const AnswerSection = ({
         }
       </div>
 
-      {labels?.length ? (
+      {labels?.length > 0 && currentDashboardType !== "text_docs" ? (
         <div
           className="bar-graph-container"
           style={{ width: "90%", height: "35rem" }}
@@ -136,7 +137,7 @@ const AnswerSection = ({
             display: "flex",
             paddingRight: "3rem",
             paddingTop: "2rem",
-            flexDirection: "column",
+            flexDirection: "column"
           }}
         >
           <button onClick={toggleDropdown} className="graphButton">

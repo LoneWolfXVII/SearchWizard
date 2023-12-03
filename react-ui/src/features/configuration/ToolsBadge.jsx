@@ -6,7 +6,7 @@ const ToolsBadge = ({ image, title }) => {
 
   return (
     <div
-      className={`flex items-center justify-between h-16 px-4 text-2xl font-medium text-black ${
+      className={`flex items-center w-[22rem] justify-between h-16 px-4 text-2xl font-medium text-black ${
         toggleValue ? "bg-white" : "bg-transparent"
       } border rounded-3xl w-96 transition-all duration-300 ease-in-out`}
     >

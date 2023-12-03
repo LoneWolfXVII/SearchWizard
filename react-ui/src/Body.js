@@ -18,6 +18,7 @@ class Body extends Component {
       isDropdownOpen: false,
       showPopUp: false,
       currentDashboardList: this.props.fetchedData,
+      currentDashboardType: ""
     };
   }
 
@@ -25,24 +26,28 @@ class Body extends Component {
 
   selectOption = (option) => {
     this.setState({
-      selectedOption: option,
+      selectedOption: option
     });
+    console.log(option);
     this.props.fetchedData?.forEach((item) => {
       if (option === item?.datasource_name) {
-        this.setState({ currentDashboardList: [...item.dropdown] });
+        this.setState({
+          currentDashboardList: [...item.dropdown],
+          currentDashboardType: item?.class || "mysql"
+        });
       }
     });
   };
 
   toggleDropdown = () => {
     this.setState({
-      isDropdownOpen: !this.state.isDropdownOpen,
+      isDropdownOpen: !this.state.isDropdownOpen
     });
   };
 
   closeDropdown = () => {
     this.setState({
-      isDropdownOpen: false,
+      isDropdownOpen: false
     });
   };
 
@@ -84,14 +89,14 @@ class Body extends Component {
 
     var raw = JSON.stringify({
       query: query,
-      "Data Source Name": this.state.selectedOption,
+      "Data Source Name": this.state.selectedOption
     });
 
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: raw,
-      redirect: "follow",
+      redirect: "follow"
     };
 
     fetch("https://api.irame.ai/get_answer2", requestOptions)
@@ -163,6 +168,7 @@ class Body extends Component {
                 handleSearchValue={this.handleSearchValue}
                 dashboard_name={this.state.selectedOption}
                 currentDashboardList={this.state.currentDashboardList}
+                currentDashboardType={this.state.currentDashboardType}
               />
             ) : (
               <HomePage

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const uploadIcon = "/upload.svg";
 const fileIcon = "/fileIcon.svg";
 
-const Upload = ({ dataSourceId, disabled }) => {
+const Upload = ({ dataSourceId, disabled, onUploadDone }) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
   const handleUploadFiles = (event) => {
@@ -37,6 +37,8 @@ const Upload = ({ dataSourceId, disabled }) => {
           throw new Error(`Unexpected status code: ${res.status}`);
         }
       });
+      onUploadDone();
+      handleClearFiles();
     } catch (error) {
       console.error(error);
       alert(
