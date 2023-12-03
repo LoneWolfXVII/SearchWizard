@@ -5,7 +5,10 @@ import ToolsBadge from "./ToolsBadge";
 import Upload from "./Upload";
 import Divider from "./Divider";
 import axios from "axios";
-const SQLIcon = "/devicon_postgresql.svg";
+import { configurationToolsData } from "./constants";
+const jiraIcon = "/jira.svg";
+const notionIcon = "/notion.svg";
+const jupiterIcon = "/jupiter.svg";
 
 const ConfigurationPage = () => {
   const [dataSource, setDataSource] = useState("");
@@ -88,11 +91,9 @@ const ConfigurationPage = () => {
           <Divider />
         </div>
 
-        <ToolsBadge image={SQLIcon} title="SQL" />
-        <ToolsBadge image={SQLIcon} title="SQL" />
-        <ToolsBadge image={SQLIcon} title="SQL" />
-        <ToolsBadge image={SQLIcon} title="SQL" />
-        <ToolsBadge image={SQLIcon} title="SQL" />
+        {configurationToolsData?.map((item) => (
+          <ToolsBadge image={item.image} title={item.title} key={item.title} />
+        ))}
       </main>
       <footer className="pb-6 px-[16rem]">
         <div className="flex items-center col-span-2 gap-5 py-5">
@@ -103,17 +104,17 @@ const ConfigurationPage = () => {
         <div className="flex flex-col gap-5">
           <FooterBadge
             title="Sync data with Jira board"
-            image={SQLIcon}
+            image={jiraIcon}
             description="Accesses your tickets and projects to helps in detailed research "
           />
           <FooterBadge
-            title="Sync data with Jira board"
-            image={SQLIcon}
-            description="Accesses your tickets and projects to helps in detailed research "
+            title="Connect notion to manage your projects"
+            image={notionIcon}
+            description="Accesses your tickets and projects & helps in detailed research "
           />
           <FooterBadge
-            title="Sync data with Jira board"
-            image={SQLIcon}
+            title="Import clients data for analysis"
+            image={jupiterIcon}
             description="Accesses your tickets and projects to helps in detailed research "
           />
         </div>{" "}
