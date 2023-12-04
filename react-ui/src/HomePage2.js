@@ -56,7 +56,7 @@ const HomePage2 = (props) => {
 
     var raw = JSON.stringify({
       task_id: props?.taskID,
-      dashboard_name: props?.dashboard_name
+      dashboard_name: option
     });
 
     var requestOptions = {
