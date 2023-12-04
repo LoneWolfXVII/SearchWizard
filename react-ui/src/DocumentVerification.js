@@ -230,30 +230,44 @@ const DocumentVerification = () => {
               Document
             </button>
             <DropdownButton onOptionSelect={handleOptionSelect} />
-            <UploadButton onFileSelect={onDrop} />
+            <UploadButton onFileSelect={handleFileSelect} />
             <div className="uploaded-files-container">
               {uploadedFiles.map((file, index) => (
                 <div className="files-div">
                   <div key={index} className="file-box">
                     <div className="file-background-image">
                       <img src="./dv-verified.svg" alt="Verified" className="verified-icon" />
-                      <button onClick={() => handleFileDelete(file)} className="delete-icon-button">
+                      <button onClick={() => handleFileDelete(file.name)} className="delete-icon-button">
                         <img src="./dv-delete.svg" alt="Delete" className="delete-icon" />
                       </button>
                     </div>
                   </div>
-                  <div className="file-name">{file}</div>
+                  <div className="file-name">{file.docType}</div>
                 </div>
               ))}
             </div>
-            <img src="./dv-verification.png" alt="Verified" className="criteria-icon" />
           </div>
-        </div>
 
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <button className="analyze-btn" onClick={submitValidationParams}>
-            Analyze
-          </button>
+          <div className="criteria">
+            <div className="criteria-heading">Select validation rules</div>
+            <div className="criteria-card">
+              <div>
+                {criteria.map((item, index) => (
+                  <div className="criteria-item-container" key={index}>
+                    <input type="checkbox" id={`criteria${index}`} style={{ display: "none" }} onChange={(e) => handleCriteriaChange(item, e.target.checked)} />
+                    <label htmlFor={`criteria${index}`}>{item}</label>
+                  </div>
+                ))}
+              </div>
+              <img src="./dv-verification.png" alt="Verified" className="criteria-icon" />
+            </div>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <button className="analyze-btn" onClick={submitValidationParams}>
+              Analyze
+            </button>
+          </div>
         </div>
       </div>
     </>
