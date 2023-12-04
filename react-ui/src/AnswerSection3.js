@@ -21,16 +21,12 @@ const AnswerSection = ({
   data,
   currentDashboardList,
   currentDashboardType,
-  fileData
+  fileData,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showCustomEdit, setShowCustomEdit] = useState(false);
   const [customEdit, setCustomEdit] = useState("");
-  const [dataToShow, setDataToShow] = useState(
-    fileData && Object.keys(fileData).length > 0
-      ? fileData[Object.keys(fileData)[0]]
-      : null
-  );
+  const [dataToShow, setDataToShow] = useState(fileData && Object.keys(fileData).length > 0 ? fileData[Object.keys(fileData)[0]] : null);
 
   const { answer, graph_img, insight } = answerData;
 
@@ -98,17 +94,8 @@ const AnswerSection = ({
               Source Name:{" "}
               <div className="flex flex-wrap">
                 {Object.keys(fileData).map((key) => (
-                  <button
-                    onClick={() => setDataToShow(fileData[key])}
-                    key={key}
-                    className={`flex flex-wrap gap-3 mx-4 font-medium text-black`}
-                  >
-                    {key}{" "}
-                    <img
-                      src={fileData[key] === dataToShow ? BlueEyeIcon : EyeIcon}
-                      className="text-blue-500 fill-current"
-                      alt="eye"
-                    />
+                  <button onClick={() => setDataToShow(fileData[key])} key={key} className={`flex flex-wrap gap-3 mx-4 font-medium text-black`}>
+                    {key} <img src={fileData[key] === dataToShow ? BlueEyeIcon : EyeIcon} className="text-blue-500 fill-current" alt="eye" />
                   </button>
                 ))}
               </div>
@@ -129,10 +116,7 @@ const AnswerSection = ({
             <img src={graph_img} alt="Graph" className="graphImage" />
 
             <div className="graphButtons">
-              <button
-                onClick={() => handleExport(graph_img)}
-                className="graphButton"
-              >
+              <button onClick={() => handleExport(graph_img)} className="graphButton">
                 <img src="/export.png" alt="Export" /> Export
               </button>
               <button onClick={toggleModal} className="graphButton">
@@ -144,11 +128,7 @@ const AnswerSection = ({
         {insight ? (
           <div className="insightSection">
             <div style={{ display: "flex" }}>
-              <img
-                src="/insights.png"
-                alt="Insights Icon"
-                className="insightIcon"
-              />
+              <img src="/insights.png" alt="Insights Icon" className="insightIcon" />
               <div className="Insights">Insights</div>
             </div>
             <div className="insightText">
@@ -161,22 +141,14 @@ const AnswerSection = ({
         ) : null}
         {
           isModalOpen && (
-            <Modal
-              taskID={taskID}
-              dataSource={selectedDataSource}
-              options={getDropdownOptions(dataSources, selectedDataSource)}
-              onClose={toggleModal}
-            />
+            <Modal taskID={taskID} dataSource={selectedDataSource} options={getDropdownOptions(dataSources, selectedDataSource)} onClose={toggleModal} />
           )
           // modalHandler()
         }
       </div>
 
       {labels?.length > 0 && currentDashboardType !== "text_docs" ? (
-        <div
-          className="bar-graph-container"
-          style={{ width: "90%", height: "35rem" }}
-        >
+        <div className="bar-graph-container" style={{ width: "90%", height: "35rem" }}>
           <BarGraph labels={labels} label={label} data={data} />
         </div>
       ) : (
@@ -189,7 +161,7 @@ const AnswerSection = ({
             paddingRight: "3rem",
             paddingTop: "2rem",
             flexDirection: "column",
-            width: "20rem"
+            width: "20rem",
           }}
         >
           <button onClick={toggleDropdown} className="graphButton">
@@ -198,11 +170,8 @@ const AnswerSection = ({
           {isDropdownOpen && (
             <div className="w-full border shadow-lg">
               {!showCustomEdit && (
-                <button
-                  onClick={() => setShowCustomEdit(true)}
-                  className="w-10/12 px-2 py-1 my-3 ml-4 font-semibold text-white bg-blue-500 border rounded-lg"
-                >
-                  Custom Edit
+                <button onClick={() => setShowCustomEdit(true)} className="w-10/12 px-2 py-1 my-3 ml-4 font-semibold text-white bg-blue-500 border rounded-lg">
+                  Add New
                 </button>
               )}
               {showCustomEdit && (
@@ -224,10 +193,7 @@ const AnswerSection = ({
                     >
                       Clear
                     </button>
-                    <button
-                      onClick={handleSaveCustomEdit}
-                      className="flex-1 px-2 py-1 my-3 font-semibold text-white bg-green-500 border rounded-lg "
-                    >
+                    <button onClick={handleSaveCustomEdit} className="flex-1 px-2 py-1 my-3 font-semibold text-white bg-green-500 border rounded-lg ">
                       Save
                     </button>
                   </div>

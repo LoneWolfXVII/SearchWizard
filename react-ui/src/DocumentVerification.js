@@ -1,12 +1,12 @@
 import React from "react";
+import { useDropzone } from "react-dropzone";
 import "./DocumentVerification.css"; // Assume you have a corresponding CSS file
 import DropdownButton from "./DropdownButton";
 import UploadButton from "./DVUploadButton";
-import { useState, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import MerchantId from "./DVMerchantID";
 import { API_BASE_URL } from "./constants";
 import DocumentVerified from "./DocumentVerified";
-import axios from "axios";
 
 const DocumentVerification = () => {
   const [merchantId, setMerchantId] = useState(""); // State for merchant ID
@@ -120,6 +120,15 @@ const DocumentVerification = () => {
     // Call handleSubmit immediately after file selection
     handleSubmit(fileObject, file);
   };
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      console.log(acceptedFiles); // Add this line to debug
+      handleSubmit({ file: acceptedFiles, docType: selectedDocumentType, name: acceptedFiles.name });
+    },
+    [selectedDocumentType],
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleOptionSelect = (option) => {
     setSelectedDocumentType(option);
@@ -127,7 +136,7 @@ const DocumentVerification = () => {
 
   const handleFileDelete = (fileName) => {
     // Remove the file from the uploadedFiles array
-    setUploadedFiles(uploadedFiles.filter((file) => file.name !== fileName));
+    setUploadedFiles(uploadedFiles.filter((file) => file !== fileName));
   };
 
   const handleMerchantIdChange = (id) => {
@@ -157,25 +166,45 @@ const DocumentVerification = () => {
     const formData = new FormData();
     formData.append("merch_id", merchantId);
     formData.append("doc_type", fileObject.docType);
+    formData.append("file", fileObject.file, fileObject.name);
 
-    formData.append("doc_img", file, fileObject.name);
-
-    console.log(`Sending request with Merchant ID: ${merchantId}, Document Type: ${fileObject.docType}, File Name: ${fileObject.name}`);
+    console.log(`Sending request to upload to s3 with Merchant ID: ${merchantId}, Document Type: ${fileObject.docType}, File Name: ${fileObject.name}`);
     console.log("test");
+    const requestOptions = {
+      method: "POST",
+      body: formData,
+      redirect: "follow",
+    };
 
-    // const requestOptions = {
-    //   method: "POST",
-    //   body: formData,
-    //   Headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    // };
+    fetch(`${API_BASE_URL}/upload_to_s3`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("API Response:", result.url);
+        callBackendAPI(result.url, fileObject.docType);
+      })
+      .catch((error) => {
+        console.log("API Error:", error);
+      });
+  };
 
-    axios
-      .post(`${API_BASE_URL}/paytm/update_merchant_data`, formData)
+  const callBackendAPI = async (fileUrl, docType) => {
+    const formData = new FormData();
+    formData.append("merch_id", merchantId);
+    formData.append("doc_type", docType);
+    formData.append("doc_img", fileUrl);
+
+    console.log(`Sending request to backend with Merchant ID: ${merchantId}, Document Type: ${docType}, File Url: ${fileUrl}`);
+    const requestOptions = {
+      method: "POST",
+      body: formData,
+      redirect: "follow",
+    };
+
+    fetch(`${API_BASE_URL}/paytm/update_merchant_data`, requestOptions)
+      .then((response) => response.text())
       .then((result) => {
         console.log("API Response:", result);
-        setUploadedFiles((prevFiles) => [...prevFiles, fileObject]);
+        setUploadedFiles((prevFiles) => [...prevFiles, fileUrl]);
       })
       .catch((error) => {
         console.log("API Error:", error);
@@ -201,44 +230,30 @@ const DocumentVerification = () => {
               Document
             </button>
             <DropdownButton onOptionSelect={handleOptionSelect} />
-            <UploadButton onFileSelect={handleFileSelect} />
+            <UploadButton onFileSelect={onDrop} />
             <div className="uploaded-files-container">
               {uploadedFiles.map((file, index) => (
                 <div className="files-div">
                   <div key={index} className="file-box">
                     <div className="file-background-image">
                       <img src="./dv-verified.svg" alt="Verified" className="verified-icon" />
-                      <button onClick={() => handleFileDelete(file.name)} className="delete-icon-button">
+                      <button onClick={() => handleFileDelete(file)} className="delete-icon-button">
                         <img src="./dv-delete.svg" alt="Delete" className="delete-icon" />
                       </button>
                     </div>
                   </div>
-                  <div className="file-name">{file.docType}</div>
+                  <div className="file-name">{file}</div>
                 </div>
               ))}
             </div>
+            <img src="./dv-verification.png" alt="Verified" className="criteria-icon" />
           </div>
+        </div>
 
-          <div className="criteria">
-            <div className="criteria-heading">Select validation rules</div>
-            <div className="criteria-card">
-              <div>
-                {criteria.map((item, index) => (
-                  <div className="criteria-item-container" key={index}>
-                    <input type="checkbox" id={`criteria${index}`} style={{ display: "none" }} onChange={(e) => handleCriteriaChange(item, e.target.checked)} />
-                    <label htmlFor={`criteria${index}`}>{item}</label>
-                  </div>
-                ))}
-              </div>
-              <img src="./dv-verification.png" alt="Verified" className="criteria-icon" />
-            </div>
-          </div>
-
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <button className="analyze-btn" onClick={submitValidationParams}>
-              Analyze
-            </button>
-          </div>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <button className="analyze-btn" onClick={submitValidationParams}>
+            Analyze
+          </button>
         </div>
       </div>
     </>
