@@ -24,6 +24,8 @@ const AnswerSection = ({
   fileData
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [showCustomEdit, setShowCustomEdit] = useState(false);
+  const [customEdit, setCustomEdit] = useState("");
   const [dataToShow, setDataToShow] = useState(
     fileData && Object.keys(fileData).length > 0
       ? fileData[Object.keys(fileData)[0]]
@@ -67,6 +69,12 @@ const AnswerSection = ({
   }
   function toggleDropdown() {
     setIsDropdownOpen((prev) => !prev);
+  }
+
+  function handleSaveCustomEdit() {
+    onAddToDashboard(customEdit);
+    setShowCustomEdit(false);
+    setCustomEdit("");
   }
 
   return (
@@ -180,25 +188,65 @@ const AnswerSection = ({
             display: "flex",
             paddingRight: "3rem",
             paddingTop: "2rem",
-            flexDirection: "column"
+            flexDirection: "column",
+            width: "20rem"
           }}
         >
           <button onClick={toggleDropdown} className="graphButton">
             <img src={addIcon} alt="Add" /> Add to Dashboard
           </button>
-          {isDropdownOpen &&
-            currentDashboardList?.map((option, index) => (
-              <div
-                className="graphButton"
-                onClick={() => {
-                  toggleDropdown();
-                  onAddToDashboard(option);
-                }}
-                key={index}
-              >
-                {option}
-              </div>
-            ))}
+          {isDropdownOpen && (
+            <div className="w-full border shadow-lg">
+              {!showCustomEdit && (
+                <button
+                  onClick={() => setShowCustomEdit(true)}
+                  className="w-10/12 px-2 py-1 my-3 ml-4 font-semibold text-white bg-blue-500 border rounded-lg"
+                >
+                  Custom Edit
+                </button>
+              )}
+              {showCustomEdit && (
+                <>
+                  <input
+                    type="text"
+                    className="px-4 py-2 my-4 ml-4 border rounded-lg"
+                    placeholder="Enter dashboard name"
+                    value={customEdit}
+                    onChange={(e) => setCustomEdit(e.target.value)}
+                  />
+                  <div className="flex gap-3 px-2">
+                    <button
+                      onClick={() => {
+                        setShowCustomEdit(false);
+                        setCustomEdit("");
+                      }}
+                      className="flex-1 px-2 py-1 my-3 font-semibold text-white bg-red-500 border rounded-lg "
+                    >
+                      Clear
+                    </button>
+                    <button
+                      onClick={handleSaveCustomEdit}
+                      className="flex-1 px-2 py-1 my-3 font-semibold text-white bg-green-500 border rounded-lg "
+                    >
+                      Save
+                    </button>
+                  </div>
+                </>
+              )}
+              {currentDashboardList?.map((option, index) => (
+                <div
+                  className="graphButton"
+                  onClick={() => {
+                    toggleDropdown();
+                    onAddToDashboard(option);
+                  }}
+                  key={index}
+                >
+                  {option}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </footer>
     </div>
