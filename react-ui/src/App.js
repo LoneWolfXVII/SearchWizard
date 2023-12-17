@@ -12,6 +12,8 @@ import { Routes } from "react-router-dom";
 import BarGraph from "./BarGraph"; // Adjust the path as necessary
 import GraphPage from "./GraphPage";
 import ConfigurationPage from "./features/configuration/configuration.component";
+import AutomationWorkflow from "./features/workflow/Automation_Workflow";
+import DocumentValidator from "./features/workflow/Document_Validator";
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
@@ -145,8 +147,12 @@ const App = () => {
             <Route path="/body" element={<Body fetchedData={navItems} dataSources={dataSources} />} />
             <Route path="/sidebar" element={<GraphPage fetchedData={images} />} />
             <Route path="/configuration" element={<ConfigurationPage />} />
-
+            {/* 
             <Route path="/automation" element={<DocumentVerification />} />
+            <Route path="/automation-page" element={<AutomationWorkflow />} />
+            <Route path="document-validator" element={<DocumentValidator />} /> */}
+            <Route path="/automation" element={<AutomationWorkflow />} />
+            <Route path="/automation/document-validator" element={<DocumentValidator />} />
           </Routes>
           {/* Conditional rendering outside of Routes */}
         </div>

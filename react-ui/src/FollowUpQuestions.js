@@ -1,16 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./HomePage.css";
+import Loader from "./components/ui/Loader";
 
 // Define the path to the shared icon for follow-up questions outside the component
 const sharedIconPath = "/search.png"; // Update this path to your icon's location
 
-const FollowUpQuestions = ({
-  followUpQuestions,
-  onQuestionSelect,
-  handleSearchValue,
-  onSearch,
-  query,
-}) => {
+const FollowUpQuestions = ({ followUpQuestions, onQuestionSelect, handleSearchValue, onSearch, query, isLoading }) => {
   const scrollContainerRef = useRef(null);
   const [inputValue, setInputValue] = useState("");
 
@@ -54,21 +49,10 @@ const FollowUpQuestions = ({
     <>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <div className="searchContainer">
-          <input
-            type="text"
-            className="searchInput"
-            placeholder=""
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            value={inputValue}
-          />
+          <input type="text" className="searchInput" placeholder="" onChange={handleInputChange} onKeyDown={handleKeyDown} value={inputValue} />
           <div className="searchIconContainer2">
-            <img
-              src="/sendIcon.png"
-              alt="Send"
-              className="searchIcon2"
-              onClick={() => onSearch(inputValue)}
-            />
+            {!isLoading && <img src="/sendIcon.png" alt="Send" className="searchIcon2" onClick={() => onSearch(inputValue)} />}
+            {!!isLoading && <Loader />}
           </div>
         </div>
       </div>
@@ -78,11 +62,7 @@ const FollowUpQuestions = ({
         </button> */}
         <div className="questions-container" ref={scrollContainerRef}>
           {followUpQuestions.map((question, index) => (
-            <button
-              key={index}
-              className="question-btn"
-              onClick={() => handleQuestionClick(question)}
-            >
+            <button key={index} className="question-btn" onClick={() => handleQuestionClick(question)}>
               <img src={sharedIconPath} alt="Q" className="question-icon" />
               {question?.text || question?.toString()}
             </button>

@@ -1,0 +1,40 @@
+.Automation_Workflow{
+    background: #F6F7FB;
+    width: 960px;
+    height: 893px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    color: #FFFFFF;
+}
+.Automation_Workflow h1{
+color: #446CFF;
+font-family: Poppins;
+font-size: 30px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+}
+.flex.shadow-lg{
+    /* width: 868px; */
+    /* height: 105px; */
+    /* margin-left: 25px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #FFF;
+    color: #FFFFFF; */
+}
+.Icons{
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+.Heading_pera{
+    color: #446CFF;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px; /* 160% */
+}
+
+

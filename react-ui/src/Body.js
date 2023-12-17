@@ -1,85 +1,77 @@
-import { Component } from "react";
+import { useContext, useState } from "react";
 import "./App.css";
 import HomePage from "./HomePage";
 import HomePage2 from "./HomePage2";
+import { Button } from "./components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "./components/ui/dropdown-menu";
+import { DashboardContext } from "./context/dashboard-context";
 
-class Body extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: "",
-      isLoading: false,
-      error: null,
-      taskID: null,
-      answerData: null,
-      showHomePage2: false,
-      userQuestion: "",
-      selectedOption: "Select Data source",
+const Body = (props) => {
+  const [state, setState] = useState({
+    query: "",
+    isLoading: false,
+    error: null,
+    taskID: null,
+    answerData: null,
+    showHomePage2: false,
+    userQuestion: "",
+    selectedOption: "Select Data source",
+    isDropdownOpen: false,
+    showPopUp: false,
+    currentDashboardList: props.fetchedData,
+    currentDashboardType: "",
+  });
+
+  const { setDashboardList, setDashboardType, setDashboardName } = useContext(DashboardContext);
+
+  const selectOption = (option) => {
+    setState((prev) => ({
+      ...prev,
+      selectedOption: option,
+      currentDashboardList: props.fetchedData?.find((item) => option === item?.datasource_name)?.dropdown || [],
+      currentDashboardType: props.fetchedData?.find((item) => option === item?.datasource_name)?.class || "mysql",
+    }));
+
+    setDashboardName(option);
+    setDashboardList(props.fetchedData?.find((item) => option === item?.datasource_name)?.dropdown || []);
+    setDashboardType(props.fetchedData?.find((item) => option === item?.datasource_name)?.class || "mysql");
+  };
+
+  const toggleDropdown = () => {
+    setState((prev) => ({
+      ...prev,
+      isDropdownOpen: !prev.isDropdownOpen,
+    }));
+  };
+
+  const closeDropdown = () => {
+    setState((prev) => ({
+      ...prev,
       isDropdownOpen: false,
-      showPopUp: false,
-      currentDashboardList: this.props.fetchedData,
-      currentDashboardType: ""
-    };
-  }
-
-  //   setSearchParams = useSearchParams()[1];
-
-  selectOption = (option) => {
-    this.setState({
-      selectedOption: option
-    });
-    console.log(option);
-    this.props.fetchedData?.forEach((item) => {
-      if (option === item?.datasource_name) {
-        this.setState({
-          currentDashboardList: [...item.dropdown],
-          currentDashboardType: item?.class || "mysql"
-        });
-      }
-    });
+    }));
   };
 
-  toggleDropdown = () => {
-    this.setState({
-      isDropdownOpen: !this.state.isDropdownOpen
-    });
+  const handleShowHomePage2 = () => {
+    setState((prev) => ({ ...prev, showHomePage2: true }));
   };
 
-  closeDropdown = () => {
-    this.setState({
-      isDropdownOpen: false
-    });
-  };
-
-  handleShowHomePage2 = () => {
-    this.setState({ showHomePage2: true });
-  };
-
-  handleSearchValue = (value) => {
+  const handleSearchValue = (value) => {
     return new Promise((resolve) => {
-      this.setState({ query: value }, () => {
-        resolve();
-      });
+      setState((prev) => ({ ...prev, query: value }));
+      resolve();
     });
   };
 
-  handleInputValue = (event) => {
-    this.setState({ query: event.target.value });
+  const handleInputValue = (event) => {
+    setState((prev) => ({ ...prev, query: event.target.value }));
   };
 
-  fetchChartData = () => {
-    // Implement the logic to fetch chart data here
+  const fetchChartData = () => {
     console.log("Fetching chart data...");
   };
 
-  handleSearch = (query = "") => {
-    // Now this method only calls fetchChartData
-    // this.fetchChartData();
-
-    if (
-      !this.state.selectedOption ||
-      this.state.selectedOption === "Select Data source"
-    ) {
+  const handleSearch = (query = "") => {
+    if (!state.selectedOption || state.selectedOption === "Select Data source") {
       alert("Please select a data source first");
       return;
     }
@@ -89,98 +81,81 @@ class Body extends Component {
 
     var raw = JSON.stringify({
       query: query,
-      "Data Source Name": this.state.selectedOption
+      "Data Source Name": state.selectedOption,
     });
 
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: raw,
-      redirect: "follow"
+      redirect: "follow",
     };
 
     fetch("https://api.irame.ai/get_answer2", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         if (result?.task_id) {
-          this.setState({ showHomePage2: true, taskID: result.task_id });
+          setState((prev) => ({ ...prev, showHomePage2: true, taskID: result.task_id }));
         }
       })
       .catch((error) => console.log("error", error));
   };
 
-  render() {
-    const { answerData, isLoading, error, query, userQuestion } = this.state;
-    if (error && !answerData) {
-      return <div>Error: {error}</div>;
-    }
+  // Destructure state for easy access
+  const { answerData, isLoading, error, query, userQuestion } = state;
 
-    if (isLoading) {
-      return <div>Loading...</div>;
-    }
+  // Define dropbtnClass
+  const dropbtnClass = `dropbtn ${state.isDropdownOpen ? "dropbtnActive" : ""}`;
 
-    const dropbtnClass = `dropbtn ${
-      this.state.isDropdownOpen ? "dropbtnActive" : ""
-    }`;
-
-    const { dataSources } = this.props;
-
-    return (
-      <>
-        {this.state.showPopUp ? (
-          <div>
-            <p>Select data source before making the API call</p>
-            <button onClick={() => this.setState({ showPopUp: false })}>
-              Close
-            </button>
-          </div>
-        ) : (
-          <div className="body-container">
-            <div className="dropdown" onMouseLeave={this.closeDropdown}>
-              <div className={dropbtnClass}>
-                <div>{this.state.selectedOption}</div>
-                <img
-                  src="./dropdown.svg"
-                  alt="Dropdown Icon"
-                  className="dronbtnIcon"
-                  onClick={this.toggleDropdown}
-                />
-              </div>
-              {this.state.isDropdownOpen && (
-                <div className="dropdown-content">
-                  {Object.keys(dataSources).map((ds) => (
-                    <a key={ds} href="#" onClick={() => this.selectOption(ds)}>
+  return (
+    <>
+      {state.showPopUp ? (
+        <div>
+          <p>Select data source before making the API call</p>
+          <button onClick={() => setState((prev) => ({ ...prev, showPopUp: false }))}>Close</button>
+        </div>
+      ) : (
+        <div className="body-container">
+          <div className="pt-10">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Button className="flex px-4 font-semibold bg-blue-500 py-7">
+                  <div>{state.selectedOption}</div>
+                  <img src="./dropdown.svg" alt="Dropdown Icon" className="dronbtnIcon" onClick={toggleDropdown} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <div className="flex flex-col gap-5 px-3 py-3 font-semibold">
+                  {Object.keys(props.dataSources).map((ds) => (
+                    <a className="hover:text-blue-500" key={ds} href="#" onClick={() => selectOption(ds)}>
                       {ds}
                     </a>
                   ))}
                 </div>
-              )}
-            </div>
-
-            {this.state.showHomePage2 ? (
-              <HomePage2
-                taskID={this.state.taskID}
-                dataSources={this.props.dataSources}
-                selectedDataSource={this.state.selectedOption}
-                answerData={answerData}
-                userQuestion={userQuestion}
-                onSearch={this.handleSearch}
-                handleSearchValue={this.handleSearchValue}
-                dashboard_name={this.state.selectedOption}
-                currentDashboardList={this.state.currentDashboardList}
-                currentDashboardType={this.state.currentDashboardType}
-              />
-            ) : (
-              <HomePage
-                handleSearchValue={this.handleSearchValue}
-                onSearch={this.handleSearch}
-              />
-            )}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-        )}
-      </>
-    );
-  }
-}
+
+          {state.showHomePage2 ? (
+            <HomePage2
+              taskID={state.taskID}
+              dataSources={props.dataSources}
+              selectedDataSource={state.selectedOption}
+              answerData={answerData}
+              userQuestion={userQuestion}
+              onSearch={handleSearch}
+              handleSearchValue={handleSearchValue}
+              dashboard_name={state.selectedOption}
+              currentDashboardList={state.currentDashboardList}
+              currentDashboardType={state.currentDashboardType}
+            />
+          ) : (
+            <HomePage handleSearchValue={handleSearchValue} onSearch={handleSearch} />
+          )}
+        </div>
+      )}
+    </>
+  );
+};
 
 export default Body;

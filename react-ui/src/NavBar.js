@@ -78,7 +78,7 @@ class NavBar extends Component {
         {/* <Dashboard optionName= {this.state.selectedOption }/> */}
         <div className="left-nav">
           {/* <div className="nav-item"> */}
-          <div className="irameLogo">
+          <div className="p-10 irameLogo">
             <img src="/irame.ai.svg" alt="Irame Logo" />
           </div>
           <a className="no-padding" href="/">

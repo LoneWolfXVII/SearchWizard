@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
 import BarGraph from "./BarGraph";
 import "./HomePage2.css";
 import Modal from "./Modal";
+import PenIcon from "./assets/pen.svg";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "./components/ui/dialog";
+import { DashboardContext } from "./context/dashboard-context";
 const EyeIcon = "/bx_show.svg";
 const BlueEyeIcon = "/bx_show_blue.svg";
 const addIcon = "/add.png";
@@ -27,6 +30,7 @@ const AnswerSection = ({
   const [showCustomEdit, setShowCustomEdit] = useState(false);
   const [customEdit, setCustomEdit] = useState("");
   const [dataToShow, setDataToShow] = useState(fileData && Object.keys(fileData).length > 0 ? fileData[Object.keys(fileData)[0]] : null);
+  const { dashboard } = useContext(DashboardContext);
 
   const { answer, graph_img, insight } = answerData;
 
@@ -164,55 +168,74 @@ const AnswerSection = ({
             width: "20rem",
           }}
         >
-          <button onClick={toggleDropdown} className="graphButton">
-            <img src={addIcon} alt="Add" /> Add to Dashboard
-          </button>
-          {isDropdownOpen && (
-            <div className="w-full border shadow-lg">
-              {!showCustomEdit && (
-                <button onClick={() => setShowCustomEdit(true)} className="w-10/12 px-2 py-1 my-3 ml-4 font-semibold text-white bg-blue-500 border rounded-lg">
-                  Add New
-                </button>
-              )}
-              {showCustomEdit && (
-                <>
-                  <input
-                    type="text"
-                    className="px-4 py-2 my-4 ml-4 border rounded-lg"
-                    placeholder="Enter dashboard name"
-                    value={customEdit}
-                    onChange={(e) => setCustomEdit(e.target.value)}
-                  />
-                  <div className="flex gap-3 px-2">
-                    <button
-                      onClick={() => {
-                        setShowCustomEdit(false);
-                        setCustomEdit("");
-                      }}
-                      className="flex-1 px-2 py-1 my-3 font-semibold text-white bg-red-500 border rounded-lg "
-                    >
-                      Clear
-                    </button>
-                    <button onClick={handleSaveCustomEdit} className="flex-1 px-2 py-1 my-3 font-semibold text-white bg-green-500 border rounded-lg ">
-                      Save
-                    </button>
+          <Dialog>
+            <DialogTrigger>
+              {" "}
+              <button onClick={toggleDropdown} className="graphButton">
+                <img src={addIcon} alt="Add" /> Add to Dashboard
+              </button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{dashboard?.dashboardName}</DialogTitle>
+                <DialogDescription>
+                  <div className="w-full">
+                    {!showCustomEdit && (
+                      <button
+                        onClick={() => setShowCustomEdit(true)}
+                        className="w-full  py-3 my-3 capitalize font-semibold text-black bg-[#EEF1FF] border flex items-center gap-5 p-2"
+                      >
+                        <img src={PenIcon} alt="" width={20} height={20} /> <span> Add to a new report </span>
+                      </button>
+                    )}
+                    {showCustomEdit && (
+                      <>
+                        <input
+                          type="text"
+                          className="w-full px-4 py-2 my-4 border rounded-lg"
+                          placeholder="Enter dashboard name"
+                          value={customEdit}
+                          onChange={(e) => setCustomEdit(e.target.value)}
+                        />
+                        <div className="flex gap-3 px-2">
+                          <button
+                            onClick={() => {
+                              setShowCustomEdit(false);
+                              setCustomEdit("");
+                            }}
+                            className="flex-1 px-2 py-1 my-3 font-semibold text-white bg-red-500 border rounded-lg "
+                          >
+                            Clear
+                          </button>
+                          <div className="flex-1 w-full">
+                            <DialogClose className="w-full">
+                              <button onClick={handleSaveCustomEdit} className="flex-1 w-full px-2 py-1 my-3 font-semibold text-white bg-green-500 border rounded-lg ">
+                                Save
+                              </button>
+                            </DialogClose>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                    <div className="bg-[#EEF1FF] py-5 px-3">
+                      {currentDashboardList?.map((option, index) => (
+                        <div
+                          className="px-3 py-3 transition-all duration-300 ease-in-out bg-white rounded-md cursor-pointer hover:bg-gray-50"
+                          onClick={() => {
+                            toggleDropdown();
+                            onAddToDashboard(option);
+                          }}
+                          key={index}
+                        >
+                          {option}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </>
-              )}
-              {currentDashboardList?.map((option, index) => (
-                <div
-                  className="graphButton"
-                  onClick={() => {
-                    toggleDropdown();
-                    onAddToDashboard(option);
-                  }}
-                  key={index}
-                >
-                  {option}
-                </div>
-              ))}
-            </div>
-          )}
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
         </div>
       </footer>
     </div>

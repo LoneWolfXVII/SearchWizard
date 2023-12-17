@@ -63,7 +63,7 @@ const Upload = ({ dataSourceId, disabled, onUploadDone }) => {
             onChange={handleUploadFiles}
             multiple
           />
-          <p>Upload your own files</p>
+          <p className="invert">Upload your own files</p>
         </>
       )}
       <div className="flex flex-wrap items-center gap-3 justify-evenly">
