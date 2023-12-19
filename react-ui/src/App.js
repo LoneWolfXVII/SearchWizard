@@ -151,6 +151,7 @@ const App = () => {
             <Route path="/automation" element={<DocumentVerification />} />
             <Route path="/automation-page" element={<AutomationWorkflow />} />
             <Route path="document-validator" element={<DocumentValidator />} /> */}
+            <Route path="/automation/data-validation" element={<DocumentVerification />} />
             <Route path="/automation" element={<AutomationWorkflow />} />
             <Route path="/automation/document-validator" element={<DocumentValidator />} />
           </Routes>

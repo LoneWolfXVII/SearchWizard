@@ -21,7 +21,7 @@ const UploadButton = ({ onFileSelect }) => {
         hidden // This hides the default file input
       />
       <label htmlFor="file-upload" className="upload-button">
-        <img src="./dv-upload.svg" alt="Upload" className="upload-icon" />
+        <img src="/dv-upload.svg" alt="Upload" className="upload-icon" />
         Upload document
       </label>
     </div>

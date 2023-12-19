@@ -226,7 +226,7 @@ const DocumentVerification = () => {
 
           <div className="upload-section">
             <button className="icon-button">
-              <img src="./dv-b1.svg" alt="Icon" className="button-icon" />
+              <img src="/dv-b1.svg" alt="Icon" className="button-icon" />
               Document
             </button>
             <DropdownButton onOptionSelect={handleOptionSelect} />
@@ -236,9 +236,9 @@ const DocumentVerification = () => {
                 <div className="files-div">
                   <div key={index} className="file-box">
                     <div className="file-background-image">
-                      <img src="./dv-verified.svg" alt="Verified" className="verified-icon" />
+                      <img src="/dv-verified.svg" alt="Verified" className="verified-icon" />
                       <button onClick={() => handleFileDelete(file.name)} className="delete-icon-button">
-                        <img src="./dv-delete.svg" alt="Delete" className="delete-icon" />
+                        <img src="/dv-delete.svg" alt="Delete" className="delete-icon" />
                       </button>
                     </div>
                   </div>
@@ -259,7 +259,7 @@ const DocumentVerification = () => {
                   </div>
                 ))}
               </div>
-              <img src="./dv-verification.png" alt="Verified" className="criteria-icon" />
+              <img src="/dv-verification.png" alt="Verified" className="criteria-icon" />
             </div>
           </div>
 

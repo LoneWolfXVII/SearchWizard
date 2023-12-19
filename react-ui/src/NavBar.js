@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import "./App.css";
 
-class NavBar extends Component {
-  state = {
-    showDataSources: false,
-    expandedDataSource: null,
-    selectedOption: null,
-    selectedDataSource: null,
-    selectedButton: null
-  };
+const NavBar = ({ dataSources, onSelectDataSource, showBody }) => {
+  const [showDataSources, setShowDataSources] = useState(false);
+  const [expandedDataSource, setExpandedDataSource] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedDataSource, setSelectedDataSource] = useState(null);
+  const [selectedButton, setSelectedButton] = useState(null);
 
-  presetColors = ["#446CFF", "#F044FF", "#15EB6A", "#FF7E35"];
+  const location = useLocation();
 
-  getRandomColor = () => {
+  const presetColors = ["#446CFF", "#F044FF", "#15EB6A", "#FF7E35"];
+
+  const getRandomColor = () => {
     const letters = "0123456789ABCDEF";
     let color = "#";
     for (let i = 0; i < 6; i++) {
@@ -22,192 +22,125 @@ class NavBar extends Component {
     return color;
   };
 
-  renderOptionIcon(selected) {
-    return (
-      <span
-        className={`option-icon ${selected ? "option-icon-selected" : ""}`}
-      ></span>
-    );
-  }
-
-  handleDashboardClick = () => {
-    this.toggleDataSources(); // This will toggle the visibility of the datasources
-    this.selectButton("dashboard"); // This will set the 'dashboard' button as selected
+  const renderOptionIcon = (selected) => {
+    return <span className={`option-icon ${selected ? "option-icon-selected" : ""}`}></span>;
   };
 
-  selectButton = (buttonId) => {
-    // this.setState({ selectedButton: buttonId });
-    this.props.showBody();
+  const handleDashboardClick = () => {
+    toggleDataSources();
+    selectButton("dashboard");
   };
 
-  toggleDataSources = () => {
-    this.setState((prevState) => ({
-      showDataSources: !prevState.showDataSources,
-      expandedDataSource: null
-    }));
+  const selectButton = (buttonId) => {
+    setSelectedButton(buttonId);
+    showBody();
   };
 
-  toggleDataSourceOptions = (dataSourceName) => {
-    if (this.state.expandedDataSource === dataSourceName) {
-      this.setState({ expandedDataSource: null });
+  const toggleDataSources = () => {
+    setShowDataSources(!showDataSources);
+    setExpandedDataSource(null);
+  };
+
+  const toggleDataSourceOptions = (dataSourceName) => {
+    if (expandedDataSource === dataSourceName) {
+      setExpandedDataSource(null);
     } else {
-      this.setState({ expandedDataSource: dataSourceName });
+      setExpandedDataSource(dataSourceName);
     }
   };
 
-  selectOption = (dataSourceName, option) => {
-    this.setState({
-      selectedDataSource: dataSourceName,
-      selectedOption: option
-    });
+  const selectOption = (dataSourceName, option) => {
+    setSelectedDataSource(dataSourceName);
+    setSelectedOption(option);
     console.log(dataSourceName, option);
-    this.props.onSelectDataSource(dataSourceName, option);
+    onSelectDataSource(dataSourceName, option);
   };
 
-  isOptionSelected = (dataSourceName, option) => {
-    return (
-      this.state.selectedDataSource === dataSourceName &&
-      this.state.selectedOption === option
-    );
+  const isOptionSelected = (dataSourceName, option) => {
+    return selectedDataSource === dataSourceName && selectedOption === option;
   };
 
-  render() {
-    const { dataSources } = this.props;
-    return (
-      <>
-        {/* <Dashboard optionName= {this.state.selectedOption }/> */}
-        <div className="left-nav">
-          {/* <div className="nav-item"> */}
-          <div className="p-10 irameLogo">
-            <img src="/irame.ai.svg" alt="Irame Logo" />
-          </div>
-          <a className="no-padding" href="/">
-            <button
-              className={`nav-item-button ${
-                this.state.selectedButton === "query" ? "selected" : ""
-              }`}
-              onClick={() => this.selectButton("query")}
-            >
-              <img src="/icon_1.svg" alt="Icon 1" />
-              New Query
-              {this.state.selectedButton === "query" && (
-                <img
-                  src="/dropdown1.png"
-                  alt="Selected"
-                  className="selected-icon"
-                />
-              )}
-            </button>
-          </a>
-
-          <button
-            className={`dashboard-btn ${
-              this.state.selectedButton === "dashboard" ? "selected" : ""
-            }`}
-            onClick={this.handleDashboardClick}
-          >
-            <img src="/icon_2.svg" alt="Icon 2" />
-            Dashboard
-            {this.state.selectedButton === "dashboard" && (
-              <img
-                src="/dropdown1.png"
-                alt="Selected"
-                className="selected-icon"
-              />
-            )}
-          </button>
-
-          {this.state.showDataSources && (
-            <div className="datasources">
-              {Object.keys(dataSources).map((ds, index) => {
-                // Use a preset color or generate a random one
-                const color = this.presetColors[index] || this.getRandomColor();
-                return (
-                  <div key={ds} className="datasource-item">
-                    <div className="datasource-row">
-                      <div
-                        className="datasource-icon"
-                        style={{ backgroundColor: color }}
-                      ></div>
-                      <button
-                        className={`datasource-btn ${
-                          this.state.expandedDataSource === ds ? "selected" : ""
-                        }`}
-                        onClick={() => this.toggleDataSourceOptions(ds)}
-                      >
-                        {ds}
-                      </button>
-                    </div>
-                    {this.state.expandedDataSource === ds && (
-                      <div className="options">
-                        {dataSources[ds].map((opt) => {
-                          const selected = this.isOptionSelected(ds, opt);
-                          return (
-                            <Link
-                              key={opt}
-                              className={`option ${
-                                selected ? "option-selected" : ""
-                              }`}
-                              to="/sidebar"
-                              onClick={() => this.selectOption(ds, opt)}
-                            >
-                              {this.renderOptionIcon(selected)}
-                              {opt}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          <Link
-            className={`no-padding ${
-              this.state.selectedButton === "automation" ? "selected" : ""
-            }`}
-            to="/automation"
-          >
-            <div className="nav-item-button">
-              <img src="/left-nav-automation.svg" alt="Auto" />
-              <div>Automation</div>
-              {this.state.selectedButton === "automation" && (
-                <img
-                  src="/dropdown1.png"
-                  alt="Selected"
-                  className="selected-icon"
-                />
-              )}
-            </div>
-          </Link>
-
-          <Link
-            className={`no-padding ${
-              this.state.selectedButton === "automation" ? "selected" : ""
-            }`}
-            to="/configuration"
-          >
-            <div className="nav-item-button">
-              <img src="/configuration.svg" alt="Auto" height={24} width={24} />
-
-              <div>Configuration</div>
-              {this.state.selectedButton === "automation" && (
-                <img
-                  src="/dropdown1.png"
-                  alt="Selected"
-                  className="selected-icon"
-                />
-              )}
-            </div>
-          </Link>
-
-          {/* </div> */}
+  return (
+    <>
+      <div className="left-nav">
+        <div className="p-10 irameLogo">
+          <img src="/irame.ai.svg" alt="Irame Logo" />
         </div>
-      </>
-    );
-  }
-}
+        <a className="no-padding" href="/">
+          <button className={`nav-item-button ${selectedButton === "query" ? "selected" : ""}`} onClick={() => selectButton("query")}>
+            <img src="/icon_1.svg" alt="Icon 1" />
+            New Query
+            {selectedButton === "query" && <img src="/dropdown1.png" alt="Selected" className="selected-icon" />}
+          </button>
+        </a>
+
+        <button className={`dashboard-btn ${selectedButton === "dashboard" ? "selected" : ""}`} onClick={handleDashboardClick}>
+          <img src="/icon_2.svg" alt="Icon 2" />
+          Dashboard
+          {selectedButton === "dashboard" && <img src="/dropdown1.png" alt="Selected" className="selected-icon" />}
+        </button>
+
+        {showDataSources && (
+          <div className="datasources">
+            {Object.keys(dataSources).map((ds, index) => {
+              const color = presetColors[index] || getRandomColor();
+              return (
+                <div key={ds} className="datasource-item">
+                  <div className="datasource-row">
+                    <div className="datasource-icon" style={{ backgroundColor: color }}></div>
+                    <button className={`datasource-btn ${expandedDataSource === ds ? "selected" : ""}`} onClick={() => toggleDataSourceOptions(ds)}>
+                      {ds}
+                    </button>
+                  </div>
+                  {expandedDataSource === ds && (
+                    <div className="options">
+                      {dataSources[ds].map((opt) => {
+                        const selected = isOptionSelected(ds, opt);
+                        return (
+                          <Link key={opt} className={`option ${selected ? "option-selected" : ""}`} to="/sidebar" onClick={() => selectOption(ds, opt)}>
+                            {renderOptionIcon(selected)}
+                            {opt}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <NavLink
+          style={{
+            background: location.pathname.toString().toLowerCase().includes("automation") ? "#efefef" : "",
+          }}
+          className={`no-padding ${selectedButton === "automation" ? "selected" : ""}`}
+          to="/automation"
+        >
+          <div onClick={() => setSelectedButton("")} className="nav-item-button">
+            <img src="/left-nav-automation.svg" alt="Auto" />
+            <div>Automation</div>
+            {selectedButton === "automation" && <img src="/dropdown1.png" alt="Selected" className="selected-icon" />}
+          </div>
+        </NavLink>
+
+        <NavLink
+          style={{
+            background: location.pathname.toString().toLowerCase().includes("configuration") ? "#efefef" : "",
+          }}
+          className={`no-padding ${selectedButton === "automation" ? "selected" : ""}`}
+          to="/configuration"
+        >
+          <div onClick={() => setSelectedButton("")} className="nav-item-button">
+            <img src="/configuration.svg" alt="Auto" height={24} width={24} />
+            <div>Configuration</div>
+            {selectedButton === "automation" && <img src="/dropdown1.png" alt="Selected" className="selected-icon" />}
+          </div>
+        </NavLink>
+      </div>
+    </>
+  );
+};
 
 export default NavBar;

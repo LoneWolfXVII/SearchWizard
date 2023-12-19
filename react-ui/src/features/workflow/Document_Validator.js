@@ -4,13 +4,11 @@ import GeneratorIcon from "../../assets/generator.svg";
 import Table from "../../components/ui/Table";
 // import UploadIcon from "../../assets/upload.png";
 import { createColumnHelper } from "@tanstack/react-table";
+import axios from "axios";
+import { useState } from "react";
 import { Checkbox } from "../../components/ui/checkbox";
 import "./Document_Validator.css";
 import UploadAutomation from "./UploadAutomation";
-import { useState } from "react";
-import { API_BASE_URL } from "../../constants";
-import MerchantId from "../../DVMerchantID";
-import axios from "axios";
 
 const columnHelper = createColumnHelper();
 
@@ -18,43 +16,35 @@ const columns = [
   columnHelper.accessor("brand", {
     cell: (info) => info.getValue(),
     header: () => "Brand",
-    footer: (info) => info.column.id,
   }),
   columnHelper.accessor("Category", {
     cell: (info) => info.getValue(),
     header: () => "Category",
-    footer: (info) => info.column.id,
   }),
   columnHelper.accessor("Agreement_TOT", {
     cell: (info) => info.getValue(),
     header: () => "Agreement TOT",
-    footer: (info) => info.column.id,
   }),
   columnHelper.accessor("Sub_Category", {
     cell: (info) => info.getValue(),
     header: () => "Category",
-    footer: (info) => info.column.id,
   }),
   columnHelper.accessor("Material_Group", {
     cell: (info) => info.getValue(),
     header: () => "Material Group",
-    footer: (info) => info.column.id,
   }),
   columnHelper.accessor("Matched_Value", {
     cell: (info) => (info.getValue() ? "Matched" : "-"),
     header: () => "Matched",
-    footer: (info) => info.column.id,
   }),
   columnHelper.accessor("Not_Matched_Value", {
     cell: (info) => (info.getValue() ? "Not Matched" : "-"),
     header: () => "Not Matched",
-    footer: (info) => info.column.id,
   }),
 ];
 
 const DocumentValidator = () => {
   const [fileList, setFileList] = useState([]);
-  const [merchantId, setMerchantId] = useState(""); // State for merchant ID
   const [showTable, setShowTable] = useState(false);
   const [taskId, setTaskId] = useState(""); // State for task ID
   const [isProcessing, setIsProcessing] = useState(false);
@@ -91,66 +81,43 @@ const DocumentValidator = () => {
   }
 
   const generateReportHandler = async () => {
-    if (!merchantId) {
-      alert("Please fill all the fields.");
-      return;
-    }
+    setIsProcessing(true);
+    let data = JSON.stringify({
+      task_id: taskId,
+    });
 
-    // const formData = new FormData();
-    // formData.append("merch_id", merchantId);
-    // formData.append("doc_type", fileList[0].type);
-    // formData.append("file", fileList[0], fileList[0].name);
-
-    // const requestOptions = {
-    //   method: "POST",
-    //   body: formData,
-    //   redirect: "follow",
-    // };
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://3.111.174.29:8080/titan/get_agreement_tot_data",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
 
     try {
-      // const response = await fetch(`${API_BASE_URL}/upload_to_s3`, requestOptions);
+      const response = await axios.request(config);
+      console.log(JSON.stringify(response.data));
 
-      // if (!response?.ok) throw new Error();
-
-      // const result = await response.json();
-
-      // callBackendAPI(result.url, fileList[0].type);
-
-      setIsProcessing(true);
-      let data = JSON.stringify({
-        task_id: taskId,
-      });
-
-      let config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: "http://3.111.174.29:8080/titan/get_agreement_tot_data",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: data,
-      };
-
-      axios
-        .request(config)
-        .then((response) => {
-          console.log(JSON.stringify(response.data));
-          setShowTable(true);
-          // set table data here.
-          setTableData(convertBrandsData(response.data?.Brand_TOT));
-          setCard({
-            client: response?.data?.Client,
-            agreement: response?.data?.Agreement_Type,
-            master: response?.data?.Agreement_Type_in_master_data,
-          });
-        })
-        .catch((error) => {
-          console.log(error);
+      if (response?.data?.status?.toString().toLowerCase() === "processing") {
+        // If status is 'processing', call the function again after a delay
+        setTimeout(generateReportHandler, 500); // 5000 ms delay
+      } else {
+        // If status is not 'processing', update the state and stop the recursion
+        setShowTable(true);
+        setTableData(convertBrandsData(response.data?.Brand_TOT));
+        setCard({
+          client: response?.data?.Client,
+          agreement: response?.data?.Agreement_Type,
+          master: response?.data?.Agreement_Type_in_master_data,
         });
+        setIsProcessing(false);
+      }
     } catch (error) {
-      alert("Unable to process file upload");
-    } finally {
+      console.log(error);
       setIsProcessing(false);
+      alert("Unable to process file upload");
     }
   };
 
@@ -213,10 +180,6 @@ const DocumentValidator = () => {
     return arrayOfObjects;
   }
 
-  const handleMerchantIdChange = (id) => {
-    setMerchantId(id);
-  };
-
   return (
     <div className="flex flex-col w-full gap-10 bg-[#F6F7FB] px-32 min-h-screen">
       <section className="px-8 py-8 my-6 bg-white rounded-sm">
@@ -238,9 +201,6 @@ const DocumentValidator = () => {
 
           {/* Second part */}
           <section className="flex items-center px-24 justify-evenly">
-            <div className="flex justify-center w-6/12">
-              <MerchantId onChange={handleMerchantIdChange} />
-            </div>
             <main className="flex items-center justify-center w-6/12 gap-20 px-2 py-5 h-28 ">
               <UploadAutomation fileList={fileList} setFileList={setFileList} getUploadFiles={fileUploadHandler} disabled={false} />
             </main>
@@ -260,14 +220,14 @@ const DocumentValidator = () => {
           </div>
 
           {/* Button */}
-          {!showTable && (
+          {!showTable && !isProcessing && (
             <button
               disabled={!!isProcessing}
               onClick={generateReportHandler}
               className="flex items-center justify-center p-4 text-white bg-blue-500 rounded-md"
             >
               <img src={GeneratorIcon} alt="generator" />
-              <span className="mx-2 mr-2">{!!isProcessing ? "Processing" : "Generate report"}</span>
+              <span className="mx-2 mr-2">Generate Report</span>
             </button>
           )}
 
@@ -288,8 +248,18 @@ const DocumentValidator = () => {
             </button>
           )}
 
+          {!!isProcessing && (
+            <img
+              className="mx-auto my-20"
+              src="https://pixel-concept.s3.ap-south-1.amazonaws.com/assets/Reveal+Loading.gif"
+              alt="loader"
+              width={120}
+              height={120}
+            />
+          )}
+
           {/* Table */}
-          {!showTable && (
+          {!showTable && !isProcessing && (
             <div className=" mt-11 p-11 bg-dark">
               <h2 className="p-3 font-bold text-center text-black">INTEGRATED DATASOURCE</h2>
               {/* <!-- First Row --> */}
@@ -325,7 +295,7 @@ const DocumentValidator = () => {
             </div>
           )}
 
-          {!!showTable && (
+          {!!showTable && !isProcessing && (
             <section className="px-0 py-10">
               <header className="flex flex-wrap py-6 justify-evenly">
                 <div className="p-6 font-bold bg-purple-100 border border-purple-500 border-solid rounded-lg shadow-md">

@@ -458,7 +458,7 @@ html {
   text-align: center;
   border: none;
   border-radius: 0px;
-  background-color: #ffffff;
+  background-color: transparent;
   color: #292d32;
   font-family: "Poppins", sans-serif;
   font-size: 16px;
@@ -1070,7 +1070,7 @@ a.no-padding {
   animation: rotation 2s linear infinite;
 }
 .loader::after {
-  content: '';  
+  content: "";
   box-sizing: border-box;
   position: absolute;
   left: 0;
@@ -1078,7 +1078,7 @@ a.no-padding {
   top: 0;
   bottom: 0;
   margin: auto;
-  border: 3px dotted #FF3D00;
+  border: 3px dotted #ff3d00;
   border-style: solid solid dotted;
   width: 18px;
   height: 18px;
@@ -1086,7 +1086,7 @@ a.no-padding {
   animation: rotationBack 1s linear infinite;
   transform-origin: center center;
 }
-    
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
@@ -1094,7 +1094,7 @@ a.no-padding {
   100% {
     transform: rotate(360deg);
   }
-} 
+}
 @keyframes rotationBack {
   0% {
     transform: rotate(0deg);
@@ -1102,4 +1102,4 @@ a.no-padding {
   100% {
     transform: rotate(-360deg);
   }
-} 
+}

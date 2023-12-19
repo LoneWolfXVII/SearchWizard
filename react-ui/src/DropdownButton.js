@@ -37,7 +37,7 @@ const DropdownButton = ({ onOptionSelect }) => {
       <button className="dropdown-button" onClick={toggleDropdown}>
         {selectedOption}
         <img
-          src='./dv-d1.svg'
+          src='/dv-d1.svg'
           alt="Open dropdown"
           className="dropdown-icon"
         />
