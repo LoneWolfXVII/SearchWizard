@@ -34,11 +34,11 @@ const columns = [
     header: () => "Material Group",
   }),
   columnHelper.accessor("Matched_Value", {
-    cell: (info) => (info.getValue() ? "Matched" : "-"),
+    cell: (info) => (info.getValue() ? info.getValue() : "-"),
     header: () => "Matched",
   }),
   columnHelper.accessor("Not_Matched_Value", {
-    cell: (info) => (info.getValue() ? "Not Matched" : "-"),
+    cell: (info) => (info.getValue() ? info.getValue() : "-"),
     header: () => "Not Matched",
   }),
 ];
