@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const MerchantId = (props) => {
   const [merchantId, setMerchantId] = useState("#12345678");
@@ -9,8 +9,8 @@ const MerchantId = (props) => {
   };
 
   const handleInputKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      setIsEditing(false);  // Exit editing mode
+    if (event.key === "Enter") {
+      setIsEditing(false); // Exit editing mode
       props.onChange(merchantId);
       console.log("Merchant ID saved:", merchantId); // For demonstration purposes
     }
@@ -21,11 +21,13 @@ const MerchantId = (props) => {
   };
 
   return (
-    <div className="merchant-id">
-      <label className='merchant-id-label' htmlFor="merchantId">Merchant Id:</label>
+    <div className="flex gap-2">
+      <label className="text-2xl font-bold whitespace-nowrap" htmlFor="merchantId">
+        Merchant Id:
+      </label>
       {isEditing ? (
         <input
-          className='merchant-id-input'
+          className="px-3 py-1 border rounded-md outline-none"
           id="merchantId"
           type="text"
           value={merchantId}

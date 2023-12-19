@@ -206,7 +206,7 @@ const Table = ({
       {isPaginating && (
         <div className="flex items-center justify-center mb-1 mt-7">
           <Button
-            className="gap-2 text-sm font-medium bg-white border rounded-r-none"
+            className="gap-2 text-sm font-medium text-black bg-white border rounded-r-none"
             disabled={!table.getCanPreviousPage()}
             onClick={() => table.previousPage()}
           >
@@ -219,7 +219,7 @@ const Table = ({
                 <span className="mx-2">...</span>
               ) : (
                 <Button
-                  className={`border rounded-none bg-white gap-2 ${
+                  className={`border rounded-none text-black bg-white gap-2 ${
                     currentPage === pageNumber ? "bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700" : "hover:bg-gray-100 hover:text-gray-700"
                   }`}
                   onClick={() => table.setPageIndex(Number(pageNumber) - 1)}
@@ -229,7 +229,7 @@ const Table = ({
               )}
             </Fragment>
           ))}
-          <Button className="gap-2 text-sm font-medium bg-white border rounded-l-none" disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}>
+          <Button className="gap-2 text-sm font-medium text-black bg-white border rounded-l-none" disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}>
             Next
             {/* <img src={arrowDownIcon} className="-rotate-90 " /> */}
           </Button>

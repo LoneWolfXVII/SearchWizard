@@ -10,20 +10,44 @@ import UploadAutomation from "./UploadAutomation";
 import { useState } from "react";
 import { API_BASE_URL } from "../../constants";
 import MerchantId from "../../DVMerchantID";
+import axios from "axios";
 
 const columnHelper = createColumnHelper();
 
 const columns = [
-  columnHelper.accessor("CustomerName", {
+  columnHelper.accessor("brand", {
     cell: (info) => info.getValue(),
+    header: () => "Brand",
     footer: (info) => info.column.id,
   }),
-  columnHelper.accessor("CustomerNumber", {
+  columnHelper.accessor("Category", {
     cell: (info) => info.getValue(),
+    header: () => "Category",
     footer: (info) => info.column.id,
   }),
-  columnHelper.accessor("TotalPayments", {
+  columnHelper.accessor("Agreement_TOT", {
     cell: (info) => info.getValue(),
+    header: () => "Agreement TOT",
+    footer: (info) => info.column.id,
+  }),
+  columnHelper.accessor("Sub_Category", {
+    cell: (info) => info.getValue(),
+    header: () => "Category",
+    footer: (info) => info.column.id,
+  }),
+  columnHelper.accessor("Material_Group", {
+    cell: (info) => info.getValue(),
+    header: () => "Material Group",
+    footer: (info) => info.column.id,
+  }),
+  columnHelper.accessor("Matched_Value", {
+    cell: (info) => (info.getValue() ? "Matched" : "-"),
+    header: () => "Matched",
+    footer: (info) => info.column.id,
+  }),
+  columnHelper.accessor("Not_Matched_Value", {
+    cell: (info) => (info.getValue() ? "Not Matched" : "-"),
+    header: () => "Not Matched",
     footer: (info) => info.column.id,
   }),
 ];
@@ -32,9 +56,38 @@ const DocumentValidator = () => {
   const [fileList, setFileList] = useState([]);
   const [merchantId, setMerchantId] = useState(""); // State for merchant ID
   const [showTable, setShowTable] = useState(false);
+  const [taskId, setTaskId] = useState(""); // State for task ID
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [card, setCard] = useState({});
 
-  function fileUploadHandler(data) {
-    setFileList(data || []);
+  function fileUploadHandler(fileData) {
+    setFileList(fileData || []);
+    // call api here
+
+    setIsProcessing(true);
+    let data = new FormData();
+    data.append("agreement", fileData[0]);
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://3.111.174.29:8080/titan/agreement_tot_match",
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        setTaskId(response?.data?.task_id);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setIsProcessing(false);
+      });
   }
 
   const generateReportHandler = async () => {
@@ -43,52 +96,122 @@ const DocumentValidator = () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("merch_id", merchantId);
-    formData.append("doc_type", fileList[0].type);
-    formData.append("file", fileList[0], fileList[0].name);
+    // const formData = new FormData();
+    // formData.append("merch_id", merchantId);
+    // formData.append("doc_type", fileList[0].type);
+    // formData.append("file", fileList[0], fileList[0].name);
 
-    const requestOptions = {
-      method: "POST",
-      body: formData,
-      redirect: "follow",
-    };
+    // const requestOptions = {
+    //   method: "POST",
+    //   body: formData,
+    //   redirect: "follow",
+    // };
 
     try {
-      const response = await fetch(`${API_BASE_URL}/upload_to_s3`, requestOptions);
+      // const response = await fetch(`${API_BASE_URL}/upload_to_s3`, requestOptions);
 
-      if (!response?.ok) throw new Error();
+      // if (!response?.ok) throw new Error();
 
-      const result = await response.json();
+      // const result = await response.json();
 
-      callBackendAPI(result.url, fileList[0].type);
+      // callBackendAPI(result.url, fileList[0].type);
+
+      setIsProcessing(true);
+      let data = JSON.stringify({
+        task_id: taskId,
+      });
+
+      let config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: "http://3.111.174.29:8080/titan/get_agreement_tot_data",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
+
+      axios
+        .request(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+          setShowTable(true);
+          // set table data here.
+          setTableData(convertBrandsData(response.data?.Brand_TOT));
+          setCard({
+            client: response?.data?.Client,
+            agreement: response?.data?.Agreement_Type,
+            master: response?.data?.Agreement_Type_in_master_data,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } catch (error) {
       alert("Unable to process file upload");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
-  const callBackendAPI = async (fileUrl, docType) => {
-    const formData = new FormData();
-    // formData.append("merch_id", merchantId);
-    formData.append("doc_type", docType);
-    formData.append("doc_img", fileUrl);
+  // const callBackendAPI = async (fileUrl, docType) => {
+  //   const formData = new FormData();
+  //   // formData.append("merch_id", merchantId);
+  //   formData.append("doc_type", docType);
+  //   formData.append("doc_img", fileUrl);
 
-    // console.log(`Sending request to backend with Merchant ID: ${merchantId}, Document Type: ${docType}, File Url: ${fileUrl}`);
-    const requestOptions = {
-      method: "POST",
-      body: formData,
-      redirect: "follow",
-    };
+  //   // console.log(`Sending request to backend with Merchant ID: ${merchantId}, Document Type: ${docType}, File Url: ${fileUrl}`);
+  //   const requestOptions = {
+  //     method: "POST",
+  //     body: formData,
+  //     redirect: "follow",
+  //   };
 
-    fetch(`${API_BASE_URL}/paytm/update_merchant_data`, requestOptions)
-      .then((response) => response.text())
-      .then(() => {
-        setShowTable(true);
-      })
-      .catch((error) => {
-        console.log("API Error:", error);
-      });
-  };
+  //   fetch(`${API_BASE_URL}/paytm/update_merchant_data`, requestOptions)
+  //     .then((response) => response.text())
+  //     .then(() => {
+  //       setShowTable(true);
+  //     })
+  //     .catch((error) => {
+  //       console.log("API Error:", error);
+  //     });
+  // };
+
+  function convertBrandsData(brandDataFromBackend) {
+    const brands = Object.keys(brandDataFromBackend);
+    const arrayOfObjects = brands.reduce((result, brand) => {
+      const brandData = brandDataFromBackend[brand];
+
+      // Extract material group information
+      const matchedMaterialGroups = brandData.Material_Group_TOT.matched || {};
+      const notMatchedMaterialGroups = brandData.Material_Group_TOT.not_matched || {};
+
+      // Create separate objects for matched values
+      const matchedObjects = Object.keys(matchedMaterialGroups).map((matchedKey) => ({
+        brand,
+        Agreement_TOT: brandData.Agreement_TOT,
+        Category: brandData.Category,
+        Sub_Category: brandData["Sub Category"],
+        Material_Group: matchedKey,
+        Matched_Value: matchedMaterialGroups[matchedKey],
+      }));
+
+      // Create separate objects for not matched values
+      const notMatchedObjects = Object.keys(notMatchedMaterialGroups).map((notMatchedKey) => ({
+        brand,
+        Agreement_TOT: brandData.Agreement_TOT,
+        Category: brandData.Category,
+        Sub_Category: brandData["Sub Category"],
+        Material_Group: notMatchedKey,
+        Not_Matched_Value: notMatchedMaterialGroups[notMatchedKey],
+      }));
+
+      // Concatenate the matched and not matched objects to the result array
+      return result.concat(matchedObjects, notMatchedObjects);
+    }, []);
+
+    return arrayOfObjects;
+  }
 
   const handleMerchantIdChange = (id) => {
     setMerchantId(id);
@@ -114,12 +237,14 @@ const DocumentValidator = () => {
           </div>
 
           {/* Second part */}
-          <div className="flex justify-center">
-            <MerchantId onChange={handleMerchantIdChange} />
-          </div>
-          <main className="flex items-center justify-center w-full gap-20 px-2 py-5 h-28 ">
-            <UploadAutomation fileList={fileList} setFileList={setFileList} getUploadFiles={fileUploadHandler} disabled={false} />
-          </main>
+          <section className="flex items-center px-24 justify-evenly">
+            <div className="flex justify-center w-6/12">
+              <MerchantId onChange={handleMerchantIdChange} />
+            </div>
+            <main className="flex items-center justify-center w-6/12 gap-20 px-2 py-5 h-28 ">
+              <UploadAutomation fileList={fileList} setFileList={setFileList} getUploadFiles={fileUploadHandler} disabled={false} />
+            </main>
+          </section>
 
           {/* Check box items */}
           <div className="p-11">
@@ -135,10 +260,33 @@ const DocumentValidator = () => {
           </div>
 
           {/* Button */}
-          <button onClick={generateReportHandler} className="flex items-center justify-center p-4 text-white bg-blue-500 rounded-md">
-            <img src={GeneratorIcon} alt="generator" />
-            <span className="mx-2 mr-2">Generate report</span>
-          </button>
+          {!showTable && (
+            <button
+              disabled={!!isProcessing}
+              onClick={generateReportHandler}
+              className="flex items-center justify-center p-4 text-white bg-blue-500 rounded-md"
+            >
+              <img src={GeneratorIcon} alt="generator" />
+              <span className="mx-2 mr-2">{!!isProcessing ? "Processing" : "Generate report"}</span>
+            </button>
+          )}
+
+          {!!showTable && (
+            <button
+              disabled={!!isProcessing}
+              onClick={() => {
+                setShowTable(false);
+                setIsProcessing(false);
+                setFileList([]);
+                setTableData([]);
+                setCard({});
+              }}
+              className="flex items-center justify-center p-4 text-white bg-blue-500 rounded-md"
+            >
+              <img src={GeneratorIcon} alt="generator" />
+              <span className="mx-2 mr-2">Request New</span>
+            </button>
+          )}
 
           {/* Table */}
           {!showTable && (
@@ -178,8 +326,20 @@ const DocumentValidator = () => {
           )}
 
           {!!showTable && (
-            <section className="px-0">
-              <Table columns={columns} data={tableDummyData} />
+            <section className="px-0 py-10">
+              <header className="flex flex-wrap py-6 justify-evenly">
+                <div className="p-6 font-bold bg-purple-100 border border-purple-500 border-solid rounded-lg shadow-md">
+                  Client: <span className="font-medium">{card?.client || ""}</span>
+                </div>
+                <div className="p-6 font-bold bg-purple-100 border border-purple-500 border-solid rounded-lg shadow-md">
+                  Agreement Store type : <span className="font-medium">{card?.agreement || ""}</span>
+                </div>
+                <div className="p-6 font-bold bg-purple-100 border border-purple-500 border-solid rounded-lg shadow-md">
+                  Master Store Type: <span className="font-medium">{card?.master || ""}</span>
+                </div>
+              </header>
+
+              <Table columns={columns} data={tableData || []} />
             </section>
           )}
         </div>
@@ -187,43 +347,5 @@ const DocumentValidator = () => {
     </div>
   );
 };
-
-const tableDummyData = [
-  {
-    CustomerName: "Euro+Shopping Channel",
-    CustomerNumber: 141,
-    TotalPayments: 715738.98,
-  },
-  {
-    CustomerName: "Mini Gifts Distributors Ltd.",
-    CustomerNumber: 124,
-    TotalPayments: 584188.24,
-  },
-  {
-    CustomerName: "Australian Collctors.Co.",
-    CustomerNumber: 114,
-    TotalPayments: 180585.07,
-  },
-  {
-    CustomerName: "Muscle Machine Inc",
-    CustomerNumber: 151,
-    TotalPayments: 177913.95,
-  },
-  {
-    CustomerName: "Dragon Souveniers.Ltd.",
-    CustomerNumber: 141,
-    TotalPayments: 156251.03,
-  },
-  {
-    CustomerName: "Down Under Souveniers.inc",
-    CustomerNumber: 323,
-    TotalPayments: 154622.08,
-  },
-  {
-    CustomerName: "Av Stores. Co.",
-    CustomerNumber: 187,
-    TotalPayments: 148410.09,
-  },
-];
 
 export default DocumentValidator;

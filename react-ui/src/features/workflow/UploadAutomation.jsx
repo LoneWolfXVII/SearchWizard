@@ -23,7 +23,7 @@ const UploadAutomation = ({ disabled, getUploadFiles, fileList, setFileList }) =
         <>
           <img src={uploadIcon} alt="" />
           <input disabled={disabled} className="absolute z-10 w-full h-full opacity-0" type="file" onChange={handleUploadFiles} />
-          <p className="invert">Upload your own files</p>
+          <p className="text-black">Upload your own files</p>
         </>
       )}
       <div className="flex flex-wrap items-center gap-3 justify-evenly">
