@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Checkbox } from "../../components/ui/checkbox";
 import "./Document_Validator.css";
 import UploadAutomation from "./UploadAutomation";
+import { Button } from "../../components/ui/button";
 
 const columnHelper = createColumnHelper();
 
@@ -50,6 +51,7 @@ const DocumentValidator = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [card, setCard] = useState({});
+  const [downloadLink, setDownloadLink] = useState("");
 
   function fileUploadHandler(fileData) {
     setFileList(fileData || []);
@@ -106,11 +108,12 @@ const DocumentValidator = () => {
       } else {
         // If status is not 'processing', update the state and stop the recursion
         setShowTable(true);
-        setTableData(convertBrandsData(response.data?.Brand_TOT));
+        setDownloadLink(response?.data?.csv_url);
+        setTableData(convertBrandsData(response.data?.data?.Brand_TOT));
         setCard({
-          client: response?.data?.Client,
-          agreement: response?.data?.Agreement_Type,
-          master: response?.data?.Agreement_Type_in_master_data,
+          client: response?.data?.data?.Client,
+          agreement: response?.data?.data?.Agreement_Type,
+          master: response?.data?.data?.Agreement_Type_in_master_data,
         });
         setIsProcessing(false);
       }
@@ -310,6 +313,9 @@ const DocumentValidator = () => {
               </header>
 
               <Table columns={columns} data={tableData || []} />
+              <div className="flex justify-end w-full">
+                <Button onClick={() => (window.location.href = downloadLink)}>Download Report</Button>
+              </div>
             </section>
           )}
         </div>
