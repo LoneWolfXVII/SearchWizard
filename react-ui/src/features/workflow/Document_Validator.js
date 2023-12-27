@@ -118,9 +118,14 @@ const DocumentValidator = () => {
         setIsProcessing(false);
       }
     } catch (error) {
-      console.log(error);
-      setIsProcessing(false);
-      alert("Unable to process file upload");
+      // debugger;
+      if (error?.response?.status === 404 && error?.response?.data?.status?.toString()?.toLowerCase()?.trim() === "processing") {
+        setTimeout(generateReportHandler, 500); // 5000 ms delay
+      } else {
+        console.log(error);
+        setIsProcessing(false);
+        alert("Unable to process file upload");
+      }
     }
   };
 
