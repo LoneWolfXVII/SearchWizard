@@ -14,6 +14,8 @@ import GraphPage from "./GraphPage";
 import ConfigurationPage from "./features/configuration/configuration.component";
 import AutomationWorkflow from "./features/workflow/Automation_Workflow";
 import DocumentValidator from "./features/workflow/Document_Validator";
+import Waitlist from "./features/homescreen/Waitlist";
+import Signin from "./features/auth/signin";
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
@@ -21,6 +23,8 @@ const App = () => {
   const [images, setImages] = useState([]);
   const [triggerReload, setTriggerReload] = useState(false);
   const [currentView, setCurrentView] = useState("");
+  const [isWaitlist, setIsWaitlist] = useState(false);
+  const [isLoggedIn] = useState(true);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/get_left_nav_items`)
@@ -118,6 +122,16 @@ const App = () => {
     }
   }
 
+  const location = window.location.pathname;
+
+  useEffect(() => {
+    if (location.toString().toLowerCase().includes("waitlist")) {
+      setIsWaitlist(true);
+    } else {
+      setIsWaitlist(false);
+    }
+  }, [location]);
+
   return (
     // <div className="app-container">
     //     <NavBar dataSources={dataSources} onSelectDataSource ={handleNavItemSelect} showBody = {toggleBody}/>
@@ -127,38 +141,49 @@ const App = () => {
     //       <DocumentVerification />
     //     </div>
     // </div>
-    <div className="app-container">
-      <Router>
-        <NavBar dataSources={dataSources} onSelectDataSource={handleNavItemSelect} showBody={toggleBody} />
-        <div className="content">
-          <Header />
-          <Routes>
-            {/* Define your routes here */}
+    <>
+      {!isLoggedIn ? <Signin /> : ""}
+      {isLoggedIn ? (
+        <div className="app-container">
+          <Router>
+            {isWaitlist ? "" : <NavBar dataSources={dataSources} onSelectDataSource={handleNavItemSelect} showBody={toggleBody} />}{" "}
+            <div className={`${!isWaitlist ? "content" : ""}`}>
+              {!isWaitlist ? <Header /> : ""}
+              <Routes>
+                <Route path="/waitlist" element={<Waitlist />} />
 
-            <Route
-              path="/"
-              element={showImageGrid ? <ImageGrid images={extractImageFileNames(images)} /> : <Body fetchedData={navItems} dataSources={dataSources} />}
-            />
+                {/* Define your routes here */}
 
-            <Route path="/bar-graph" element={<BarGraph />} />
-            {/* Add other routes as needed */}
-            {/* Example route for ImageGrid or Body */}
-            <Route path="/image-grid" element={<ImageGrid images={extractImageFileNames(images)} />} />
-            <Route path="/body" element={<Body fetchedData={navItems} dataSources={dataSources} />} />
-            <Route path="/sidebar" element={<GraphPage fetchedData={images} />} />
-            <Route path="/configuration" element={<ConfigurationPage />} />
-            {/* 
+                <Route
+                  path="/"
+                  element={
+                    showImageGrid ? <ImageGrid images={extractImageFileNames(images)} /> : <Body fetchedData={navItems} dataSources={dataSources} />
+                  }
+                />
+
+                <Route path="/bar-graph" element={<BarGraph />} />
+                {/* Add other routes as needed */}
+                {/* Example route for ImageGrid or Body */}
+                <Route path="/image-grid" element={<ImageGrid images={extractImageFileNames(images)} />} />
+                <Route path="/body" element={<Body fetchedData={navItems} dataSources={dataSources} />} />
+                <Route path="/sidebar" element={<GraphPage fetchedData={images} />} />
+                <Route path="/configuration" element={<ConfigurationPage />} />
+                {/* 
             <Route path="/automation" element={<DocumentVerification />} />
             <Route path="/automation-page" element={<AutomationWorkflow />} />
             <Route path="document-validator" element={<DocumentValidator />} /> */}
-            <Route path="/automation/data-validation" element={<DocumentVerification />} />
-            <Route path="/automation" element={<AutomationWorkflow />} />
-            <Route path="/automation/document-validator" element={<DocumentValidator />} />
-          </Routes>
-          {/* Conditional rendering outside of Routes */}
+                <Route path="/automation/data-validation" element={<DocumentVerification />} />
+                <Route path="/automation" element={<AutomationWorkflow />} />
+                <Route path="/automation/document-validator" element={<DocumentValidator />} />
+              </Routes>
+              {/* Conditional rendering outside of Routes */}
+            </div>
+          </Router>
         </div>
-      </Router>
-    </div>
+      ) : (
+        ""
+      )}
+    </>
   );
 };
 

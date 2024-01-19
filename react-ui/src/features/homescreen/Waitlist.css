@@ -1,0 +1,116 @@
+.Waitlist_page{
+    background: #000101;
+    width: 100%;
+    padding: 2%;
+}
+.Join_Waitlist_button{
+    width: 163px;
+height: 46px;
+flex-shrink: 0;
+color: rgb(8, 8, 8);
+border: 1px solid white;
+border-radius: 10px;
+background-color: white;
+}
+
+/* Hero text start */
+.Hero_text{
+    width: 1139px;
+text-align: center;
+font-family: Phonk;
+line-height: 60px; /* 136.364% */
+color: var(--white-100, #FFF);
+font-family: Poppins;
+font-size: 44px;
+font-style: normal;
+font-weight: 900;
+line-height: 60px;
+padding: 8%;
+}
+.Hero_text p{
+padding-top: 2%;
+color: var(--white-100, #FFF);
+text-align: center;
+font-family: Gilroy-Medium;
+font-size: 24px;
+font-style: normal;
+font-weight: 400;
+line-height: 36px; /* 150% */
+opacity: 0.8;
+}
+.After_Hero_text h1{
+     padding-top: 5%;
+    color: #F1F3F4;
+    text-align: center;
+    font-size: 34px;
+    font-style: normal;
+    font-family: Poppins;
+    font-weight: 900;
+    line-height: 48px;
+}
+.After_Hero_text p{
+color: var(--white-100, #FFF);
+text-align: center;
+font-family: Gilroy-Regular;
+font-size: 22px;
+font-style: normal;
+font-weight: 400;
+line-height: 36px; /* 163.636% */
+opacity: 0.8;
+padding-bottom: 4%;
+}
+.Table_Icons{
+ width: 50px;  
+}
+.Big_button{
+height: 250px;
+flex-shrink: 0;
+border-radius: 50px;
+border: 2px solid rgba(255, 255, 255, 0.64);
+background: radial-gradient(228% 117.58% at 24.99% 43.36%, rgba(51, 71, 255, 0.40) 0%, rgba(223, 226, 255, 0.22) 74.98%, rgba(107, 122, 255, 0.40) 100%);
+backdrop-filter: blur(7.637977123260498px);
+}
+.Button_Heading h1{
+    color: var(--white-100, #FFF);
+text-align: center;
+font-family: Phonk;
+font-size: 30px;
+font-style: normal;
+font-weight: 600;
+line-height: 48px; /* 141.176% */
+}
+.Button_Heading{
+    color: var(--white-100, #FFF);
+text-align: center;
+font-family: Gilroy-Medium;
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: 32px; /* 145.455% */
+}
+.Border_color{
+    border-radius: var(--16, 16px);
+ border-bottom: 0.5px solid #3394FF; 
+ border-right: 0.5px solid #3394FF; 
+background-image: url('./Waitlist_Assets/CardBg_img.png');
+}
+
+/* card 1 */
+/* 
+.Card_Button_Heading h1 , p{
+    color: var(--white-100, #FFF);
+text-align: center;
+font-family: Gilroy-SemiBold;
+font-size: 36px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+.Card_Button_Heading p{
+    width: 803px;
+font-family: Gilroy-Regular;
+font-size: 22px;
+}
+.Create_Your_datesheet_button{
+    margin-left: 30%;
+} */
