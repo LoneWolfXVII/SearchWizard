@@ -27,21 +27,20 @@ const KnowledgeGraph = () => {
           <br />
           Playground
         </h2>
-        <Button className="rounded-3xl ">
+        <Button className="tracking-widest rounded-3xl">
           Join the waitlist
           <img src={ArrowSvg} alt="Arrow" className="ml-1" />
         </Button>
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-5 my-16 text-white px-36 py-28" style={KnowledgeGraphStyle}>
+      <div className="flex flex-col items-center justify-center gap-5 my-16 text-white md:px-36 py-28" style={KnowledgeGraphStyle}>
         {uploadedFiles?.length === 0 ? (
           <>
-            {" "}
-            <h4 className="text-base font-semibold">Analyse a PDF Text with Irame.ai</h4>
-            <p className="text-sm opacity-80">
+            <h4 className="text-4xl font-semibold text-center">Analyse a PDF Text with Irame.ai</h4>
+            <p className="px-2 py-1 tracking-wider text-center md:px-24 text-md opacity-80">
               First, visualize data and analyze text to identify key idea clusters. This provides a broad overview of the PDF document before delving
               into specific questions.
-            </p>{" "}
+            </p>
           </>
         ) : (
           uploadedFiles?.map((_, index) => {
@@ -67,7 +66,7 @@ const KnowledgeGraph = () => {
             );
           })
         )}
-        <Button className="relative text-black bg-white px-28 hover:bg-gray-200">
+        <Button className="relative text-black bg-white md:px-28 hover:bg-gray-200">
           {uploadedFiles?.length === 0 && (
             <input type="file" className="absolute z-10 w-full opacity-0 cursor-pointer" onChange={(e) => handleUploadedfiles(e)} />
           )}

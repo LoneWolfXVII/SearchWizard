@@ -1,5 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600&display=swap");
 
+/* @font-face {
+  font-family: 'Phonk';
+  src: url('./assets/Phonk-Regular-DEMO.otf') format('opentype');
+} */
+
+
 body,
 html {
   background-color: #f6f7fb; /* Change this to a grey color */
@@ -8,7 +14,7 @@ html {
   width: 100%;
   height: 100%;
   font-family: "Inter", sans-serif;
-  font-family: "Poppins", sans-serif;
+  font-family: "Phonk", sans-serif;
 }
 
 .app-container {

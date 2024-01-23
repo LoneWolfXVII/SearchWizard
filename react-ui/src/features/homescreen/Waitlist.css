@@ -34,15 +34,13 @@
   font-family: Phonk;
   line-height: 60px; /* 136.364% */
   color: var(--white-100, #fff);
-  font-family: Poppins;
+  /* font-family: Poppins; */
   font-size: 44px;
   font-style: normal;
   font-weight: 900;
   line-height: 60px;
   padding-bottom: 2rem;
   margin-bottom: 2rem;
-  padding-right: 5rem;
-  padding-left: 5rem;
 }
 .Hero_text p {
   padding-top: 2%;
@@ -110,6 +108,9 @@
   border-bottom: 0.5px solid #3394ff;
   border-right: 0.5px solid #3394ff;
   background-image: url("./Waitlist_Assets/CardBg_img.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+object-fit: cover;
 }
 
 /* card 1 */

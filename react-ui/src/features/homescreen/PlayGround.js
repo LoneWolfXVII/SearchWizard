@@ -6,13 +6,8 @@ import WebView from "./WebView";
 const PlayGround = () => {
   return (
     <>
-      <div className="w-full px-10 bg-[#000101] py-28">
+      <div className="w-full px-10 bg-[#000101] pt-16">
         {/* Big button */}
-
-        <br />
-        <br />
-        <br />
-        <br />
 
         <KnowledgeGraph />
         <br />
