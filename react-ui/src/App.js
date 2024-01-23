@@ -11,11 +11,12 @@ import { API_BASE_URL } from "./constants";
 import { Routes } from "react-router-dom";
 import BarGraph from "./BarGraph"; // Adjust the path as necessary
 import GraphPage from "./GraphPage";
+import Signin from "./features/auth/signin";
 import ConfigurationPage from "./features/configuration/configuration.component";
+import PlayGround from "./features/homescreen/PlayGround";
+import Waitlist from "./features/homescreen/Waitlist";
 import AutomationWorkflow from "./features/workflow/Automation_Workflow";
 import DocumentValidator from "./features/workflow/Document_Validator";
-import Waitlist from "./features/homescreen/Waitlist";
-import Signin from "./features/auth/signin";
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
@@ -146,19 +147,38 @@ const App = () => {
       {isLoggedIn ? (
         <div className="app-container">
           <Router>
-            {isWaitlist ? "" : <NavBar dataSources={dataSources} onSelectDataSource={handleNavItemSelect} showBody={toggleBody} />}{" "}
-            <div className={`${!isWaitlist ? "content" : ""}`}>
-              {!isWaitlist ? <Header /> : ""}
+            {isWaitlist ||
+            window.location.pathname.toLocaleLowerCase().includes("signin") ||
+            window.location.pathname.toLocaleLowerCase().includes("playground") ? (
+              ""
+            ) : (
+              <NavBar dataSources={dataSources} onSelectDataSource={handleNavItemSelect} showBody={toggleBody} />
+            )}{" "}
+            <div
+              className={`${
+                !isWaitlist &&
+                !window.location.pathname.toLocaleLowerCase().includes("signin") &&
+                !window.location.pathname.toLocaleLowerCase().includes("playground")
+                  ? "content"
+                  : "w-full"
+              }`}
+            >
+              {!isWaitlist &&
+              !window.location.pathname.toLocaleLowerCase().includes("signin") &&
+              !window.location.pathname.toLocaleLowerCase().includes("playground") ? (
+                <Header />
+              ) : (
+                ""
+              )}
               <Routes>
                 <Route path="/waitlist" element={<Waitlist />} />
+                <Route path="/signin" element={<Signin />} />
+                <Route path="/playground" element={<PlayGround />} />
 
                 {/* Define your routes here */}
-
                 <Route
                   path="/"
-                  element={
-                    showImageGrid ? <ImageGrid images={extractImageFileNames(images)} /> : <Body fetchedData={navItems} dataSources={dataSources} />
-                  }
+                  element={showImageGrid ? <ImageGrid images={extractImageFileNames(images)} /> : <Body fetchedData={navItems} dataSources={dataSources} />}
                 />
 
                 <Route path="/bar-graph" element={<BarGraph />} />
