@@ -49,7 +49,7 @@ const Waitlist = () => {
           <button className="Join_Waitlist_button">Join Waitlist</button>
         </nav>
 
-        <div className="pt-6 Hero_text z-10 relative">
+        <div className="pt-28 Hero_text z-10 relative">
           <h1>
             AI that excels in understanding
             <br />
@@ -78,21 +78,27 @@ const Waitlist = () => {
       </section>
 
       <section className="px-20">
-        <div className="mt-28 After_Hero_text">
+        <div className="mt-0 After_Hero_text relative">
           <h1>
             Surpassing AI Limits: <br />
             Knowledge Graphs Meet LLMs
           </h1>
-          <p>
+          <p className="text-md">
             Introducing a trailblazing approach that synergizes Knowledge Graphs with
             <br /> Large Language Models for superior AI applications.
           </p>
+          <div className="absolute top-0 -left-28">
+            <img src="/leftD.png" className=" h-48 w-20 " />
+          </div>
+          <div className="absolute top-0 -right-28">
+            <img src="/RightD.png" className="h-48 w-20 " />
+          </div>
         </div>
         {/* TABLE START FORM HERE */}
-        <table className="w-full mx-auto my-10 border-separate border-spacing-8">
+        <table className="w-full mx-auto mt-0 my-10 border-separate border-spacing-8">
           <tbody>
             <tr className="rounded-md">
-              <td className="ml-2 Border_color">
+              <td className="ml-2 Border_color p-5">
                 {/* First Column */}
                 <div className="flex items-center justify-center p-2">
                   <img src={DatabaseSvg} alt="Image" className="Table_Icons" />
@@ -104,7 +110,7 @@ const Waitlist = () => {
                 </div>
               </td>
 
-              <td className="text-white Border_color">
+              <td className="text-white Border_color p-5">
                 {/* First Column */}
                 <div className="flex items-center justify-center p-2">
                   <img src={PatternSvg} alt="Image" className="Table_Icons" />
@@ -118,7 +124,7 @@ const Waitlist = () => {
             </tr>
 
             <tr className="">
-              <td className="text-white Border_color">
+              <td className="text-white Border_color p-5">
                 {/* First Column */}
                 <div className="flex items-center justify-center p-2">
                   <img src={ChecklistSvg} alt="Image" className="Table_Icons" />
@@ -130,7 +136,7 @@ const Waitlist = () => {
                 </div>
               </td>
 
-              <td className="text-white Border_color">
+              <td className="text-white Border_color p-5">
                 {/* First Column */}
                 <div className="flex items-center justify-center p-2 ">
                   <img src={GroupSvg} alt="Image" className="Table_Icons" />
@@ -146,13 +152,15 @@ const Waitlist = () => {
         </table>
         <div className="flex justify-between Big_button">
           <img src={DotSvg} alt="dot" width={90} className="mx-3" />
-          <div className="mt-20 Button_Heading">
+          <div className="mt-16 Button_Heading">
             <h1>Transform your business</h1>
             <p>Launching soon, stay tuned for reveal!</p>
-            <button className="flex items-center justify-center w-64 p-2 my-3 space-x-3 text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300">
-              {" "}
-              <span>Join the Waitlist </span>
-              <img src={ArrowSvg} alt="Arrow" className="" />
+            <button
+              onClick={() => window.open("https://jtxx25xa6e7.typeform.com/to/H1Bc4Ofm", "_blank")}
+              className="flex items-center ml-8 justify-center w-64 p-2 my-3 space-x-3 text-white bg-white  hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300"
+            >
+              <span className="text-black">Join the Waitlist </span>
+              <img src="/rightArrowBlack.png" alt="Arrow" className="fill-black grayscale" />
             </button>
           </div>
 

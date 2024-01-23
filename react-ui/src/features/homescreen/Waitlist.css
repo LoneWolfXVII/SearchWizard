@@ -94,16 +94,16 @@
   font-size: 30px;
   font-style: normal;
   font-weight: 600;
-  line-height: 48px; /* 141.176% */
+  /* line-height: 48px; 141.176% */
 }
 .Button_Heading {
   color: var(--white-100, #fff);
   text-align: center;
   font-family: Gilroy-Medium;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 32px; /* 145.455% */
+  /* font-size: 18px; */
+  /* font-style: normal; */
+  /* font-weight: 400; */
+  /* line-height: 32px;  */
 }
 .Border_color {
   border-radius: var(--16, 16px);
