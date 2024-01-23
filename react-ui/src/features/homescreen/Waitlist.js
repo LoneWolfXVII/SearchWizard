@@ -44,7 +44,7 @@ const Waitlist = () => {
         {/* Content should be placed after the overlay to ensure it's on top */}
         <nav className="relative z-10 flex justify-between">
           {/* Logo button */}
-          <button className="text-lg font-bold text-white">Irame.ai</button>
+          <button className="text-lg font-bold text-white font-[phonk]">Irameai</button>
 
           {/* Join Waitlist button */}
           <button className="Join_Waitlist_button">Join Waitlist</button>
@@ -54,7 +54,7 @@ const Waitlist = () => {
           <h1>
             AI that excels in understanding
             <br />
-            your business dynamics!
+            your business dynamics
           </h1>
           <p>
             IRAME is an advanced AI-focused semantic framework, powered by Knowledge Vector Graph and LLMs. It excels in knowledge processing and forecasting
@@ -80,8 +80,8 @@ const Waitlist = () => {
 
       <section className="px-2 md:px-20">
         <div className="relative mt-0 After_Hero_text">
-          <h1>
-            Surpassing AI Limits: <br />
+          <h1 className="phonk-font">
+            Surpassing AI Limits <br />
             Knowledge Graphs Meet LLMs
           </h1>
           <p className="text-md">
@@ -120,9 +120,9 @@ const Waitlist = () => {
         </section>
 
         <div className="flex flex-wrap justify-center px-5 mt-48 md:justify-between Big_button">
-          <img src={DotSvg}  alt="dot" width={90} className="hidden mx-3 md:flex" />
+          <img src={DotSvg} alt="dot" width={90} className="hidden mx-3 md:flex" />
           <div className="flex flex-col gap-1 mt-16 text-center Button_Heading">
-            <h1>Transform your business</h1>
+            <h1 className="phonk-font">Transform your business</h1>
             <p>Launching soon, stay tuned for reveal!</p>
             <Button
               onClick={() => window.open("https://jtxx25xa6e7.typeform.com/to/H1Bc4Ofm", "_blank")}

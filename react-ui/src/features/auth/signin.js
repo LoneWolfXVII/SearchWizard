@@ -7,7 +7,7 @@ const Signin = () => {
       <div className="flex justify-center flex-1 w-full m-0 bg-white shadow sm:rounded-lg">
         <div className="p-6 lg:w-1/2 xl:w-5/12 sm:p-12">
           <div className="flex flex-col items-center mt-12">
-            <h1 className="text-2xl font-extrabold xl:text-3xl">Let's get started</h1>
+            <h1 className="text-2xl font-extrabold xl:text-3xl phonk-font">Lets get started</h1>
 
             <div className="flex-1 w-full mt-8">
               <div className="flex flex-col items-center">
@@ -56,8 +56,8 @@ const Signin = () => {
               backgroundImage: "url('/signin.svg')",
             }}
           >
-            <h2 className="absolute z-10 text-xl font-bold text-white top-10 left-10">Iframe.ai</h2>
-            <h4 className="absolute z-10 text-3xl font-bold text-white">AI that excels in understanding your business dynamics!</h4>
+            <h2 className="absolute z-10 text-xl font-bold text-white top-10 left-10 phonk-font">Iframeai</h2>
+            <h4 className="absolute z-10 text-3xl font-bold text-white phonk-font">AI that excels in understanding your business dynamics</h4>
             <img src="/signinOverlap.svg" className="bg-cover " />
           </div>
         </div>

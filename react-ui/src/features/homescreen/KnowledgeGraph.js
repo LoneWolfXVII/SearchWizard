@@ -22,7 +22,7 @@ const KnowledgeGraph = () => {
   return (
     <section className="px-4">
       <div className="flex justify-between">
-        <h2 className="text-3xl font-bold text-white">
+        <h2 className="text-3xl font-bold text-white phonk-font">
           Knowledge Graph
           <br />
           Playground
