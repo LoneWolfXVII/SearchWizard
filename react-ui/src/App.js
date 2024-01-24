@@ -148,6 +148,7 @@ const App = () => {
         <div className="app-container">
           <Router>
             {isWaitlist ||
+            !window.location.pathname === "/" ||
             window.location.pathname.toLocaleLowerCase().includes("signin") ||
             window.location.pathname.toLocaleLowerCase().includes("playground") ? (
               ""
@@ -158,6 +159,7 @@ const App = () => {
               className={`${
                 !isWaitlist &&
                 !window.location.pathname.toLocaleLowerCase().includes("signin") &&
+                window.location.pathname !== "/" &&
                 !window.location.pathname.toLocaleLowerCase().includes("playground")
                   ? "content"
                   : "w-full"
@@ -165,19 +167,20 @@ const App = () => {
             >
               {!isWaitlist &&
               !window.location.pathname.toLocaleLowerCase().includes("signin") &&
-              !window.location.pathname.toLocaleLowerCase().includes("playground") ? (
+              !window.location.pathname.toLocaleLowerCase().includes("playground") &&
+              !window.location.pathname === "/" ? (
                 <Header />
               ) : (
                 ""
               )}
               <Routes>
-                <Route path="/waitlist" element={<Waitlist />} />
+                <Route path="/" element={<Waitlist />} />
                 <Route path="/signin" element={<Signin />} />
                 <Route path="/playground" element={<PlayGround />} />
 
                 {/* Define your routes here */}
                 <Route
-                  path="/"
+                  path="/dashboard"
                   element={showImageGrid ? <ImageGrid images={extractImageFileNames(images)} /> : <Body fetchedData={navItems} dataSources={dataSources} />}
                 />
 
