@@ -57,14 +57,17 @@ const Waitlist = () => {
             your business dynamics
           </h1>
           <p>
-            IRAME is an advanced AI-focused semantic framework, powered by Knowledge Vector Graph and LLMs. It excels in knowledge processing and forecasting
-            enterprise needs, ensuring high accuracy and efficiency.
+            IRAME is an advanced AI-focused semantic framework, powered by Knowledge Vector Graph and LLMs. It excels in knowledge processing and forecasting enterprise
+            needs, ensuring high accuracy and efficiency.
           </p>
         </div>
 
         {/* Button for Join Waitlist and Learn More */}
         <div className="relative z-10 flex justify-center gap-4 mt-10">
-          <button className="flex items-center justify-center w-64 p-3 space-x-3 text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300">
+          <button
+            onClick={() => window.open("https://jtxx25xa6e7.typeform.com/to/H1Bc4Ofm", "_blank")}
+            className="flex items-center justify-center w-64 p-3 space-x-3 text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300"
+          >
             <span>Join the Waitlist </span>
           </button>
           <button
@@ -97,11 +100,7 @@ const Waitlist = () => {
         </div>
 
         <section className="grid grid-cols-1 gap-10 my-10 md:grid-cols-2 gap-y-10">
-          <CardComp
-            image={DatabaseSvg}
-            title="Intelligent Data Fusion"
-            description="Processing and interpreting data within the context of its use or application."
-          />
+          <CardComp image={DatabaseSvg} title="Intelligent Data Fusion" description="Processing and interpreting data within the context of its use or application." />
           <CardComp
             image={PatternSvg}
             title="Multi-source data handling"

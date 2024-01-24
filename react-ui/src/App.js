@@ -148,7 +148,7 @@ const App = () => {
         <div className="app-container">
           <Router>
             {isWaitlist ||
-            !window.location.pathname === "/" ||
+            window.location.pathname === "/" ||
             window.location.pathname.toLocaleLowerCase().includes("signin") ||
             window.location.pathname.toLocaleLowerCase().includes("playground") ? (
               ""
@@ -191,7 +191,7 @@ const App = () => {
                 <Route path="/body" element={<Body fetchedData={navItems} dataSources={dataSources} />} />
                 <Route path="/sidebar" element={<GraphPage fetchedData={images} />} />
                 <Route path="/configuration" element={<ConfigurationPage />} />
-                {/* 
+                {/*
             <Route path="/automation" element={<DocumentVerification />} />
             <Route path="/automation-page" element={<AutomationWorkflow />} />
             <Route path="document-validator" element={<DocumentValidator />} /> */}
