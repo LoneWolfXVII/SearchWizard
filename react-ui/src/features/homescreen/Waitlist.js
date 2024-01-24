@@ -47,7 +47,9 @@ const Waitlist = () => {
           <button className="text-lg font-bold text-white font-[phonk]">Irameai</button>
 
           {/* Join Waitlist button */}
-          <button className="Join_Waitlist_button">Join Waitlist</button>
+          <button onClick={() => window.open("https://jtxx25xa6e7.typeform.com/to/H1Bc4Ofm", "_blank")} className="Join_Waitlist_button">
+            Join Waitlist
+          </button>
         </nav>
 
         <div className="relative z-10 md:px-20 pt-28 Hero_text">
