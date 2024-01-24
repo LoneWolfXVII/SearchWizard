@@ -71,14 +71,7 @@ const Waitlist = () => {
           >
             <span>Join the Waitlist </span>
           </button>
-          <button
-            className="w-48 p-3 text-white border-2 border-white rounded-full hover:bg-blue-700"
-            onClick={() => {
-              navigate("/playground");
-            }}
-          >
-            Try yourself(beta)
-          </button>
+         
         </div>
       </section>
 
