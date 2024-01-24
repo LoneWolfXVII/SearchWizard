@@ -54,9 +54,9 @@ const Waitlist = () => {
 
         <div className="relative z-10 md:px-20 pt-28 Hero_text">
           <h1>
-            AI that excels in understanding
+          Build AI that understands your business
             <br />
-            your business dynamics
+        
           </h1>
           <p>
             IRAME is an advanced AI-focused semantic framework, powered by Knowledge Vector Graph and LLMs. It excels in knowledge processing and forecasting enterprise
@@ -78,7 +78,7 @@ const Waitlist = () => {
               navigate("/playground");
             }}
           >
-            Learn More
+            Try yourself(beta)
           </button>
         </div>
       </section>
@@ -102,20 +102,22 @@ const Waitlist = () => {
         </div>
 
         <section className="grid grid-cols-1 gap-10 my-10 md:grid-cols-2 gap-y-10">
-          <CardComp image={DatabaseSvg} title="Intelligent Data Fusion" description="Processing and interpreting data within the context of its use or application." />
+          <CardComp image={DatabaseSvg} 
+          title="Intelligent Data Fusion"
+          description="Processing and interpreting data within the context of its use or application." />
           <CardComp
             image={PatternSvg}
-            title="Multi-source data handling"
-            description="Managing and integrating information from various structured and unstructured sources."
+            title="Accurate Proprietary Data Responses"
+            description="Traditional LLMs often falter on niche, proprietary datasets but our Knowledge Graph-LLM synergy excels, delivering precise and accurate answers every time."
           />
           <CardComp
             image={ChecklistSvg}
-            title="Proprietary data handling"
+            title="Cost-Efficient Context Management"
             description="Dealing with data that is exclusive or unique to a specific organization or context."
           />
           <CardComp
             image={GroupSvg}
-            title="Fine tuning challenges"
+            title="Bypass the Fine-Tuning Hassle"
             description="Difficulties encountered in adapting and optimizing models for specific tasks or datasets."
           />
         </section>
