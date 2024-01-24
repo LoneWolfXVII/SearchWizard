@@ -54,9 +54,8 @@ const Waitlist = () => {
 
         <div className="relative z-10 md:px-20 pt-28 Hero_text">
           <h1>
-          Build AI that understands your business
+          Build a plug and play AI that understands your business 
             <br />
-        
           </h1>
           <p>
             IRAME is an advanced AI-focused semantic framework, powered by Knowledge Vector Graph and LLMs. It excels in knowledge processing and forecasting enterprise
@@ -113,12 +112,12 @@ const Waitlist = () => {
           <CardComp
             image={ChecklistSvg}
             title="Cost-Efficient Context Management"
-            description="Dealing with data that is exclusive or unique to a specific organization or context."
+            description="Our solution maintains context with efficiency better than LLMs, significantly reducing operational costs and resource demands."
           />
           <CardComp
             image={GroupSvg}
             title="Bypass the Fine-Tuning Hassle"
-            description="Difficulties encountered in adapting and optimizing models for specific tasks or datasets."
+            description="LLMs demands continual data quality monitoring and updates. Our approach eliminates the need for constant fine-tuning, offering the precision of a fine-tuned LLM right out-of-the-box for your enterprise needs."
           />
         </section>
 
