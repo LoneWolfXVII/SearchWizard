@@ -45,7 +45,7 @@
 .Hero_text p {
   padding-top: 2%;
   color: var(--white-100, #fff);
-  text-align: center;
+  /* text-align: center; */
   font-family: Gilroy-Medium;
   font-size: 24px;
   font-style: normal;
