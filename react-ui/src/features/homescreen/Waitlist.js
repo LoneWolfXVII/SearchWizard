@@ -188,7 +188,7 @@ const CategoryCard = ({ title, description, imageUrl }) => {
         backgroundPosition: "center",
         objectFit: "cover",
       }}
-      className="relative group cursor-pointer  flex flex-col justify-end w-64 max-w-xs px-4 rounded-xl py-7 h-96 sm:h-[28rem]"
+      className="relative transition-all duration-500 ease-in-out hover:scale-105 group cursor-pointer  flex flex-col justify-end w-64 max-w-xs px-4 rounded-xl py-7 h-96 sm:h-[28rem]"
     >
       <h4 className="relative z-20 text-2xl max-w-[70%]  line-clamp-2 font-semibold text-white">{title}</h4>
       <img src="/right-card-arrow.svg" alt="right arrow" width={35} height={35} className="relative z-20 mt-2 text-white group-hover:hidden" />
