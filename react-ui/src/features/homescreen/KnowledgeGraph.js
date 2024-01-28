@@ -3,12 +3,17 @@ import { Button } from "../../components/ui/button";
 import Toggle from "../../components/ui/toggle.component";
 import BalckArrowSvg from "./Waitlist_Assets/blackArrow.svg";
 import ArrowSvg from "./Waitlist_Assets/arow.svg";
+import { Input } from "../../components/ui/input";
+import { useRef } from "react";
+import axios from "axios";
+import { Divide } from "lucide-react";
 
-const KnowledgeGraph = () => {
+const KnowledgeGraph = ({setDataSourceId}) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [isDeleteIconVisible, setIsDeleteIconVisible] = useState(false);
+  const dbInputRef = useRef();
 
-  function handleUploadedfiles(e) {
+  const handleUploadedfiles = (e) => {
     const filesArray = Array.from(e.target.files);
     setUploadedFiles(filesArray);
   }
@@ -18,6 +23,25 @@ const KnowledgeGraph = () => {
     updatedFiles.splice(index, 1);
     setUploadedFiles(updatedFiles);
   };
+
+  const dataSetHandler = async () => { 
+    if (uploadedFiles?.length === 0) return;
+    const dbName = dbInputRef.current.value;
+   
+    try {
+      if (dbName) {
+        uploadedFiles.forEach(async (file) => {
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("data_source_name", dbName);
+          const res = await axios.post("http://3.111.174.29:8080/kg/upload_file", formData);
+          setDataSourceId(res?.data?.datasource_id)
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <section className="px-4">
@@ -43,36 +67,44 @@ const KnowledgeGraph = () => {
             </p>
           </>
         ) : (
-          uploadedFiles?.map((_, index) => {
-            return (
-              <div
-                onMouseEnter={() => {
-                  setIsDeleteIconVisible(true);
-                }}
-                onMouseLeave={() => {
-                  setIsDeleteIconVisible(false);
-                }}
-                key={index + 1}
-                className={`flex items-center justify-center p-2 ${isDeleteIconVisible ? "bg-gray-700" : "bg-white"} rounded-md cursor-pointer`}
-              >
-                {isDeleteIconVisible ? (
-                  <div onClick={() => handleRemoveFile(index)} className="h-[36px] w-[36px] rounded-full p-1 bg-white">
-                    <img src="/trash.svg" alt="excel" width={30} height={30} />
+          <div className="flex items-center gap-4 flex-wrap">{
+            uploadedFiles?.map((file, index) => {
+              return (
+                <div >
+                  <div
+                    key={file?.name || index + 1}
+                    className={`flex items-center group w-16 justify-center p-2 bg-white hover:bg-gray-700 duration-300 transition-all ease-linear rounded-md cursor-pointer`}
+                  >
+                   
+                    <div onClick={() => handleRemoveFile(index)} className="h-[36px] w-[36px] hidden group-hover:flex rounded-full p-1 bg-white">
+                      <img src="/trash.svg" alt="excel" width={30} height={30} />
+                    </div>
+                   
+                    <img className="group-hover:hidden" src="/vscode-icons_file-type-excel.svg" alt="excel" width={36} height={36} />
+                    
                   </div>
-                ) : (
-                  <img src="/vscode-icons_file-type-excel.svg" alt="excel" width={36} height={36} />
-                )}
-              </div>
-            );
-          })
+
+                  <p className="text-center w-20 line-clamp-1 text-ellipsis overflow-hidden text-sm">
+                    {file?.name}
+                  </p> 
+
+                </div>
+              );
+            })
+          }
+          </div>
         )}
-        <Button className="relative text-black bg-white md:px-28 hover:bg-gray-200">
-          {uploadedFiles?.length === 0 && (
-            <input type="file" className="absolute z-10 w-full opacity-0 cursor-pointer" onChange={(e) => handleUploadedfiles(e)} />
-          )}
-          {uploadedFiles?.length === 0 ? "Create your own datasheet" : "Save data set"}
-          <img src={BalckArrowSvg} alt="Arrow" className="ml-2" />
-        </Button>
+
+        <div className="w-11/12 md:w-5/12 flex flex-col gap-3">
+          <Input placeholder="Enter database name" ref={dbInputRef} className={`text-black ${uploadedFiles?.length > 0 ? 'hidden' : ''}`} />
+          <Button onClick={dataSetHandler} className="relative text-black bg-white md:px-28 hover:bg-gray-200">
+            {uploadedFiles?.length === 0 && (
+              <input multiple type="file" className="absolute z-10 w-full opacity-0 cursor-pointer" onChange={(e) => handleUploadedfiles(e)} />
+            )}
+            {uploadedFiles?.length === 0 ? "Create your own datasheet" : "Save data set"}
+            <img src={BalckArrowSvg} alt="Arrow" className="ml-2" />
+          </Button>
+        </div>
         <span className="flex gap-2">
           <label>Use sample data set</label>
           <Toggle onValueChange={() => {}} />

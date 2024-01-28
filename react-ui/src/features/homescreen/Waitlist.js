@@ -167,6 +167,7 @@ const Waitlist = () => {
   );
 };
 
+
 const CardComp = ({ image, title, description }) => {
   return (
     <div className="flex flex-col items-center gap-3 px-8 py-12 md:flex-row Border_color">

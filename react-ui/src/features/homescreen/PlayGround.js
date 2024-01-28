@@ -1,17 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 
 import KnowledgeGraph from "./KnowledgeGraph";
 import WebView from "./WebView";
 
 const PlayGround = () => {
+    const [dataSourceId, setDataSourceId] = useState('');
+
   return (
     <>
       <div className="w-full px-10 bg-[#000101] pt-16">
-        {/* Big button */}
-
-        <KnowledgeGraph />
+        <KnowledgeGraph setDataSourceId={setDataSourceId} />
         <br />
-        <WebView />
+        <WebView dataSourceId={dataSourceId} />
       </div>
     </>
   );
