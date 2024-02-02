@@ -8,15 +8,14 @@ import { useRef } from "react";
 import axios from "axios";
 import { Divide } from "lucide-react";
 
-const KnowledgeGraph = ({setDataSourceId}) => {
+const KnowledgeGraph = ({ setDataSourceId, onSuccessfulUpload }) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [isDeleteIconVisible, setIsDeleteIconVisible] = useState(false);
   const dbInputRef = useRef();
 
   const handleUploadedfiles = (e) => {
     const filesArray = Array.from(e.target.files);
     setUploadedFiles(filesArray);
-  }
+  };
 
   const handleRemoveFile = (index) => {
     const updatedFiles = [...uploadedFiles];
@@ -24,10 +23,10 @@ const KnowledgeGraph = ({setDataSourceId}) => {
     setUploadedFiles(updatedFiles);
   };
 
-  const dataSetHandler = async () => { 
+  const dataSetHandler = async () => {
     if (uploadedFiles?.length === 0) return;
     const dbName = dbInputRef.current.value;
-   
+
     try {
       if (dbName) {
         uploadedFiles.forEach(async (file) => {
@@ -35,13 +34,15 @@ const KnowledgeGraph = ({setDataSourceId}) => {
           formData.append("file", file);
           formData.append("data_source_name", dbName);
           const res = await axios.post("http://3.111.174.29:8080/kg/upload_file", formData);
-          setDataSourceId(res?.data?.datasource_id)
+          setDataSourceId(res?.data?.datasource_id);
         });
+
+        onSuccessfulUpload();
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <section className="px-4">
@@ -51,7 +52,7 @@ const KnowledgeGraph = ({setDataSourceId}) => {
           <br />
           Playground
         </h2>
-        <Button className="tracking-widest rounded-3xl">
+        <Button className="tracking-widest rounded-3xl bg-[#076eff]">
           Join the waitlist
           <img src={ArrowSvg} alt="Arrow" className="ml-1" />
         </Button>
@@ -67,36 +68,30 @@ const KnowledgeGraph = ({setDataSourceId}) => {
             </p>
           </>
         ) : (
-          <div className="flex items-center gap-4 flex-wrap">{
-            uploadedFiles?.map((file, index) => {
+          <div className="flex flex-wrap items-center gap-4">
+            {uploadedFiles?.map((file, index) => {
               return (
-                <div >
+                <div>
                   <div
                     key={file?.name || index + 1}
                     className={`flex items-center group w-16 justify-center p-2 bg-white hover:bg-gray-700 duration-300 transition-all ease-linear rounded-md cursor-pointer`}
                   >
-                   
                     <div onClick={() => handleRemoveFile(index)} className="h-[36px] w-[36px] hidden group-hover:flex rounded-full p-1 bg-white">
                       <img src="/trash.svg" alt="excel" width={30} height={30} />
                     </div>
-                   
+
                     <img className="group-hover:hidden" src="/vscode-icons_file-type-excel.svg" alt="excel" width={36} height={36} />
-                    
                   </div>
 
-                  <p className="text-center w-20 line-clamp-1 text-ellipsis overflow-hidden text-sm">
-                    {file?.name}
-                  </p> 
-
+                  <p className="w-20 overflow-hidden text-sm text-center line-clamp-1 text-ellipsis">{file?.name}</p>
                 </div>
               );
-            })
-          }
+            })}
           </div>
         )}
 
-        <div className="w-11/12 md:w-5/12 flex flex-col gap-3">
-          <Input placeholder="Enter database name" ref={dbInputRef} className={`text-black ${uploadedFiles?.length > 0 ? 'hidden' : ''}`} />
+        <div className="flex flex-col w-11/12 gap-3 md:w-5/12">
+          <Input placeholder="Enter database name" ref={dbInputRef} className={`text-black ${uploadedFiles?.length > 0 ? "hidden" : ""}`} />
           <Button onClick={dataSetHandler} className="relative text-black bg-white md:px-28 hover:bg-gray-200">
             {uploadedFiles?.length === 0 && (
               <input multiple type="file" className="absolute z-10 w-full opacity-0 cursor-pointer" onChange={(e) => handleUploadedfiles(e)} />
