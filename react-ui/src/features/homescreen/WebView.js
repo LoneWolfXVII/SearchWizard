@@ -37,18 +37,25 @@ const WebView = ({ dataSourceId }) => {
       formData.append("query", queryRef.current.value);
       formData.append("datasource_id", dataSourceId);
 
-      const res = await axios.post("http://3.111.174.29:8080/kg/query_knowledge_graph", formData);
+      const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/query_kg", formData);
 
-      setIsTable(res?.data?.response === "Random Table" ? true : false);
-      for (let index = 0; index < res?.data?.columnDef?.length; index++) {
-        const element = res?.data?.columnDef[index];
-        columns.push(
-          columnHelper.accessor(element?.field, {
-            header: element?.header,
-          })
-        );
-      }
-      setTableData(res?.data?.data);
+      let status = "pending";
+      let queryRes;
+      const fetchResponse = async () => {
+        queryRes = await axios.post("http://13.232.85.33:3000/kg/kg/get_response", {
+          query_id: res?.data?.query_id,
+        });
+
+        status = queryRes?.data?.status === "Done" ? "done" : "pending";
+
+        if (status === "pending") {
+          setTimeout(fetchResponse, 1000); // Adjust the timeout as needed
+        } else {
+          setTableData(queryRes?.data?.response);
+        }
+      };
+
+      fetchResponse();
     } catch (error) {
       console.log(error);
     }
@@ -125,10 +132,7 @@ const WebView = ({ dataSourceId }) => {
             <div className="relative flex flex-nowrap">
               <Input className="text-black" ref={queryRef} placeholder="Actual question test to be input by user" />
               <AccordionTrigger className="absolute p-0 text-white right-2">
-                <Button
-                  onClick={queryHandler}
-                  className="p-0 m-0 transition-all duration-300 ease-linear bg-transparent hover:bg-transparent hover:scale-105"
-                >
+                <Button onClick={queryHandler} className="p-0 m-0 transition-all duration-300 ease-linear bg-transparent hover:bg-transparent hover:scale-105">
                   <img src="/uploadButton.svg" />
                 </Button>
               </AccordionTrigger>
@@ -147,8 +151,7 @@ const WebView = ({ dataSourceId }) => {
 const KnowledgeGraphStyle = {
   borderRadius: "50px",
   border: "2px solid rgba(255, 255, 255, 0.64)",
-  background:
-    "radial-gradient(228% 117.58% at 24.99% 43.36%, rgba(51, 71, 255, 0.40) 0%, rgba(223, 226, 255, 0.22) 74.98%, rgba(107, 122, 255, 0.40) 100%)",
+  background: "radial-gradient(228% 117.58% at 24.99% 43.36%, rgba(51, 71, 255, 0.40) 0%, rgba(223, 226, 255, 0.22) 74.98%, rgba(107, 122, 255, 0.40) 100%)",
   backdropFilter: "blur(7.637977123260498px)",
 };
 
