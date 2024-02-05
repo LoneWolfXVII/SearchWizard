@@ -174,7 +174,7 @@ const App = () => {
                 ""
               )}
               <Routes>
-                <Route path="/" element={<Waitlist />} />
+                <Route path="/" element={<PlayGround />} />
                 <Route path="/signin" element={<Signin />} />
                 <Route path="/playground" element={<PlayGround />} />
 
