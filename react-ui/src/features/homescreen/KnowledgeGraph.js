@@ -33,7 +33,7 @@ const KnowledgeGraph = ({ setDataSourceId, onSuccessfulUpload }) => {
           const formData = new FormData();
           formData.append("file", file);
           formData.append("data_source_name", dbName);
-          const res = await axios.post("http://3.111.174.29:8080/kg/upload_file", formData);
+          const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/upload_file", formData);
           setDataSourceId(res?.data?.datasource_id);
         });
 

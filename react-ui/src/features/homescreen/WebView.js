@@ -42,7 +42,7 @@ const WebView = ({ dataSourceId }) => {
       let status = "pending";
       let queryRes;
       const fetchResponse = async () => {
-        queryRes = await axios.post("http://13.232.85.33:3000/kg/kg/get_response", {
+        queryRes = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/get_response", {
           query_id: res?.data?.query_id,
         });
 
@@ -65,7 +65,7 @@ const WebView = ({ dataSourceId }) => {
     let timeoutId = null;
     const fetchKnowledgeGraph = async () => {
       try {
-        const res = await axios.post("http://3.111.174.29:8080/kg/get_knowledge_graph", { datasource_id: dataSourceId });
+        const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/get_knowledge_graph", { datasource_id: dataSourceId });
         if (res?.data?.status === "In Progress") {
           // If the status is 'In Progress', wait for a while and fetch again
           timeoutId = setTimeout(fetchKnowledgeGraph, 1000); // Adjust the timeout as needed
