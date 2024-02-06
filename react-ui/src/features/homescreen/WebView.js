@@ -77,8 +77,8 @@ const WebView = ({ dataSourceId }) => {
           timeoutId = setTimeout(fetchKnowledgeGraph, 1000); // Adjust the timeout as needed
         } else {
           // Handle other cases or set state accordingly
-          console.log('res?.data', res?.data.knowledge_graph_url)
-          
+          console.log("res?.data", res?.data.knowledge_graph_url);
+
           console.log("Knowledge graph fetch completed:", res?.data?.status);
           setGraphUrl(res?.data?.knowledge_graph_url);
           setNodes(res?.data?.Nodes);
@@ -106,11 +106,11 @@ const WebView = ({ dataSourceId }) => {
     <section className="md:h-[700px]">
       <div className="relative flex flex-col h-full gap-5 px-5 pt-3 mt-16 text-white rounded-lg" style={KnowledgeGraphStyle}>
         {isLoading && (
-          <div className="flex justify-center">
+          <div className="absolute flex items-center justify-center w-full h-full">
             <Loader />
           </div>
         )}
-        {!isLoading && !graphUrl && <p className="text-lg font-semibold text-center text-white align-middle">No data found!</p>}
+        {!isLoading && !graphUrl && <p className="absolute font-semibold text-center text-white align-middle text-">No data found!</p>}
         <div className="grid w-full h-full grid-cols-6 overflow-hidden rounded-lg">
           <iframe src={graphUrl} title="knowledge" className={`${graphUrl ? "col-span-5" : "col-span-6"} "w-full h-full  rounded-lg"`} />
 
@@ -150,19 +150,25 @@ const WebView = ({ dataSourceId }) => {
               </div>
 
               <div className="relative flex flex-nowrap">
-                <Input className="text-black" ref={queryRef} placeholder="Actual question test to be input by user" />
+                <Input
+                  className="text-black"
+                  ref={queryRef}
+                  placeholder="Actual question test to be input by user"
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      queryHandler();
+                    }
+                  }}
+                />
                 <AccordionTrigger className="absolute p-0 text-white right-2">
-                  <Button
-                    onClick={queryHandler}
-                    className="p-0 m-0 transition-all duration-300 ease-linear bg-transparent hover:bg-transparent hover:scale-105"
-                  >
-                    <img src="/uploadButton.svg" />
+                  <Button className="p-0 m-0 transition-all duration-300 ease-linear bg-transparent hover:bg-transparent hover:scale-105">
+                    <img src="/uploadButton.svg" alt="upload" />
                   </Button>
                 </AccordionTrigger>
               </div>
               <AccordionContent className="p-4 mt-5 bg-white border rounded-xl">
                 {isTable && <Table data={tableData} isPaginating={false} columns={columns} />}
-                {!isTable && <p className="text-black">{JSON.stringify(tableData)}</p>}
+                {!isTable && <p className="text-black">{tableData?.toString()}</p>}
               </AccordionContent>
             </AccordionItem>
           </Accordion>
