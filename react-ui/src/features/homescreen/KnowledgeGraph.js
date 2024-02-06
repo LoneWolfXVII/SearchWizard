@@ -26,18 +26,28 @@ const KnowledgeGraph = ({ setDataSourceId, onSuccessfulUpload }) => {
   const dataSetHandler = async () => {
     if (uploadedFiles?.length === 0) return;
     const dbName = dbInputRef.current.value;
-
+    let count = 0;
+    let canCallSuccess = 0;
     try {
       if (dbName) {
-        uploadedFiles.forEach(async (file) => {
+        const uploadPromises = uploadedFiles.map(async (file) => {
           const formData = new FormData();
           formData.append("file", file);
           formData.append("data_source_name", dbName);
-          const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/upload_file", formData);
+          const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/upload_file", formData);
+
+          if (res?.data?.message?.includes("not supported")) {
+            alert("File not supported");
+            count++;
+            return;
+          }
+          canCallSuccess++;
           setDataSourceId(res?.data?.datasource_id);
         });
 
-        onSuccessfulUpload();
+        await Promise.all(uploadPromises);
+
+        if (count === 0 && canCallSuccess === uploadedFiles?.length) onSuccessfulUpload();
       }
     } catch (error) {
       console.log(error);
@@ -63,8 +73,8 @@ const KnowledgeGraph = ({ setDataSourceId, onSuccessfulUpload }) => {
           <>
             <h4 className="text-4xl font-semibold text-center">Analyse a PDF Text with Irame.ai</h4>
             <p className="px-2 py-1 tracking-wider text-center md:px-24 text-md opacity-80">
-              First, visualize data and analyze text to identify key idea clusters. This provides a broad overview of the PDF document before delving
-              into specific questions.
+              First, visualize data and analyze text to identify key idea clusters. This provides a broad overview of the PDF document before delving into
+              specific questions.
             </p>
           </>
         ) : (
@@ -112,8 +122,7 @@ const KnowledgeGraph = ({ setDataSourceId, onSuccessfulUpload }) => {
 const KnowledgeGraphStyle = {
   borderRadius: "50px",
   border: "2px solid rgba(255, 255, 255, 0.64)",
-  background:
-    "radial-gradient(228% 117.58% at 24.99% 43.36%, rgba(51, 71, 255, 0.40) 0%, rgba(223, 226, 255, 0.22) 74.98%, rgba(107, 122, 255, 0.40) 100%)",
+  background: "radial-gradient(228% 117.58% at 24.99% 43.36%, rgba(51, 71, 255, 0.40) 0%, rgba(223, 226, 255, 0.22) 74.98%, rgba(107, 122, 255, 0.40) 100%)",
   backdropFilter: "blur(7.637977123260498px)",
 };
 

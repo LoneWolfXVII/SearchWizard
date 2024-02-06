@@ -65,7 +65,7 @@ const WebView = ({ dataSourceId }) => {
     let timeoutId = null;
     const fetchKnowledgeGraph = async () => {
       try {
-        const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/get_knowledge_graph", { datasource_id: dataSourceId });
+        const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/get_knowledge_graph", { datasource_id: dataSourceId });
         if (res?.data?.status === "In Progress") {
           // If the status is 'In Progress', wait for a while and fetch again
           timeoutId = setTimeout(fetchKnowledgeGraph, 1000); // Adjust the timeout as needed
