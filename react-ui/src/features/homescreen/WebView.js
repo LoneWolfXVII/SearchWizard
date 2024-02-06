@@ -6,6 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { Input } from "../../components/ui/input";
 import Table from "../../components/ui/Table";
 import { createColumnHelper } from "@tanstack/react-table";
+import qs from "qs"
 
 const columnHelper = createColumnHelper();
 
@@ -42,9 +43,9 @@ const WebView = ({ dataSourceId }) => {
       let status = "pending";
       let queryRes;
       const fetchResponse = async () => {
-        queryRes = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/get_response", {
+        queryRes = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/get_response", qs.stringify({
           query_id: res?.data?.query_id,
-        });
+        }));
 
         status = queryRes?.data?.status === "Done" ? "done" : "pending";
 
@@ -65,7 +66,7 @@ const WebView = ({ dataSourceId }) => {
     let timeoutId = null;
     const fetchKnowledgeGraph = async () => {
       try {
-        const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/get_knowledge_graph", { datasource_id: dataSourceId });
+        const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/get_knowledge_graph", qs.stringify({ datasource_id: dataSourceId }));
         if (res?.data?.status === "In Progress") {
           // If the status is 'In Progress', wait for a while and fetch again
           timeoutId = setTimeout(fetchKnowledgeGraph, 1000); // Adjust the timeout as needed
