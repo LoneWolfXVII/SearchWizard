@@ -41,6 +41,7 @@ const WebView = ({ dataSourceId }) => {
       formData.append("query", queryRef.current.value);
       formData.append("datasource_id", dataSourceId);
 
+      setTableData("");
       const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/query_kg", formData);
 
       let status = "pending";
