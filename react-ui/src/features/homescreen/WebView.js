@@ -29,12 +29,14 @@ const WebView = ({ dataSourceId }) => {
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [textResponse, setTextResponse] = useState("");
+  const [loadingQuery, setLoadingQuery] = useState(false);
   const queryRef = useRef();
 
   const columns = [];
 
   const queryHandler = async () => {
     try {
+      setLoadingQuery(true);
       const formData = new FormData();
       formData.append("query", queryRef.current.value);
       formData.append("datasource_id", dataSourceId);
@@ -56,12 +58,14 @@ const WebView = ({ dataSourceId }) => {
         if (status === "pending") {
           setTimeout(fetchResponse, 1000); // Adjust the timeout as needed
         } else {
+          setLoadingQuery(false);
           setTableData(queryRes?.data?.response);
         }
       };
 
       fetchResponse();
     } catch (error) {
+      setLoadingQuery(false);
       console.log(error);
     }
   };
@@ -112,7 +116,7 @@ const WebView = ({ dataSourceId }) => {
         )}
         {!isLoading && !graphUrl && <p className="absolute font-semibold text-center text-white align-middle text-">No data found!</p>}
         <div className="grid w-full h-full grid-cols-6 overflow-hidden rounded-lg">
-          <iframe src={graphUrl} title="knowledge" className={`${graphUrl ? "col-span-5" : "col-span-6"} "w-full h-full  rounded-lg"`} />
+          <iframe src={graphUrl} title="knowledge" className={`${graphUrl ? "col-span-5" : "col-span-6"} w-full h-full  rounded-lg"`} />
 
           {graphUrl && (
             <div style={{ borderRadius: "1rem" }} className="flex flex-col h-full gap-4 p-3 text-white bg-black rounded-lg">
@@ -129,7 +133,7 @@ const WebView = ({ dataSourceId }) => {
           <Accordion type="single" collapsible>
             <AccordionItem
               style={{ left: "25%" }}
-              className="!rounded-2xl  absolute bottom-0 w-6/12 p-5 bg-gradient-to-t from-[#fff] to-[#076eff] backdrop-blur-[1px]"
+              className="!rounded-2xl  absolute z-10 bottom-0 w-6/12 p-5 bg-gradient-to-t from-[#fff] to-[#076eff] backdrop-blur-[1px]"
               value="item-1"
             >
               <div className="flex items-center justify-between mb-2">
@@ -161,8 +165,14 @@ const WebView = ({ dataSourceId }) => {
                   }}
                 />
                 <AccordionTrigger className="absolute p-0 text-white right-2">
-                  <Button className="p-0 m-0 transition-all duration-300 ease-linear bg-transparent hover:bg-transparent hover:scale-105">
-                    <img src="/uploadButton.svg" alt="upload" />
+                  <Button
+                    onClick={() => {
+                      queryHandler();
+                    }}
+                    disabled={loadingQuery}
+                    className="p-0 m-0 transition-all duration-300 ease-linear bg-transparent hover:bg-transparent hover:scale-105"
+                  > 
+                    {!!loadingQuery ? <Loader /> : <img src="/uploadButton.svg" alt="upload" />}
                   </Button>
                 </AccordionTrigger>
               </div>
