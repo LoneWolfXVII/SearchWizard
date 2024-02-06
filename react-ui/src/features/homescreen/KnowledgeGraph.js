@@ -7,10 +7,12 @@ import { Input } from "../../components/ui/input";
 import { useRef } from "react";
 import axios from "axios";
 import { Divide } from "lucide-react";
+import Loader from "../../components/ui/Loader";
 
 const KnowledgeGraph = ({ setDataSourceId, onSuccessfulUpload }) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const dbInputRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleUploadedfiles = (e) => {
     const filesArray = Array.from(e.target.files);
@@ -30,6 +32,7 @@ const KnowledgeGraph = ({ setDataSourceId, onSuccessfulUpload }) => {
     let canCallSuccess = 0;
     try {
       if (dbName) {
+        setIsLoading(true);
         const uploadPromises = uploadedFiles.map(async (file) => {
           const formData = new FormData();
           formData.append("file", file);
@@ -47,9 +50,13 @@ const KnowledgeGraph = ({ setDataSourceId, onSuccessfulUpload }) => {
 
         await Promise.all(uploadPromises);
 
-        if (count === 0 && canCallSuccess === uploadedFiles?.length) onSuccessfulUpload();
+        if (count === 0 && canCallSuccess === uploadedFiles?.length) {
+          setIsLoading(false);
+          onSuccessfulUpload();
+        }
       }
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
@@ -102,13 +109,20 @@ const KnowledgeGraph = ({ setDataSourceId, onSuccessfulUpload }) => {
 
         <div className="flex flex-col w-11/12 gap-3 md:w-5/12">
           <Input placeholder="Enter database name" ref={dbInputRef} className={`text-black ${uploadedFiles?.length > 0 ? "hidden" : ""}`} />
-          <Button onClick={dataSetHandler} className="relative text-black bg-white md:px-28 hover:bg-gray-200">
-            {uploadedFiles?.length === 0 && (
-              <input multiple type="file" className="absolute z-10 w-full opacity-0 cursor-pointer" onChange={(e) => handleUploadedfiles(e)} />
-            )}
-            {uploadedFiles?.length === 0 ? "Create your own datasheet" : "Save data set"}
-            <img src={BalckArrowSvg} alt="Arrow" className="ml-2" />
-          </Button>
+          {isLoading && (
+            <div className="flex justify-center ">
+              <Loader />
+            </div>
+          )}
+          {!isLoading && (
+            <Button onClick={dataSetHandler} className="relative text-black bg-white md:px-28 hover:bg-gray-200">
+              {uploadedFiles?.length === 0 && (
+                <input multiple type="file" className="absolute z-10 w-full opacity-0 cursor-pointer" onChange={(e) => handleUploadedfiles(e)} />
+              )}
+              {uploadedFiles?.length === 0 ? "Create your own datasheet" : "Save data set"}
+              <img src={BalckArrowSvg} alt="Arrow" className="ml-2" />
+            </Button>
+          )}
         </div>
         <span className="flex gap-2">
           <label>Use sample data set</label>

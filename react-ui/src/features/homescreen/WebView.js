@@ -77,6 +77,8 @@ const WebView = ({ dataSourceId }) => {
           timeoutId = setTimeout(fetchKnowledgeGraph, 1000); // Adjust the timeout as needed
         } else {
           // Handle other cases or set state accordingly
+          console.log('res?.data', res?.data.knowledge_graph_url)
+          
           console.log("Knowledge graph fetch completed:", res?.data?.status);
           setGraphUrl(res?.data?.knowledge_graph_url);
           setNodes(res?.data?.Nodes);
