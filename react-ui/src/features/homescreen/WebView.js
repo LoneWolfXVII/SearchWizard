@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Button } from "../../components/ui/button";
-import ArrowSvg from "./Waitlist_Assets/arow.svg";
-import axios from "axios";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../components/ui/accordion";
-import { Input } from "../../components/ui/input";
-import Table from "../../components/ui/Table";
 import { createColumnHelper } from "@tanstack/react-table";
-import qs from "qs"
+import axios from "axios";
+import qs from "qs";
+import { useEffect, useRef, useState } from "react";
+import Loader from "../../components/ui/Loader";
+import Table from "../../components/ui/Table";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../components/ui/accordion";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
 
 const columnHelper = createColumnHelper();
 
@@ -27,6 +27,7 @@ const WebView = ({ dataSourceId }) => {
   const [nodes, setNodes] = useState([]);
   const [isTable, setIsTable] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [textResponse, setTextResponse] = useState("");
   const queryRef = useRef();
 
@@ -43,9 +44,12 @@ const WebView = ({ dataSourceId }) => {
       let status = "pending";
       let queryRes;
       const fetchResponse = async () => {
-        queryRes = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/get_response", qs.stringify({
-          query_id: res?.data?.query_id,
-        }));
+        queryRes = await axios.post(
+          "https://api.irame.ai/knowledge-graph/kg/kg/get_response",
+          qs.stringify({
+            query_id: res?.data?.query_id,
+          }),
+        );
 
         status = queryRes?.data?.status === "Done" ? "done" : "pending";
 
@@ -65,6 +69,7 @@ const WebView = ({ dataSourceId }) => {
   useEffect(() => {
     let timeoutId = null;
     const fetchKnowledgeGraph = async () => {
+      setIsLoading(true);
       try {
         const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/get_knowledge_graph", qs.stringify({ datasource_id: dataSourceId }));
         if (res?.data?.status === "In Progress") {
@@ -76,8 +81,10 @@ const WebView = ({ dataSourceId }) => {
           setGraphUrl(res?.data?.knowledge_graph_url);
           setNodes(res?.data?.Nodes);
           clearTimeout(timeoutId);
+          setIsLoading(false);
         }
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching knowledge graph:", error);
         clearTimeout(timeoutId);
       }
@@ -96,54 +103,68 @@ const WebView = ({ dataSourceId }) => {
   return (
     <section className="md:h-[700px]">
       <div className="relative flex flex-col h-full gap-5 px-5 pt-3 mt-16 text-white rounded-lg" style={KnowledgeGraphStyle}>
-        <div className="grid w-full h-full grid-cols-6 overflow-hidden rounded-lg">
-          <iframe src={graphUrl} className="w-full h-full col-span-5 rounded-lg" />
-          <div style={{ borderRadius: "1rem" }} className="flex flex-col h-full gap-4 p-3 text-white bg-black rounded-lg">
-            {nodes?.map((node) => (
-              <div key={node} className="px-2 py-4 border border-green-500 rounded-md">
-                {node}
-              </div>
-            ))}
+        {isLoading && (
+          <div className="flex justify-center">
+            <Loader />
           </div>
+        )}
+        {!isLoading && !graphUrl && <p className="text-lg font-semibold text-center text-white align-middle">No data found!</p>}
+        <div className="grid w-full h-full grid-cols-6 overflow-hidden rounded-lg">
+          <iframe src={graphUrl} title="knowledge" className={`${graphUrl ? "col-span-5" : "col-span-6"} "w-full h-full  rounded-lg"`} />
+
+          {graphUrl && (
+            <div style={{ borderRadius: "1rem" }} className="flex flex-col h-full gap-4 p-3 text-white bg-black rounded-lg">
+              {nodes?.map((node) => (
+                <div key={node} title={node} className="px-2 py-4 overflow-hidden border border-green-500 rounded-md text-ellipsis">
+                  {node}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        <Accordion type="single" collapsible>
-          <AccordionItem
-            style={{ left: "25%" }}
-            className="!rounded-2xl  absolute bottom-0 w-6/12 p-5 bg-gradient-to-t from-[#fff] to-[#076eff] backdrop-blur-[1px]"
-            value="item-1"
-          >
-            <div className="flex items-center justify-between mb-2">
-              {!JSON.stringify(tableData)?.length ? (
-                <span className="px-3 py-2 border border-white rounded-lg"> {"Query Panel"}</span>
-              ) : (
-                <span className="px-3 py-2 rounded-lg">There is no character limit for short-answer questions.</span>
-              )}
-              <span
-                onClick={() => {
-                  setTableData([]);
-                  setIsTable(false);
-                }}
-                className="cursor-pointer"
-              >
-                X
-              </span>
-            </div>
+        {graphUrl && (
+          <Accordion type="single" collapsible>
+            <AccordionItem
+              style={{ left: "25%" }}
+              className="!rounded-2xl  absolute bottom-0 w-6/12 p-5 bg-gradient-to-t from-[#fff] to-[#076eff] backdrop-blur-[1px]"
+              value="item-1"
+            >
+              <div className="flex items-center justify-between mb-2">
+                {!JSON.stringify(tableData)?.length ? (
+                  <span className="px-3 py-2 border border-white rounded-lg"> {"Query Panel"}</span>
+                ) : (
+                  <span className="px-3 py-2 rounded-lg">There is no character limit for short-answer questions.</span>
+                )}
+                <span
+                  onClick={() => {
+                    setTableData([]);
+                    setIsTable(false);
+                  }}
+                  className="cursor-pointer"
+                >
+                  X
+                </span>
+              </div>
 
-            <div className="relative flex flex-nowrap">
-              <Input className="text-black" ref={queryRef} placeholder="Actual question test to be input by user" />
-              <AccordionTrigger className="absolute p-0 text-white right-2">
-                <Button onClick={queryHandler} className="p-0 m-0 transition-all duration-300 ease-linear bg-transparent hover:bg-transparent hover:scale-105">
-                  <img src="/uploadButton.svg" />
-                </Button>
-              </AccordionTrigger>
-            </div>
-            <AccordionContent className="p-4 mt-5 bg-white border rounded-xl">
-              {isTable && <Table data={tableData} isPaginating={false} columns={columns} />}
-              {!isTable && <p className="text-black">{JSON.stringify(tableData)}</p>}
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+              <div className="relative flex flex-nowrap">
+                <Input className="text-black" ref={queryRef} placeholder="Actual question test to be input by user" />
+                <AccordionTrigger className="absolute p-0 text-white right-2">
+                  <Button
+                    onClick={queryHandler}
+                    className="p-0 m-0 transition-all duration-300 ease-linear bg-transparent hover:bg-transparent hover:scale-105"
+                  >
+                    <img src="/uploadButton.svg" />
+                  </Button>
+                </AccordionTrigger>
+              </div>
+              <AccordionContent className="p-4 mt-5 bg-white border rounded-xl">
+                {isTable && <Table data={tableData} isPaginating={false} columns={columns} />}
+                {!isTable && <p className="text-black">{JSON.stringify(tableData)}</p>}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        )}
       </div>
     </section>
   );
