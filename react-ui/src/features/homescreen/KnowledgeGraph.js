@@ -73,10 +73,9 @@ const KnowledgeGraph = ({ setDataSourceId, onSuccessfulUpload }) => {
       <div className="flex flex-col items-center justify-center gap-5 my-16 text-white md:px-36 py-28" style={KnowledgeGraphStyle}>
         {uploadedFiles?.length === 0 ? (
           <>
-            <h4 className="text-4xl font-semibold text-center">Analyse a PDF Text with Irame.ai</h4>
+            <h4 className="text-4xl font-semibold text-center phonk-font">Experience enhanced information retrieval with knowledge graph</h4>
             <p className="px-2 py-1 tracking-wider text-center md:px-24 text-md opacity-80">
-              First, visualize data and analyze text to identify key idea clusters. This provides a broad overview of the PDF document before delving into
-              specific questions.
+              Upload your dataset, visualize your knowledge graph ontology, and discover the ultimate information retrieval system experience.
             </p>
           </>
         ) : (

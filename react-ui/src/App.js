@@ -174,6 +174,7 @@ const App = () => {
                 ""
               )}
               <Routes>
+                {/* <Route path="/index.html" element={<PlayGround />} /> */}
                 <Route path="/" element={<PlayGround />} />
                 <Route path="/signin" element={<Signin />} />
                 <Route path="/playground" element={<PlayGround />} />

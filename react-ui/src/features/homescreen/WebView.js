@@ -141,7 +141,7 @@ const WebView = ({ dataSourceId }) => {
                 {!JSON.stringify(tableData)?.length ? (
                   <span className="px-3 py-2 border border-white rounded-lg"> {"Query Panel"}</span>
                 ) : (
-                  <span className="px-3 py-2 rounded-lg">There is no character limit for short-answer questions.</span>
+                  <span className="px-3 py-2 rounded-lg phonk-font">Please enter your query regarding the dataset in the search box below.</span>
                 )}
                 <span
                   onClick={() => {
@@ -172,7 +172,7 @@ const WebView = ({ dataSourceId }) => {
                     }}
                     disabled={loadingQuery}
                     className="p-0 m-0 transition-all duration-300 ease-linear bg-transparent hover:bg-transparent hover:scale-105"
-                  > 
+                  >
                     {!!loadingQuery ? <Loader /> : <img src="/uploadButton.svg" alt="upload" />}
                   </Button>
                 </AccordionTrigger>
