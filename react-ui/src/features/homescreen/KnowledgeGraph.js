@@ -28,32 +28,27 @@ const KnowledgeGraph = ({ setDataSourceId, onSuccessfulUpload }) => {
   const dataSetHandler = async () => {
     if (uploadedFiles?.length === 0) return;
     const dbName = dbInputRef.current.value;
-    let count = 0;
-    let canCallSuccess = 0;
+
     try {
       if (dbName) {
         setIsLoading(true);
-        const uploadPromises = uploadedFiles.map(async (file) => {
-          const formData = new FormData();
-          formData.append("file", file);
-          formData.append("data_source_name", dbName);
-          const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/upload_file", formData);
 
-          if (res?.data?.message?.includes("not supported")) {
-            alert("File not supported");
-            count++;
-            return;
-          }
-          canCallSuccess++;
-          setDataSourceId(res?.data?.datasource_id);
+        const formData = new FormData();
+        formData.append("data_source_name", dbName);
+        uploadedFiles.forEach((file) => {
+          formData.append("files", file);
         });
 
-        await Promise.all(uploadPromises);
+        setIsLoading(true);
+        const res = await axios.post("https://api.irame.ai/knowledge-graph/kg/kg/upload_files", formData);
 
-        if (count === 0 && canCallSuccess === uploadedFiles?.length) {
-          setIsLoading(false);
-          onSuccessfulUpload();
+        if (res?.data?.message?.includes("not supported")) {
+          alert("File not supported");
+          return;
         }
+
+        setDataSourceId(res?.data?.datasource_id);
+        onSuccessfulUpload();
       }
     } catch (error) {
       setIsLoading(false);
