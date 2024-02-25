@@ -113,7 +113,7 @@ const NavBar = ({ dataSources, onSelectDataSource, showBody }) => {
 
         <NavLink
           style={{
-            background: location.pathname.toString().toLowerCase().includes("automation") ? "#efefef" : "",
+            background: location.pathname.toString().toLowerCase().includes("automation") ? "#d2dbfa" : "",
           }}
           className={`no-padding ${selectedButton === "automation" ? "selected" : ""}`}
           to="/automation"
@@ -127,7 +127,7 @@ const NavBar = ({ dataSources, onSelectDataSource, showBody }) => {
 
         <NavLink
           style={{
-            background: location.pathname.toString().toLowerCase().includes("configuration") ? "#efefef" : "",
+            background: location.pathname.toString().toLowerCase().includes("configuration") ? "#d2dbfa" : "",
           }}
           className={`no-padding ${selectedButton === "automation" ? "selected" : ""}`}
           to="/configuration"

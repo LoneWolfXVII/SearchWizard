@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const uploadIcon = "/upload.svg";
 const fileIcon = "/fileIcon.svg";
 
-const Upload = ({ dataSourceId, disabled, onUploadDone }) => {
+const Upload = ({ onUploadDone, dataSource, setDataSource }) => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
   const handleUploadFiles = (event) => {
@@ -13,9 +13,30 @@ const Upload = ({ dataSourceId, disabled, onUploadDone }) => {
 
   const handleClearFiles = () => {
     setUploadedFiles([]);
+    setDataSource("");
   };
 
-  const handleUploadButton = async () => {
+  const handleSaveDataSource = async (callback) => {
+    const formData = new FormData();
+    formData.append("datasource_name", dataSource);
+    formData.append("class", "text_docs");
+    try {
+      const res = await axios.post(
+        "http://3.111.174.29:8080/create_new_datasource",
+        formData,
+      );
+      if (res.status !== 200) {
+        throw new Error(`Unexpected status code: ${res.status}`);
+      }
+
+      callback(res?.data?.datasource_id);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleUploadButton = async (dataSourceId) => {
     const uploadPromises = uploadedFiles.map((file, index) => {
       const formData = new FormData();
       formData.append("datasource_id", dataSourceId);
@@ -26,7 +47,7 @@ const Upload = ({ dataSourceId, disabled, onUploadDone }) => {
 
       return axios.post(
         "http://3.111.174.29:8080/upload_datasource_files",
-        formData
+        formData,
       );
     });
 
@@ -41,29 +62,27 @@ const Upload = ({ dataSourceId, disabled, onUploadDone }) => {
       handleClearFiles();
     } catch (error) {
       console.error(error);
-      alert(
-        "An error occurred while saving the data source. Please try again."
-      );
     }
   };
 
   return (
     <div
-      className={`relative shadow-lg flex flex-col items-center justify-center w-full p-10 border rounded-lg ${
-        disabled ? "bg-gray-100" : "bg-white cursor-pointer"
-      }`}
+      className={`relative shadow-lg flex flex-col items-center justify-center w-full py-5 border rounded-lg 
+      bg-gray-100 cursor-pointer"
+      `}
     >
       {!uploadedFiles?.length && (
         <>
-          <img src={uploadIcon} alt="" />
+          <div className="flex gap-2 items-center font-semibold">
+            <img src={uploadIcon} alt="" />
+            <p className="text-black">Upload your own files</p>
+          </div>
           <input
-            disabled={disabled}
             className="absolute z-10 w-full h-full opacity-0"
             type="file"
             onChange={handleUploadFiles}
             multiple
           />
-          <p className="invert">Upload your own files</p>
         </>
       )}
       <div className="flex flex-wrap items-center gap-3 justify-evenly">
@@ -100,7 +119,7 @@ const Upload = ({ dataSourceId, disabled, onUploadDone }) => {
           </button>
           <button
             className="px-2 py-1 text-sm font-semibold text-white bg-blue-500 border rounded-lg"
-            onClick={handleUploadButton}
+            onClick={() => handleSaveDataSource(handleUploadButton)}
           >
             {/* <img src={uploadButtonIcon} alt="upload button icon" /> */}
             Upload

@@ -14,7 +14,6 @@ import GraphPage from "./GraphPage";
 import Signin from "./features/auth/signin";
 import ConfigurationPage from "./features/configuration/configuration.component";
 import PlayGround from "./features/homescreen/PlayGround";
-import Waitlist from "./features/homescreen/Waitlist";
 import AutomationWorkflow from "./features/workflow/Automation_Workflow";
 import DocumentValidator from "./features/workflow/Document_Validator";
 
@@ -150,24 +149,38 @@ const App = () => {
             {isWaitlist ||
             window.location.pathname === "/" ||
             window.location.pathname.toLocaleLowerCase().includes("signin") ||
-            window.location.pathname.toLocaleLowerCase().includes("playground") ? (
+            window.location.pathname
+              .toLocaleLowerCase()
+              .includes("playground") ? (
               ""
             ) : (
-              <NavBar dataSources={dataSources} onSelectDataSource={handleNavItemSelect} showBody={toggleBody} />
+              <NavBar
+                dataSources={dataSources}
+                onSelectDataSource={handleNavItemSelect}
+                showBody={toggleBody}
+              />
             )}{" "}
             <div
               className={`${
                 !isWaitlist &&
-                !window.location.pathname.toLocaleLowerCase().includes("signin") &&
+                !window.location.pathname
+                  .toLocaleLowerCase()
+                  .includes("signin") &&
                 window.location.pathname !== "/" &&
-                !window.location.pathname.toLocaleLowerCase().includes("playground")
+                !window.location.pathname
+                  .toLocaleLowerCase()
+                  .includes("playground")
                   ? "content"
                   : "w-full"
               }`}
             >
               {!isWaitlist &&
-              !window.location.pathname.toLocaleLowerCase().includes("signin") &&
-              !window.location.pathname.toLocaleLowerCase().includes("playground") &&
+              !window.location.pathname
+                .toLocaleLowerCase()
+                .includes("signin") &&
+              !window.location.pathname
+                .toLocaleLowerCase()
+                .includes("playground") &&
               !window.location.pathname === "/" ? (
                 <Header />
               ) : (
@@ -182,23 +195,46 @@ const App = () => {
                 {/* Define your routes here */}
                 <Route
                   path="/dashboard"
-                  element={showImageGrid ? <ImageGrid images={extractImageFileNames(images)} /> : <Body fetchedData={navItems} dataSources={dataSources} />}
+                  element={
+                    showImageGrid ? (
+                      <ImageGrid images={extractImageFileNames(images)} />
+                    ) : (
+                      <Body fetchedData={navItems} dataSources={dataSources} />
+                    )
+                  }
                 />
 
                 <Route path="/bar-graph" element={<BarGraph />} />
                 {/* Add other routes as needed */}
                 {/* Example route for ImageGrid or Body */}
-                <Route path="/image-grid" element={<ImageGrid images={extractImageFileNames(images)} />} />
-                <Route path="/body" element={<Body fetchedData={navItems} dataSources={dataSources} />} />
-                <Route path="/sidebar" element={<GraphPage fetchedData={images} />} />
+                <Route
+                  path="/image-grid"
+                  element={<ImageGrid images={extractImageFileNames(images)} />}
+                />
+                <Route
+                  path="/body"
+                  element={
+                    <Body fetchedData={navItems} dataSources={dataSources} />
+                  }
+                />
+                <Route
+                  path="/sidebar"
+                  element={<GraphPage fetchedData={images} />}
+                />
                 <Route path="/configuration" element={<ConfigurationPage />} />
                 {/*
             <Route path="/automation" element={<DocumentVerification />} />
             <Route path="/automation-page" element={<AutomationWorkflow />} />
             <Route path="document-validator" element={<DocumentValidator />} /> */}
-                <Route path="/automation/data-validation" element={<DocumentVerification />} />
+                <Route
+                  path="/automation/data-validation"
+                  element={<DocumentVerification />}
+                />
                 <Route path="/automation" element={<AutomationWorkflow />} />
-                <Route path="/automation/document-validator" element={<DocumentValidator />} />
+                <Route
+                  path="/automation/document-validator"
+                  element={<DocumentValidator />}
+                />
               </Routes>
               {/* Conditional rendering outside of Routes */}
             </div>

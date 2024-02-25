@@ -499,7 +499,7 @@ a.no-padding {
 }
 
 .selected {
-  background-color: rgba(68, 108, 255, 0.1);
+  background-color: rgb(38, 102, 222);
 }
 
 .selected-icon {
@@ -512,7 +512,7 @@ a.no-padding {
 .dashboard-btn.selected {
   justify-content: center;
   align-items: center;
-  background-color: rgba(68, 108, 255, 0.1); /* Replace with the specific purple color you want */
+  background-color: rgba(68, 149, 255, 0.965); /* Replace with the specific purple color you want */
 }
 
 /* .dropdown {
