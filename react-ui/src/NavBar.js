@@ -23,7 +23,11 @@ const NavBar = ({ dataSources, onSelectDataSource, showBody }) => {
   };
 
   const renderOptionIcon = (selected) => {
-    return <span className={`option-icon ${selected ? "option-icon-selected" : ""}`}></span>;
+    return (
+      <span
+        className={`option-icon ${selected ? "option-icon-selected" : ""}`}
+      ></span>
+    );
   };
 
   const handleDashboardClick = () => {
@@ -67,17 +71,35 @@ const NavBar = ({ dataSources, onSelectDataSource, showBody }) => {
           <img src="/irame.ai.svg" alt="Irame Logo" />
         </div>
         <a className="no-padding" href="/">
-          <button className={`nav-item-button ${selectedButton === "query" ? "selected" : ""}`} onClick={() => selectButton("query")}>
+          <button
+            className={`nav-item-button ${selectedButton === "query" ? "selected" : ""}`}
+            onClick={() => selectButton("query")}
+          >
             <img src="/icon_1.svg" alt="Icon 1" />
             New Query
-            {selectedButton === "query" && <img src="/dropdown1.png" alt="Selected" className="selected-icon" />}
+            {selectedButton === "query" && (
+              <img
+                src="/dropdown1.png"
+                alt="Selected"
+                className="selected-icon"
+              />
+            )}
           </button>
         </a>
 
-        <button className={`dashboard-btn ${selectedButton === "dashboard" ? "selected" : ""}`} onClick={handleDashboardClick}>
+        <button
+          className={`dashboard-btn ${selectedButton === "dashboard" ? "selected" : ""}`}
+          onClick={handleDashboardClick}
+        >
           <img src="/icon_2.svg" alt="Icon 2" />
           Dashboard
-          {selectedButton === "dashboard" && <img src="/dropdown1.png" alt="Selected" className="selected-icon" />}
+          {selectedButton === "dashboard" && (
+            <img
+              src="/dropdown1.png"
+              alt="Selected"
+              className="selected-icon"
+            />
+          )}
         </button>
 
         {showDataSources && (
@@ -87,8 +109,14 @@ const NavBar = ({ dataSources, onSelectDataSource, showBody }) => {
               return (
                 <div key={ds} className="datasource-item">
                   <div className="datasource-row">
-                    <div className="datasource-icon" style={{ backgroundColor: color }}></div>
-                    <button className={`datasource-btn ${expandedDataSource === ds ? "selected" : ""}`} onClick={() => toggleDataSourceOptions(ds)}>
+                    <div
+                      className="datasource-icon"
+                      style={{ backgroundColor: color }}
+                    ></div>
+                    <button
+                      className={`datasource-btn ${expandedDataSource === ds ? "selected" : ""}`}
+                      onClick={() => toggleDataSourceOptions(ds)}
+                    >
                       {ds}
                     </button>
                   </div>
@@ -97,7 +125,12 @@ const NavBar = ({ dataSources, onSelectDataSource, showBody }) => {
                       {dataSources[ds].map((opt) => {
                         const selected = isOptionSelected(ds, opt);
                         return (
-                          <Link key={opt} className={`option ${selected ? "option-selected" : ""}`} to="/sidebar" onClick={() => selectOption(ds, opt)}>
+                          <Link
+                            key={opt}
+                            className={`option ${selected ? "option-selected" : ""}`}
+                            to="/sidebar"
+                            onClick={() => selectOption(ds, opt)}
+                          >
                             {renderOptionIcon(selected)}
                             {opt}
                           </Link>
@@ -113,29 +146,57 @@ const NavBar = ({ dataSources, onSelectDataSource, showBody }) => {
 
         <NavLink
           style={{
-            background: location.pathname.toString().toLowerCase().includes("automation") ? "#d2dbfa" : "",
+            background: location.pathname
+              .toString()
+              .toLowerCase()
+              .includes("automation")
+              ? "#d2dbfa"
+              : "",
           }}
           className={`no-padding ${selectedButton === "automation" ? "selected" : ""}`}
           to="/automation"
         >
-          <div onClick={() => setSelectedButton("")} className="nav-item-button">
+          <div
+            onClick={() => setSelectedButton("")}
+            className="nav-item-button"
+          >
             <img src="/left-nav-automation.svg" alt="Auto" />
             <div>Automation</div>
-            {selectedButton === "automation" && <img src="/dropdown1.png" alt="Selected" className="selected-icon" />}
+            {selectedButton === "automation" && (
+              <img
+                src="/dropdown1.png"
+                alt="Selected"
+                className="selected-icon"
+              />
+            )}
           </div>
         </NavLink>
 
         <NavLink
           style={{
-            background: location.pathname.toString().toLowerCase().includes("configuration") ? "#d2dbfa" : "",
+            background: location.pathname
+              .toString()
+              .toLowerCase()
+              .includes("configuration")
+              ? "#d2dbfa"
+              : "",
           }}
           className={`no-padding ${selectedButton === "automation" ? "selected" : ""}`}
           to="/configuration"
         >
-          <div onClick={() => setSelectedButton("")} className="nav-item-button">
+          <div
+            onClick={() => setSelectedButton("")}
+            className="nav-item-button"
+          >
             <img src="/configuration.svg" alt="Auto" height={24} width={24} />
             <div>Configuration</div>
-            {selectedButton === "automation" && <img src="/dropdown1.png" alt="Selected" className="selected-icon" />}
+            {selectedButton === "automation" && (
+              <img
+                src="/dropdown1.png"
+                alt="Selected"
+                className="selected-icon"
+              />
+            )}
           </div>
         </NavLink>
       </div>

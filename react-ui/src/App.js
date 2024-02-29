@@ -16,6 +16,8 @@ import ConfigurationPage from "./features/configuration/configuration.component"
 import PlayGround from "./features/homescreen/PlayGround";
 import AutomationWorkflow from "./features/workflow/Automation_Workflow";
 import DocumentValidator from "./features/workflow/Document_Validator";
+import { QueryPage } from "./pages/query-page";
+import { Apiresult } from "./ApiResult";
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
@@ -51,7 +53,7 @@ const App = () => {
   }, [navItems]);
 
   function handleNavItemSelect(selectedDataSource, selectedDashboard) {
-    // console.log(selectedDataSource, selectedDashboard);
+    console.log("selected data Sources", selectedDataSource, selectedDashboard);
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -188,7 +190,24 @@ const App = () => {
               )}
               <Routes>
                 {/* <Route path="/index.html" element={<PlayGround />} /> */}
-                <Route path="/" element={<PlayGround />} />
+                <Route
+                  path="/"
+                  element={
+                    <QueryPage
+                      fetchedData={navItems}
+                      dataSources={dataSources}
+                    />
+                  }
+                />
+                <Route
+                  path="/a"
+                  element={
+                    <Apiresult
+                      dataSources={dataSources}
+                      fetchedData={navItems}
+                    />
+                  }
+                />
                 <Route path="/signin" element={<Signin />} />
                 <Route path="/playground" element={<PlayGround />} />
 

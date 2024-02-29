@@ -2,6 +2,7 @@ import React from "react";
 import BarGraph from "./BarGraph";
 
 const GraphPage = ({ fetchedData }) => {
+  // console.log("graph page ", fetchedData);
   return (
     <div
       style={{

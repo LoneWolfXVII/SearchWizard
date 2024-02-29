@@ -3,10 +3,15 @@ import "./App.css";
 import HomePage from "./HomePage";
 import HomePage2 from "./HomePage2";
 import { Button } from "./components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "./components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "./components/ui/dropdown-menu";
 import { DashboardContext } from "./context/dashboard-context";
 
 const Body = (props) => {
+  console.table("props  ", props);
   const [state, setState] = useState({
     query: "",
     isLoading: false,
@@ -22,19 +27,30 @@ const Body = (props) => {
     currentDashboardType: "",
   });
 
-  const { setDashboardList, setDashboardType, setDashboardName } = useContext(DashboardContext);
+  const { setDashboardList, setDashboardType, setDashboardName } =
+    useContext(DashboardContext);
 
   const selectOption = (option) => {
     setState((prev) => ({
       ...prev,
       selectedOption: option,
-      currentDashboardList: props.fetchedData?.find((item) => option === item?.datasource_name)?.dropdown || [],
-      currentDashboardType: props.fetchedData?.find((item) => option === item?.datasource_name)?.class || "mysql",
+      currentDashboardList:
+        props.fetchedData?.find((item) => option === item?.datasource_name)
+          ?.dropdown || [],
+      currentDashboardType:
+        props.fetchedData?.find((item) => option === item?.datasource_name)
+          ?.class || "mysql",
     }));
 
     setDashboardName(option);
-    setDashboardList(props.fetchedData?.find((item) => option === item?.datasource_name)?.dropdown || []);
-    setDashboardType(props.fetchedData?.find((item) => option === item?.datasource_name)?.class || "mysql");
+    setDashboardList(
+      props.fetchedData?.find((item) => option === item?.datasource_name)
+        ?.dropdown || []
+    );
+    setDashboardType(
+      props.fetchedData?.find((item) => option === item?.datasource_name)
+        ?.class || "mysql"
+    );
   };
 
   const toggleDropdown = () => {
@@ -71,7 +87,10 @@ const Body = (props) => {
   };
 
   const handleSearch = (query = "") => {
-    if (!state.selectedOption || state.selectedOption === "Select Data source") {
+    if (
+      !state.selectedOption ||
+      state.selectedOption === "Select Data source"
+    ) {
       alert("Please select a data source first");
       return;
     }
@@ -95,7 +114,11 @@ const Body = (props) => {
       .then((response) => response.json())
       .then((result) => {
         if (result?.task_id) {
-          setState((prev) => ({ ...prev, showHomePage2: true, taskID: result.task_id }));
+          setState((prev) => ({
+            ...prev,
+            showHomePage2: true,
+            taskID: result.task_id,
+          }));
         }
       })
       .catch((error) => console.log("error", error));
@@ -112,7 +135,11 @@ const Body = (props) => {
       {state.showPopUp ? (
         <div>
           <p>Select data source before making the API call</p>
-          <button onClick={() => setState((prev) => ({ ...prev, showPopUp: false }))}>Close</button>
+          <button
+            onClick={() => setState((prev) => ({ ...prev, showPopUp: false }))}
+          >
+            Close
+          </button>
         </div>
       ) : (
         <div className="body-container">
@@ -121,13 +148,23 @@ const Body = (props) => {
               <DropdownMenuTrigger>
                 <Button className="flex px-4 font-semibold bg-blue-500 py-7">
                   <div>{state.selectedOption}</div>
-                  <img src="./dropdown.svg" alt="Dropdown Icon" className="dronbtnIcon" onClick={toggleDropdown} />
+                  <img
+                    src="./dropdown.svg"
+                    alt="Dropdown Icon"
+                    className="dronbtnIcon"
+                    onClick={toggleDropdown}
+                  />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <div className="flex flex-col gap-5 px-3 py-3 font-semibold">
                   {Object.keys(props.dataSources).map((ds) => (
-                    <a className="hover:text-blue-500" key={ds} href="#" onClick={() => selectOption(ds)}>
+                    <a
+                      className="hover:text-blue-500"
+                      key={ds}
+                      href="#"
+                      onClick={() => selectOption(ds)}
+                    >
                       {ds}
                     </a>
                   ))}
@@ -150,7 +187,10 @@ const Body = (props) => {
               currentDashboardType={state.currentDashboardType}
             />
           ) : (
-            <HomePage handleSearchValue={handleSearchValue} onSearch={handleSearch} />
+            <HomePage
+              handleSearchValue={handleSearchValue}
+              onSearch={handleSearch}
+            />
           )}
         </div>
       )}

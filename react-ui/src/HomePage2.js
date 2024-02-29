@@ -12,9 +12,11 @@ const HomePage2 = (props) => {
     const originalFollowUpQuestions = props.answerData.follow_up_questions;
 
     // Convert the original follow-up questions array to the desired format
-    formattedFollowUpQuestions = originalFollowUpQuestions.map((question, index) => ({
-      text: question,
-    }));
+    formattedFollowUpQuestions = originalFollowUpQuestions.map(
+      (question, index) => ({
+        text: question,
+      })
+    );
 
     // Now you can use formattedFollowUpQuestions in your component
   } else {
@@ -49,6 +51,7 @@ const HomePage2 = (props) => {
   const [chartData, setChartData] = useState([]);
   const [fileData, setFileData] = useState({});
 
+
   const onAddToDashboardHandler = (option) => {
     console.log("option :>> ", option);
     var myHeaders = new Headers();
@@ -68,7 +71,7 @@ const HomePage2 = (props) => {
 
     fetch("https://api.irame.ai/update_dashboard", requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => console.log("bar graph", result))
       .catch((error) => console.log("error", error));
   };
 
@@ -91,7 +94,10 @@ const HomePage2 = (props) => {
 
     const fetchStatus = async () => {
       try {
-        const response = await fetch(`https://api.irame.ai/get_query_status?task_id=${props?.taskID}`, requestOptions);
+        const response = await fetch(
+          `https://api.irame.ai/get_query_status?task_id=${props?.taskID}`,
+          requestOptions
+        );
         const result = await response.json();
 
         console.log("result :>> ", result?.query_data?.label);
@@ -99,18 +105,26 @@ const HomePage2 = (props) => {
         if (result?.status?.toLowerCase() !== "done") {
           if (result?.answer) setAnswer(result?.answer);
           if (result?.query) setQuestion(result?.query);
-          if (result?.follow_up_questions?.length) setFollorUpQuestions(result?.follow_up_questions);
+          if (result?.follow_up_questions?.length)
+            setFollorUpQuestions(result?.follow_up_questions);
           setTimeout(fetchStatus, 1000);
         } else {
           setIsLoading(false);
 
           if (result?.answer) setAnswer(result?.answer);
           if (result?.query) setQuestion(result?.query);
-          if (result?.query_data?.labels?.length) setLabels(result?.query_data?.labels);
-          if (result?.query_data?.values?.length) setChartData(result?.query_data?.values);
-          if (result?.follow_up_questions?.length) setFollorUpQuestions(result?.follow_up_questions);
+          if (result?.query_data?.labels?.length)
+            setLabels(result?.query_data?.labels);
+          if (result?.query_data?.values?.length)
+            setChartData(result?.query_data?.values);
+          if (result?.follow_up_questions?.length)
+            setFollorUpQuestions(result?.follow_up_questions);
           if (result?.query_data?.label) setlabel(result?.query_data?.label);
-          if (typeof result?.query_data === "object" && !result?.query_data?.label && !result?.query_data?.values) {
+          if (
+            typeof result?.query_data === "object" &&
+            !result?.query_data?.label &&
+            !result?.query_data?.values
+          ) {
             setFileData(result?.query_data);
           }
         }
@@ -146,9 +160,13 @@ const HomePage2 = (props) => {
             color: "#8F8F8F",
           }}
         >
-          <div style={{ height: "0.5px", width: "10%", background: "#808080" }} />
+          <div
+            style={{ height: "0.5px", width: "10%", background: "#808080" }}
+          />
           Result
-          <div style={{ height: "0.5px", width: "88%", background: "#808080" }} />
+          <div
+            style={{ height: "0.5px", width: "88%", background: "#808080" }}
+          />
         </aside>
 
         <AnswerSection

@@ -2,6 +2,8 @@ import React, { useRef, useEffect } from "react";
 import Chart from "chart.js/auto";
 
 const BarGraph = ({ labels, data, title = "#", label }) => {
+  console.log("labels  ", labels);
+  console.log("data-name  ", data);
   console.log("data :>> ", label);
   const canvasRef = useRef(null);
 
