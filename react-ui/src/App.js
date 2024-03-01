@@ -3,21 +3,20 @@ import { Route, BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 import Body from "./Body";
 import DocumentVerification from "./DocumentVerification";
-import Header from "./Header";
 import ImageGrid from "./ImageGrid";
-import NavBar from "./NavBar";
 import { API_BASE_URL } from "./constants";
 
 import { Routes } from "react-router-dom";
+import { Apiresult } from "./ApiResult";
 import BarGraph from "./BarGraph"; // Adjust the path as necessary
 import GraphPage from "./GraphPage";
+import { GlobalLayout } from "./components/global-layout";
 import Signin from "./features/auth/signin";
 import ConfigurationPage from "./features/configuration/configuration.component";
 import PlayGround from "./features/homescreen/PlayGround";
 import AutomationWorkflow from "./features/workflow/Automation_Workflow";
 import DocumentValidator from "./features/workflow/Document_Validator";
 import { QueryPage } from "./pages/query-page";
-import { Apiresult } from "./ApiResult";
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
@@ -146,9 +145,92 @@ const App = () => {
     <>
       {!isLoggedIn ? <Signin /> : ""}
       {isLoggedIn ? (
-        <div className="app-container">
+        <div className="w-full">
           <Router>
-            {isWaitlist ||
+            <Routes>
+              {/* <Route path="/index.html" element={<PlayGround />} /> */}
+              <Route path="/" element={<Signin />} />
+              <Route path="/" element={<GlobalLayout />}>
+                <Route
+                  path="query"
+                  element={
+                    <QueryPage
+                      dataSources={dataSources}
+                      fetchedData={navItems}
+                    />
+                  }
+                />
+                <Route
+                  path="chat"
+                  element={
+                    <Apiresult
+                      dataSources={dataSources}
+                      fetchedData={navItems}
+                    />
+                  }
+                />
+              </Route>
+
+              <Route path="/playground" element={<PlayGround />} />
+
+              {/* Define your routes here */}
+              <Route
+                path="/dashboard"
+                element={
+                  showImageGrid ? (
+                    <ImageGrid images={extractImageFileNames(images)} />
+                  ) : (
+                    <Body fetchedData={navItems} dataSources={dataSources} />
+                  )
+                }
+              />
+
+              <Route path="/bar-graph" element={<BarGraph />} />
+              {/* Add other routes as needed */}
+              {/* Example route for ImageGrid or Body */}
+              <Route
+                path="/image-grid"
+                element={<ImageGrid images={extractImageFileNames(images)} />}
+              />
+              <Route
+                path="/body"
+                element={
+                  <Body fetchedData={navItems} dataSources={dataSources} />
+                }
+              />
+              <Route
+                path="/sidebar"
+                element={<GraphPage fetchedData={images} />}
+              />
+              <Route path="/configuration" element={<ConfigurationPage />} />
+              {/*
+            <Route path="/automation" element={<DocumentVerification />} />
+            <Route path="/automation-page" element={<AutomationWorkflow />} />
+            <Route path="document-validator" element={<DocumentValidator />} /> */}
+              <Route
+                path="/automation/data-validation"
+                element={<DocumentVerification />}
+              />
+              <Route path="/automation" element={<AutomationWorkflow />} />
+              <Route
+                path="/automation/document-validator"
+                element={<DocumentValidator />}
+              />
+            </Routes>
+            {/* Conditional rendering outside of Routes */}
+          </Router>
+        </div>
+      ) : (
+        ""
+      )}
+    </>
+  );
+};
+
+export default App;
+
+{
+  /*     {isWaitlist ||
             window.location.pathname === "/" ||
             window.location.pathname.toLocaleLowerCase().includes("signin") ||
             window.location.pathname
@@ -187,83 +269,5 @@ const App = () => {
                 <Header />
               ) : (
                 ""
-              )}
-              <Routes>
-                {/* <Route path="/index.html" element={<PlayGround />} /> */}
-                <Route
-                  path="/"
-                  element={
-                    <QueryPage
-                      fetchedData={navItems}
-                      dataSources={dataSources}
-                    />
-                  }
-                />
-                <Route
-                  path="/a"
-                  element={
-                    <Apiresult
-                      dataSources={dataSources}
-                      fetchedData={navItems}
-                    />
-                  }
-                />
-                <Route path="/signin" element={<Signin />} />
-                <Route path="/playground" element={<PlayGround />} />
-
-                {/* Define your routes here */}
-                <Route
-                  path="/dashboard"
-                  element={
-                    showImageGrid ? (
-                      <ImageGrid images={extractImageFileNames(images)} />
-                    ) : (
-                      <Body fetchedData={navItems} dataSources={dataSources} />
-                    )
-                  }
-                />
-
-                <Route path="/bar-graph" element={<BarGraph />} />
-                {/* Add other routes as needed */}
-                {/* Example route for ImageGrid or Body */}
-                <Route
-                  path="/image-grid"
-                  element={<ImageGrid images={extractImageFileNames(images)} />}
-                />
-                <Route
-                  path="/body"
-                  element={
-                    <Body fetchedData={navItems} dataSources={dataSources} />
-                  }
-                />
-                <Route
-                  path="/sidebar"
-                  element={<GraphPage fetchedData={images} />}
-                />
-                <Route path="/configuration" element={<ConfigurationPage />} />
-                {/*
-            <Route path="/automation" element={<DocumentVerification />} />
-            <Route path="/automation-page" element={<AutomationWorkflow />} />
-            <Route path="document-validator" element={<DocumentValidator />} /> */}
-                <Route
-                  path="/automation/data-validation"
-                  element={<DocumentVerification />}
-                />
-                <Route path="/automation" element={<AutomationWorkflow />} />
-                <Route
-                  path="/automation/document-validator"
-                  element={<DocumentValidator />}
-                />
-              </Routes>
-              {/* Conditional rendering outside of Routes */}
-            </div>
-          </Router>
-        </div>
-      ) : (
-        ""
-      )}
-    </>
-  );
-};
-
-export default App;
+              )} */
+}

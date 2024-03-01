@@ -1,25 +1,65 @@
-import { useState } from "react";
+import axios from "axios";
+import { useRef, useState } from "react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { UploadedDocumentCard } from "./uploaded-document-card.component";
 
 export function UploadDocument(props) {
   const [selectedDoc, setSelectedDoc] = useState("");
+  const [selectedDbFile, setSelectedDbFile] = useState();
+
   function handelUploadDoc(ds) {
     // console.log("hola mgos sf");
     setSelectedDoc(ds);
   }
+
+  const fileUrlref = useRef();
+
+  async function handleNewDBAdd() {
+    if (!fileUrlref.current.value) {
+      alert("Please enter a Data source name first.");
+      return;
+    }
+    let data = new FormData();
+    data.append("data_source_name", fileUrlref.current.value);
+    data.append("files", selectedDbFile);
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "https://api.irame.ai/knowledge-graph/kg/kg/upload_files",
+      headers: {
+        accept: "application/json",
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then((res) => {
+        props.onSuccessUploadNewDB(res?.data?.datasource_id);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <div className="flex flex-col w-full px-3 text-black">
       {!props.uploaded && (
         <div className="flex items-center justify-center px-16 py-5 mt-12 bg-white border-2 border-dashed rounded-3xl border-slate-300 max-md:px-5 max-md:mt-10 max-md:max-w-full">
           <div className="flex flex-col items-center max-w-full my-12 max-md:my-10">
-            <div className="flex gap-2.5 justify-between self-stretch px-20 py-3.5 text-xl leading-8 whitespace-nowrap rounded-xl bg-neutral-100 max-md:px-5">
+            <div className="flex cursor-pointer gap-2.5 justify-between relative self-stretch px-20 py-3.5 text-xl leading-8 whitespace-nowrap rounded-xl bg-neutral-100 max-md:px-5">
               <img
                 loading="lazy"
                 alt="Upload files"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/011c49511ffad4b9f66238e10f50c1ee347f33596640d2a9aa611edbadc9f011?"
                 className="w-8 aspect-square"
+              />
+              <input
+                type="file"
+                onChange={(e) => setSelectedDbFile(e.target.files[0])}
+                className="absolute top-0 left-0 z-10 w-full h-full opacity-0 cursor-pointer"
               />
               <div className="grow">Upload files</div>
             </div>
@@ -79,13 +119,17 @@ export function UploadDocument(props) {
       )}
       {!props.uploaded && (
         <Input
+          ref={fileUrlref}
           placeholder="Add file URL"
           className="items-start justify-center py-8 pl-5 pr-16 mt-3 text-xl font-medium leading-7 text-gray-400 rounded-sm whitespace-nowrap bg-slate-100 max-md:pr-5 max-md:max-w-full"
         />
       )}
       <Button
         className="flex items-center self-center justify-center gap-4 px-20 py-6 mt-12 text-lg leading-7 text-center text-white bg-blue-600 rounded-xl whitespace-nowrap max-md:px-5 max-md:mt-10"
-        onClick={() => props.handelcontinue(selectedDoc)}
+        onClick={() => {
+          if (props.uploaded) props.handelcontinue(selectedDoc);
+          else handleNewDBAdd();
+        }}
       >
         Continue
         <img
@@ -96,7 +140,12 @@ export function UploadDocument(props) {
         />
       </Button>
       <div className="flex gap-3.5 self-center mt-8 text-lg leading-7 text-center whitespace-nowrap">
-        <div className="grow">Select from connected Data Source</div>
+        <div
+          onClickCapture={props.onSelectDataSources}
+          className="cursor-pointer grow"
+        >
+          Select from connected Data Source
+        </div>
         <img
           loading="lazy"
           alt="Select from connected Data Source"
