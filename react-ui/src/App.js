@@ -169,6 +169,9 @@ const App = () => {
                     />
                   }
                 />
+              <Route path="/configuration" element={<ConfigurationPage />} />
+
+
               </Route>
 
               <Route path="/playground" element={<PlayGround />} />
@@ -202,7 +205,6 @@ const App = () => {
                 path="/sidebar"
                 element={<GraphPage fetchedData={images} />}
               />
-              <Route path="/configuration" element={<ConfigurationPage />} />
               {/*
             <Route path="/automation" element={<DocumentVerification />} />
             <Route path="/automation-page" element={<AutomationWorkflow />} />

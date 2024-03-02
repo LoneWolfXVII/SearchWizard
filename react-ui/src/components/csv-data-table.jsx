@@ -8,28 +8,30 @@ const CSVDataTable = ({ data }) => {
       {data.length === 0 ? (
         <p>No data available.</p>
       ) : (
-        <table style={tableStyle}>
-          <thead>
-            <tr>
-              {headers.map((header, index) => (
-                <th key={index} style={tableHeaderStyle}>
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, index) => (
-              <tr key={index}>
-                {headers.map((header, columnIndex) => (
-                  <td key={columnIndex} style={tableCellStyle}>
-                    {row[header]}
-                  </td>
+        <div className="min-w-[600px] overflow-auto w-full max-w-full">
+          <table style={tableStyle}>
+            <thead>
+              <tr>
+                {headers.map((header, index) => (
+                  <th key={index} style={tableHeaderStyle}>
+                    {header}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.map((row, index) => (
+                <tr key={index}>
+                  {headers.map((header, columnIndex) => (
+                    <td key={columnIndex} style={tableCellStyle}>
+                      {row[header]}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </>
   );
@@ -39,7 +41,6 @@ const tableStyle = {
   borderCollapse: "collapse",
   width: "100%",
   borderRadius: "10px",
-  overflow: "hidden",
   boxShadow: "40px 90px 55px -20px rgba(155, 184, 243, 0.2)",
 };
 

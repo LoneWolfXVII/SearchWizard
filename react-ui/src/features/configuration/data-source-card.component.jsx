@@ -9,15 +9,15 @@ const DataSourceCard = ({ title, image }) => {
         <div className="flex flex-col w-full">
           <h5 className="text-xl font-semibold ">{title}</h5>
           {/* show progress bar here  */}
-          <div class="w-full  rounded-full h-2 dark:bg-gray-700">
+          {/* <div class="w-full  rounded-full h-2 dark:bg-gray-700">
             <div
               class="bg-green-400 h-2 rounded-full"
               style={{ width: "50%" }}
             ></div>
-          </div>
+          </div> */}
         </div>
       </div>
-      <img src={dropdownarrow} alt="drop-down" height={14} width={14} />
+      {/* <img src={dropdownarrow} alt="drop-down" height={14} width={14} /> */}
     </div>
   );
 };

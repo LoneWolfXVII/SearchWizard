@@ -17,7 +17,7 @@ const ConfigurationPage = () => {
   const [dataSource, setDataSource] = useState("");
 
   return (
-    <section className="grid w-full h-screen px-3 overflow-scroll bg-white grid-col-1 xl:grid-cols-3 ">
+    <section className="grid w-full h-screen px-3 py-5 overflow-scroll bg-white grid-col-1 xl:grid-cols-3 ">
       {/* left side  */}
       <div className="xl:col-span-2">
         <header className="px-10">
@@ -30,6 +30,7 @@ const ConfigurationPage = () => {
               value={dataSource}
               onChange={(e) => setDataSource(e.target.value)}
             />
+
             <Upload dataSource={dataSource} setDataSource={setDataSource} />
           </div>
         </header>

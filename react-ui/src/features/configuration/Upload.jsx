@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { PlusIcon } from "lucide-react";
 const uploadIcon = "/upload.svg";
 const fileIcon = "/fileIcon.svg";
 
@@ -23,14 +24,13 @@ const Upload = ({ onUploadDone, dataSource, setDataSource }) => {
     try {
       const res = await axios.post(
         "http://3.111.174.29:8080/create_new_datasource",
-        formData,
+        formData
       );
       if (res.status !== 200) {
         throw new Error(`Unexpected status code: ${res.status}`);
       }
 
       callback(res?.data?.datasource_id);
-
     } catch (error) {
       console.error(error);
     }
@@ -47,7 +47,7 @@ const Upload = ({ onUploadDone, dataSource, setDataSource }) => {
 
       return axios.post(
         "http://3.111.174.29:8080/upload_datasource_files",
-        formData,
+        formData
       );
     });
 
@@ -67,14 +67,17 @@ const Upload = ({ onUploadDone, dataSource, setDataSource }) => {
 
   return (
     <div
-      className={`relative shadow-lg flex flex-col items-center justify-center w-full py-5 border rounded-lg 
+      className={`relative  flex flex-col items-center justify-center w-full py-5 border rounded-lg 
       bg-gray-100 cursor-pointer"
       `}
     >
       {!uploadedFiles?.length && (
         <>
-          <div className="flex gap-2 items-center font-semibold">
-            <img src={uploadIcon} alt="" />
+          <div className="flex items-center gap-2 font-bold">
+            {/* <img src={uploadIcon} alt="" /> */}
+            <div className="p-1 border-2 border-black rounded-full">
+              <PlusIcon size={16}/>
+            </div>
             <p className="text-black">Upload your own files</p>
           </div>
           <input

@@ -10,8 +10,8 @@ const linksArr = [
     icon: homeIcon,
   },
   {
-    label: "Analytics",
-    value: "analytics",
+    label: "Configuration",
+    value: "configuration",
     icon: AnalyticsIcon,
   },
   {

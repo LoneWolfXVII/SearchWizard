@@ -29,13 +29,13 @@ export function Apiresult({ dataSources, fetchedData }) {
   const [dislike, setDislike] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
+  const [isUploadDB, setIsUploadDB] = useState(false);
+
   const [UploadboxOpen, setUploadboxOpen] = useState(false);
 
   const [answer, setAnswer] = useState("");
   const [question, setQuestion] = useState("");
-  const [labels, setLabels] = useState([]);
-  const [label, setlabel] = useState("");
-  const [chartData, setChartData] = useState([]);
+
   const [SelectedFile, setSelectedFile] = useState("");
   const [responseCsvUrl, setResponseCsvUrl] = useState("");
   const [graphResponseData, setGraphResponseData] = useState({});
@@ -62,9 +62,7 @@ export function Apiresult({ dataSources, fetchedData }) {
   useEffect(() => {
     setAnswer("");
     setQuestion("");
-    setLabels([]);
-    setlabel("");
-    setChartData([]);
+
     pollingRef.current = true;
 
     const fetchStatus = async () => {
@@ -212,112 +210,124 @@ export function Apiresult({ dataSources, fetchedData }) {
       .catch((error) => console.log("error", error));
   };
 
+  function handleExistinDBSelect(data) {
+    console.log(data);
+    // this data will have datasource_id, sample_questions
+    setSelectedFile(data?.datasource_id);
+
+    setUploadboxOpen(false);
+  }
+
   return (
     <>
-      <section className="px-5 py-5">
-        <Question question={question} />
-        <Answer
-          answer={answer}
-          graphResponseData={graphResponseData}
-          responseCsvUrl={responseCsvUrl}
-        />
-        <div className="flex justify-between w-full my-10">
-          <div className="flex items-center justify-center gap-2">
-            <ThumbsUp
-              onClick={() => {
-                setLike(!like);
-                setDislike(false);
-              }}
-              fill={like ? "black" : "transparent"}
-            />
-            <ThumbsDown
-              onClick={() => {
-                setDislike(!dislike);
-                setLike(false);
-              }}
-              fill={dislike ? "black" : "transparent"}
+      <section className="flex flex-col justify-center w-full h-screen px-5 py-5">
+        <div className="h-[90vh] w-full">
+          <Question question={question} />
+          <div className="h-[60vh]">
+            <Answer
+              answer={answer}
+              graphResponseData={graphResponseData}
+              responseCsvUrl={responseCsvUrl}
             />
           </div>
-          <div className="flex items-center justify-center gap-2">
-            <Button className="flex gap-1 bg-white text-black border-[1px] border-black">
-              <Share2 />
-              Share answer
-            </Button>
+          <div className="flex justify-between w-full my-10">
+            <div className="flex items-center justify-center gap-2">
+              <ThumbsUp
+                onClick={() => {
+                  setLike(!like);
+                  setDislike(false);
+                }}
+                fill={like ? "black" : "transparent"}
+              />
+              <ThumbsDown
+                onClick={() => {
+                  setDislike(!dislike);
+                  setLike(false);
+                }}
+                fill={dislike ? "black" : "transparent"}
+              />
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <Button className="flex gap-1 bg-white text-black border-[1px] border-black">
+                <Share2 />
+                Share answer
+              </Button>
 
-            <Dialog>
-              <DialogTrigger>
-                <Button className="flex gap-1 bg-[#076EFF]">
-                  <PlusCircle />
-                  Add to dashboard
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>{dashboard?.dashboardName}</DialogTitle>
-                  <DialogDescription>
-                    <div className="w-full">
-                      {!showCustomEdit && (
-                        <button
-                          onClick={() => setShowCustomEdit(true)}
-                          className="w-full  py-3 my-3 capitalize font-semibold text-black bg-[#EEF1FF] border flex items-center gap-5 p-2"
-                        >
-                          <img src={PenIcon} alt="" width={20} height={20} />{" "}
-                          <span> Add to a new report </span>
-                        </button>
-                      )}
-                      {showCustomEdit && (
-                        <>
-                          <input
-                            type="text"
-                            className="w-full px-4 py-2 my-4 border rounded-lg"
-                            placeholder="Enter dashboard name"
-                            value={customEdit}
-                            onChange={(e) => setCustomEdit(e.target.value)}
-                          />
-                          <div className="flex gap-3 px-2">
-                            <button
-                              onClick={() => {
-                                setShowCustomEdit(false);
-                                setCustomEdit("");
-                              }}
-                              className="flex-1 px-2 py-1 my-3 font-semibold text-white bg-red-500 border rounded-lg "
-                            >
-                              Clear
-                            </button>
-                            <div className="flex-1 w-full">
-                              <DialogClose className="w-full">
-                                <button
-                                  onClick={handleSaveCustomEdit}
-                                  className="flex-1 w-full px-2 py-1 my-3 font-semibold text-white bg-green-500 border rounded-lg "
-                                >
-                                  SavecurrentDashboardList
-                                </button>
-                              </DialogClose>
-                            </div>
-                          </div>
-                        </>
-                      )}
-                      <div className="bg-[#EEF1FF] py-5 px-3">
-                        {DasboardList?.map((option, index) => (
-                          <div
-                            className="px-3 py-3 transition-all duration-300 ease-in-out bg-white rounded-md cursor-pointer hover:bg-gray-50"
-                            onClick={() => {
-                              onAddToDashboardHandler(option);
-                            }}
-                            key={index}
+              <Dialog>
+                <DialogTrigger>
+                  <Button className="flex gap-1 bg-[#076EFF]">
+                    <PlusCircle />
+                    Add to dashboard
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>{dashboard?.dashboardName}</DialogTitle>
+                    <DialogDescription>
+                      <div className="w-full">
+                        {!showCustomEdit && (
+                          <button
+                            onClick={() => setShowCustomEdit(true)}
+                            className="w-full  py-3 my-3 capitalize font-semibold text-black bg-[#EEF1FF] border flex items-center gap-5 p-2"
                           >
-                            {option}
-                          </div>
-                        ))}
+                            <img src={PenIcon} alt="" width={20} height={20} />{" "}
+                            <span> Add to a new report </span>
+                          </button>
+                        )}
+                        {showCustomEdit && (
+                          <>
+                            <input
+                              type="text"
+                              className="w-full px-4 py-2 my-4 border rounded-lg"
+                              placeholder="Enter dashboard name"
+                              value={customEdit}
+                              onChange={(e) => setCustomEdit(e.target.value)}
+                            />
+                            <div className="flex gap-3 px-2">
+                              <button
+                                onClick={() => {
+                                  setShowCustomEdit(false);
+                                  setCustomEdit("");
+                                }}
+                                className="flex-1 px-2 py-1 my-3 font-semibold text-white bg-red-500 border rounded-lg "
+                              >
+                                Clear
+                              </button>
+                              <div className="flex-1 w-full">
+                                <DialogClose className="w-full">
+                                  <button
+                                    onClick={handleSaveCustomEdit}
+                                    className="flex-1 w-full px-2 py-1 my-3 font-semibold text-white bg-green-500 border rounded-lg "
+                                  >
+                                    SavecurrentDashboardList
+                                  </button>
+                                </DialogClose>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                        <div className="bg-[#EEF1FF] py-5 px-3">
+                          {DasboardList?.map((option, index) => (
+                            <div
+                              className="px-3 py-3 transition-all duration-300 ease-in-out bg-white rounded-md cursor-pointer hover:bg-gray-50"
+                              onClick={() => {
+                                onAddToDashboardHandler(option);
+                              }}
+                              key={index}
+                            >
+                              {option}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  </DialogDescription>
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
+                    </DialogDescription>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </div>
-        <footer className="flex gap-5 justify-between items-start p-2 mt-2 w-full text-2xl font-medium leading-10 whitespace-nowrap bg-white rounded-xl border border-solid border-neutral-400 max-w-[1540px] max-md:flex-wrap max-md:mt-10 max-md:max-w-full">
+        <footer className="flex items-start justify-between w-full gap-5 p-2 mt-2 text-2xl font-medium leading-10 bg-white border border-solid whitespace-nowrap rounded-xl border-neutral-400 max-md:flex-wrap max-md:mt-10 max-md:max-w-full">
           <Dialog onOpenChange={setUploadboxOpen} open={UploadboxOpen}>
             <DialogTrigger>
               <ImageWithAlt
@@ -326,14 +336,23 @@ export function Apiresult({ dataSources, fetchedData }) {
                 className={"w-[40px] max-md:w-[30px] cursor-pointer"}
               />
             </DialogTrigger>
-            <DialogContent className="md:max-w-[60rem] h-[70vh] max-h-screen px-10">
+            <DialogContent className="md:max-w-[60rem] h-[80vh] max-h-screen px-10">
               <DialogHeader>
                 <h2 className="text-2xl font-bold">Upload document</h2>
               </DialogHeader>
+
               <UploadDocument
-                uploaded={true}
+                uploaded={isUploadDB}
                 dataSources={dataSources}
                 handelcontinue={(ds) => handelcontinue(ds)}
+                onSelectExistinDB={handleExistinDBSelect}
+                onSelectDataSources={(value) => {
+                  setIsUploadDB(value);
+                }}
+                onSuccessUploadNewDB={(dataSourceId) => {
+                  setSelectedFile(dataSourceId);
+                  setUploadboxOpen(false);
+                }}
               />
             </DialogContent>
           </Dialog>
@@ -368,10 +387,12 @@ const Question = ({ question }) => {
   );
 };
 
-const Answer = ({ answer, graphResponseData, responseCsvUrl }) => {
+const Answer = ({ answer, responseCsvUrl, graphResponseData }) => {
   const [selectedTab, setSelectedTab] = useState("Graph");
 
   const [csvData, setCsvData] = useState([]);
+
+  const [graphData, setGraphData] = useState({});
 
   useEffect(() => {
     fetch(responseCsvUrl)
@@ -391,51 +412,78 @@ const Answer = ({ answer, graphResponseData, responseCsvUrl }) => {
             dataFrame.push(row);
           }
         }
-        console.log("dataFrame", dataFrame)
+        console.log("dataFrame", dataFrame);
         setCsvData(dataFrame);
+
+        const yaxis = dataFrame.map((item) =>
+          parseFloat(item[graphResponseData?.["x-axis"]])
+        );
+        const xaxis = dataFrame.map(
+          (item) => item[graphResponseData?.["x-axis"]]
+        );
+
+        setGraphData({
+          yaxis,
+          xaxis,
+        });
       })
       .catch((error) => console.error("Error loading CSV data:", error));
-  }, [responseCsvUrl]);
+  }, [responseCsvUrl, graphResponseData]);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  // const handleFileChange = (event) => {
+  //   const file = event.target.files[0];
 
-    if (file) {
-      const reader = new FileReader();
+  //   if (file) {
+  //     const reader = new FileReader();
 
-      reader.onload = (e) => {
-        const csvText = e.target.result;
-        parseCSV(csvText);
-      };
+  //     reader.onload = (e) => {
+  //       const csvText = e.target.result;
+  //       parseCSV(csvText);
+  //     };
 
-      reader.readAsText(file);
-    }
-  };
+  //     reader.readAsText(file);
+  //   }
+  // };
 
-  const parseCSV = (csvText) => {
-    const lines = csvText.split("\n");
-    const headers = lines[0].split(",");
-    const parsedData = [];
+  // const parseCSV = (csvText) => {
+  //   const lines = csvText.split("\n");
+  //   const headers = lines[0].split(",");
+  //   const parsedData = [];
 
-    for (let i = 1; i < lines.length; i++) {
-      const currentLine = lines[i].split(",");
+  //   for (let i = 1; i < lines.length; i++) {
+  //     const currentLine = lines[i].split(",");
 
-      if (currentLine.length === headers.length) {
-        const row = {};
-        for (let j = 0; j < headers.length; j++) {
-          row[headers[j].trim()] = currentLine[j].trim();
-        }
-        parsedData.push(row);
-      }
-    }
+  //     if (currentLine.length === headers.length) {
+  //       const row = {};
+  //       for (let j = 0; j < headers.length; j++) {
+  //         row[headers[j].trim()] = currentLine[j].trim();
+  //       }
+  //       parsedData.push(row);
+  //     }
+  //   }
 
-    setCsvData(parsedData);
-  };
+  //   setCsvData(parsedData);
+
+  //   console.log("parsedData", parsedData);
+  //   const yaxis = parsedData.map((item) => parseFloat(item.TRANS_AMOUNT));
+  //   const xaxis = parsedData.map((item) => item.CATEGORY);
+
+  //   console.log("yaxis", yaxis);
+  //   console.log("xaxis", xaxis);
+
+  //   setGraphData({
+  //     yaxis,
+  //     xaxis,
+  //   });
+  // };
+
+  console.log("csvData", csvData);
 
   return (
-    <div className="flex flex-col p-6 overflow-x-hidden overflow-y-auto border rounded-lg h-96 max-h-96 min-h-96 ">
+    <div className="flex flex-col w-full h-full max-h-full p-6 overflow-x-hidden overflow-y-auto border rounded-lg">
       <div className="flex gap-3 text-xl font-bold">
         <User /> Irame.ai
+        {/* <input type="file" onChange={handleFileChange} /> */}
       </div>
       <p className="ml-3">{answer}</p>
 
@@ -448,12 +496,7 @@ const Answer = ({ answer, graphResponseData, responseCsvUrl }) => {
         >
           Graph
         </div>
-        <div
-          onClick={() => setSelectedTab("Data")}
-          className={`w-auto h-full cursor-pointer ${selectedTab === "Data" ? "border-b-2 border-blue-500" : ""}`}
-        >
-          Data
-        </div>
+
         <div
           onClick={() => setSelectedTab("Source")}
           className={`w-auto h-full cursor-pointer ${selectedTab === "Source" ? "border-b-2 border-blue-500" : ""}`}
@@ -462,21 +505,19 @@ const Answer = ({ answer, graphResponseData, responseCsvUrl }) => {
         </div>
       </nav>
 
-      <div>
-        {selectedTab === "Graph" && <BarGraph title={"ghgfh "} />}
+      <div className="w-full">
+        {selectedTab === "Graph" && (
+          <BarGraph
+            labels={graphData?.xaxis}
+            data={graphData?.yaxis}
+            title={"Graph "}
+          />
+        )}
 
-        {/* {showGraph === "Data" && <DataTab />} */}
         {selectedTab === "Source" && <CSVDataTable data={csvData} />}
       </div>
 
       {/* tabs ends here  */}
-
-      <input
-        type="file"
-        className="px-4 bg-gray-300"
-        onChange={handleFileChange}
-        accept=".csv"
-      />
     </div>
   );
 };
