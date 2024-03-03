@@ -58,7 +58,7 @@ export function QueryPage({ fetchedData, dataSources }) {
   // console.log(fetchedData);
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
-  const [SelectedFile, setSelectedFile] = useState("");
+  const [dataSource, setDataSource] = useState("");
 
   const [UploadboxOpen, setUploadboxOpen] = useState(false);
 
@@ -67,9 +67,9 @@ export function QueryPage({ fetchedData, dataSources }) {
   const [sampleQuestions, setSampleQuestions] = useState([]);
 
   async function onSearch() {
-    if (!inputValue || !SelectedFile) return;
+    if (!inputValue || !dataSource) return;
 
-    console.log("final submit is working ", SelectedFile);
+    console.log("final submit is working ", dataSource);
     // navigate("/a");
     var myHeaders = new Headers();
     myHeaders.append("accept", "application/json");
@@ -77,7 +77,7 @@ export function QueryPage({ fetchedData, dataSources }) {
 
     var urlencoded = new URLSearchParams();
     urlencoded.append("query", inputValue);
-    urlencoded.append("datasource_id", SelectedFile);
+    urlencoded.append("datasource_id", dataSource);
 
     var requestOptions = {
       method: "POST",
@@ -91,13 +91,13 @@ export function QueryPage({ fetchedData, dataSources }) {
       .then((result) => {
         if (result?.query_id) {
           navigate("/chat", {
-            state: { selecteddata: SelectedFile, name: result.query_id },
+            state: { selecteddata: dataSource, name: result.query_id },
           });
         }
       })
       .catch((error) => console.log("error", error));
     setInputValue("");
-    setSelectedFile("");
+    setDataSource("");
   }
 
   const handleInputChange = (event) => {
@@ -113,14 +113,14 @@ export function QueryPage({ fetchedData, dataSources }) {
   };
   function handelcontinue(ds) {
     setUploadboxOpen(false);
-    setSelectedFile(ds);
+    setDataSource(ds);
     console.log("continue   ", ds);
   }
 
   function handleExistinDBSelect(data) {
     console.log(data);
     // this data will have datasource_id, sample_questions
-    setSelectedFile(data?.datasource_id);
+    setDataSource(data?.datasource_id);
 
     // set sample questions
     setSampleQuestions(data?.sample_questions);
@@ -183,7 +183,7 @@ export function QueryPage({ fetchedData, dataSources }) {
                   className={"w-[40px] max-md:w-[30px] cursor-pointer"}
                 />
                 <div
-                  class={`absolute bottom-6 flex flex-col items-center  mb-6 group-hover:flex ${SelectedFile ? "hidden" : ""}`}
+                  class={`absolute bottom-6 flex flex-col items-center  mb-6 group-hover:flex ${dataSource ? "hidden" : ""}`}
                 >
                   <span class="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-blue-500 rounded-lg px-2 py-3 shadow-lg">
                     Select database to get started.
@@ -205,7 +205,7 @@ export function QueryPage({ fetchedData, dataSources }) {
                   setIsUploadDB(value);
                 }}
                 onSuccessUploadNewDB={(dataSourceId) => {
-                  setSelectedFile(dataSourceId);
+                  setDataSource(dataSourceId);
                   setUploadboxOpen(false);
                 }}
               />
@@ -218,7 +218,7 @@ export function QueryPage({ fetchedData, dataSources }) {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
           />
-          <Button onClick={onSearch} disabled={!inputValue || !SelectedFile}>
+          <Button onClick={onSearch} disabled={!inputValue || !dataSource}>
             <ImageWithAlt
               src="/bi_send-fill.svg"
               alt="Icon"

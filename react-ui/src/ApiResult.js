@@ -36,7 +36,7 @@ export function Apiresult({ dataSources, fetchedData }) {
   const [answer, setAnswer] = useState("");
   const [question, setQuestion] = useState("");
 
-  const [SelectedFile, setSelectedFile] = useState("");
+  const [dataSource, setDataSource] = useState("");
   const [responseCsvUrl, setResponseCsvUrl] = useState("");
   const [graphResponseData, setGraphResponseData] = useState({});
 
@@ -110,13 +110,20 @@ export function Apiresult({ dataSources, fetchedData }) {
       console.log("not found task id");
       navigate("");
     } else {
+      setDataSource(location?.state?.selecteddata);
       fetchStatus();
     }
 
     return () => {
       pollingRef.current = false;
     };
-  }, [SelectedFile, taskId, navigate, location.state.name]);
+  }, [
+    dataSource,
+    taskId,
+    navigate,
+    location.state.name,
+    location.state.selecteddata,
+  ]);
 
   function ImageWithAlt({ src, alt, className }) {
     return (
@@ -131,7 +138,7 @@ export function Apiresult({ dataSources, fetchedData }) {
 
   function handelcontinue(ds) {
     setUploadboxOpen(false);
-    setSelectedFile(ds);
+    setDataSource(ds);
     setDasboardList(
       fetchedData?.find((item) => ds === item?.datasource_name)?.dropdown || []
     );
@@ -139,7 +146,12 @@ export function Apiresult({ dataSources, fetchedData }) {
   }
 
   async function onSearch() {
-    console.log("final submit is working ", SelectedFile);
+    console.log("final submit is working ", dataSource);
+
+    if (!dataSource) {
+      alert("Datasource is not selected");
+      return;
+    }
 
     fetch("https://api.irame.ai/knowledge-graph/kg/kg/query_kg", {
       method: "POST",
@@ -148,7 +160,7 @@ export function Apiresult({ dataSources, fetchedData }) {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
-        datasource_id: SelectedFile,
+        datasource_id: dataSource,
         query: inputValue,
       }),
     })
@@ -160,6 +172,7 @@ export function Apiresult({ dataSources, fetchedData }) {
       })
       .then((data) => {
         console.log(data);
+
         setTaskId(data?.query_id);
       })
       .catch((error) => {
@@ -167,7 +180,7 @@ export function Apiresult({ dataSources, fetchedData }) {
       });
 
     setInputValue("");
-    // setSelectedFile("");
+    // setDataSource("");
   }
 
   const handleInputChange = (event) => {
@@ -213,7 +226,7 @@ export function Apiresult({ dataSources, fetchedData }) {
   function handleExistinDBSelect(data) {
     console.log(data);
     // this data will have datasource_id, sample_questions
-    setSelectedFile(data?.datasource_id);
+    setDataSource(data?.datasource_id);
 
     setUploadboxOpen(false);
   }
@@ -350,7 +363,7 @@ export function Apiresult({ dataSources, fetchedData }) {
                   setIsUploadDB(value);
                 }}
                 onSuccessUploadNewDB={(dataSourceId) => {
-                  setSelectedFile(dataSourceId);
+                  setDataSource(dataSourceId);
                   setUploadboxOpen(false);
                 }}
               />
@@ -416,7 +429,7 @@ const Answer = ({ answer, responseCsvUrl, graphResponseData }) => {
         setCsvData(dataFrame);
 
         const yaxis = dataFrame.map((item) =>
-          parseFloat(item[graphResponseData?.["x-axis"]])
+          parseFloat(item[graphResponseData?.["y-axis"]])
         );
         const xaxis = dataFrame.map(
           (item) => item[graphResponseData?.["x-axis"]]
