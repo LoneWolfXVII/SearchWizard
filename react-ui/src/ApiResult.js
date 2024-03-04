@@ -7,6 +7,7 @@ import {
   User,
 } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import BarGraph from "./BarGraph";
 import CSVDataTable from "./components/csv-data-table";
@@ -47,6 +48,8 @@ export function Apiresult({ dataSources, fetchedData }) {
   const [customEdit, setCustomEdit] = useState("");
   const { dashboard } = useContext(DashboardContext);
   const [DasboardList, setDasboardList] = useState([]);
+
+  const { dataSourceID } = useSelector((state) => state.chat);
 
   const navigate = useNavigate();
 
@@ -117,13 +120,7 @@ export function Apiresult({ dataSources, fetchedData }) {
     return () => {
       pollingRef.current = false;
     };
-  }, [
-    dataSource,
-    taskId,
-    navigate,
-    location.state.name,
-    location.state.selecteddata,
-  ]);
+  }, [taskId, navigate, location.state.name, location.state.selecteddata]);
 
   function ImageWithAlt({ src, alt, className }) {
     return (
@@ -148,7 +145,7 @@ export function Apiresult({ dataSources, fetchedData }) {
   async function onSearch() {
     console.log("final submit is working ", dataSource);
 
-    if (!dataSource) {
+    if (!dataSource && dataSourceID) {
       alert("Datasource is not selected");
       return;
     }
@@ -160,7 +157,7 @@ export function Apiresult({ dataSources, fetchedData }) {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
-        datasource_id: dataSource,
+        datasource_id: dataSource || dataSourceID,
         query: inputValue,
       }),
     })

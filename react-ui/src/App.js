@@ -17,6 +17,9 @@ import PlayGround from "./features/homescreen/PlayGround";
 import AutomationWorkflow from "./features/workflow/Automation_Workflow";
 import DocumentValidator from "./features/workflow/Document_Validator";
 import { QueryPage } from "./pages/query-page";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { chatActions } from "./store/chat-slice";
 
 const App = () => {
   const [navItems, setNavItems] = useState([]);
@@ -133,6 +136,28 @@ const App = () => {
     }
   }, [location]);
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: "https://api.irame.ai/knowledge-graph/kg/kg/get_datasource",
+      headers: {
+        accept: "application/json",
+      },
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        dispatch(chatActions.setDataSources(response?.data || []));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [dispatch]);
+
   return (
     // <div className="app-container">
     //     <NavBar dataSources={dataSources} onSelectDataSource ={handleNavItemSelect} showBody = {toggleBody}/>
@@ -169,9 +194,7 @@ const App = () => {
                     />
                   }
                 />
-              <Route path="/configuration" element={<ConfigurationPage />} />
-
-
+                <Route path="/configuration" element={<ConfigurationPage />} />
               </Route>
 
               <Route path="/playground" element={<PlayGround />} />

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navigation, Pagination, Scrollbar } from "swiper/modules";
+import tryNowIcon from "../assets/arcticons_youtube-go.svg";
 import { Button } from "../components/ui/button";
 import {
   Dialog,
@@ -10,12 +11,13 @@ import {
 } from "../components/ui/dialog";
 import { Input } from "../components/ui/input";
 import { UploadDocument } from "../features/upload-document/upload-document.component";
-import tryNowIcon from "../assets/arcticons_youtube-go.svg";
 
+import { useDispatch, useSelector } from "react-redux";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { chatActions } from "../store/chat-slice";
 
 function WelcomeMessage() {
   return (
@@ -39,16 +41,25 @@ function ImageWithAlt({ src, alt, className }) {
   );
 }
 
-function SampleQuestionCard({ question, title }) {
+function SampleQuestionCard({ question, title, onTryNow }) {
   return (
     <div className="max-w-xs w-[20rem] h-40 relative px-4 flex flex-col justify-between bg-[#f3faff] py-3 border rounded-md ">
       <div>
         <h5 className="font-semibold">{title}</h5>
         <p>{question}</p>
       </div>
-      <div className="flex items-center gap-2 mt-auto ml-auto">
-        <p>Try Now</p>
-        <img src={tryNowIcon} width={30} height={30} alt="try now" />
+      <div
+        onClickCapture={() => onTryNow(question)}
+        className="flex items-center gap-2 mt-auto ml-auto cursor-pointer"
+      >
+        <p onClickCapture={() => onTryNow(question)}>Try Now</p>
+        <img
+          onClickCapture={() => onTryNow(question)}
+          src={tryNowIcon}
+          width={30}
+          height={30}
+          alt="try now"
+        />
       </div>
     </div>
   );
@@ -64,7 +75,7 @@ export function QueryPage({ fetchedData, dataSources }) {
 
   const [isUploadDB, setIsUploadDB] = useState(false);
 
-  const [sampleQuestions, setSampleQuestions] = useState([]);
+  const { dataSourceID, sample_questions } = useSelector((state) => state.chat);
 
   async function onSearch() {
     if (!inputValue || !dataSource) return;
@@ -77,7 +88,7 @@ export function QueryPage({ fetchedData, dataSources }) {
 
     var urlencoded = new URLSearchParams();
     urlencoded.append("query", inputValue);
-    urlencoded.append("datasource_id", dataSource);
+    urlencoded.append("datasource_id", dataSource || dataSourceID);
 
     var requestOptions = {
       method: "POST",
@@ -91,7 +102,10 @@ export function QueryPage({ fetchedData, dataSources }) {
       .then((result) => {
         if (result?.query_id) {
           navigate("/chat", {
-            state: { selecteddata: dataSource, name: result.query_id },
+            state: {
+              selecteddata: dataSource || dataSourceID,
+              name: result.query_id,
+            },
           });
         }
       })
@@ -117,13 +131,13 @@ export function QueryPage({ fetchedData, dataSources }) {
     console.log("continue   ", ds);
   }
 
+  const dispatch = useDispatch();
   function handleExistinDBSelect(data) {
     console.log(data);
     // this data will have datasource_id, sample_questions
     setDataSource(data?.datasource_id);
 
-    // set sample questions
-    setSampleQuestions(data?.sample_questions);
+    dispatch(chatActions.setSampleQuestions(data?.sample_questions));
 
     setUploadboxOpen(false);
   }
@@ -151,11 +165,14 @@ export function QueryPage({ fetchedData, dataSources }) {
               navigation
               pagination={{ clickable: true }}
             >
-              {Object.keys(sampleQuestions)?.map((key) => (
+              {Object.keys(sample_questions)?.map((key) => (
                 <SwiperSlide key={key}>
                   <SampleQuestionCard
                     title={key}
-                    question={sampleQuestions[key]}
+                    question={sample_questions[key]}
+                    onTryNow={(question) => {
+                      setInputValue(question);
+                    }}
                   />
                 </SwiperSlide>
               ))}
@@ -183,7 +200,7 @@ export function QueryPage({ fetchedData, dataSources }) {
                   className={"w-[40px] max-md:w-[30px] cursor-pointer"}
                 />
                 <div
-                  class={`absolute bottom-6 flex flex-col items-center  mb-6 group-hover:flex ${dataSource ? "hidden" : ""}`}
+                  class={`absolute bottom-6 flex flex-col items-center  mb-6 group-hover:flex ${dataSource || dataSourceID ? "hidden" : ""}`}
                 >
                   <span class="relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-blue-500 rounded-lg px-2 py-3 shadow-lg">
                     Select database to get started.
@@ -218,7 +235,10 @@ export function QueryPage({ fetchedData, dataSources }) {
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
           />
-          <Button onClick={onSearch} disabled={!inputValue || !dataSource}>
+          <Button
+            onClick={onSearch}
+            disabled={!inputValue || (!dataSource && !dataSourceID)}
+          >
             <ImageWithAlt
               src="/bi_send-fill.svg"
               alt="Icon"

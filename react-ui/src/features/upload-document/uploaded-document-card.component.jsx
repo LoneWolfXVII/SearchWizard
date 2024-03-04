@@ -1,11 +1,5 @@
-import { useEffect, useState } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "../../components/ui/accordion";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 function DashboardCard({
   iconSrc,
@@ -48,9 +42,7 @@ function Question({ item }) {
   );
 }
 
-export function UploadedDocumentCard({
-  handelDBSelect
-}) {
+export function UploadedDocumentCard({ handelDBSelect }) {
   const [dbList, setDBList] = useState([]);
   const [selectedDB, setSelectedDB] = useState("");
 
