@@ -7,6 +7,7 @@ import ToolsBadge from "./ToolsBadge";
 import Upload from "./Upload";
 import { leftSideConfig, rightSideConfig } from "./constants";
 import DataSourceCard from "./data-source-card.component";
+import { useSelector } from "react-redux";
 
 const jiraIcon = "/jira.svg";
 const notionIcon = "/notion.svg";
@@ -15,6 +16,8 @@ const databasecontainer = "/databasecontainer.svg";
 
 const ConfigurationPage = () => {
   const [dataSource, setDataSource] = useState("");
+
+  const { dataSources } = useSelector((state) => state.chat);
 
   return (
     <section className="grid w-full h-screen px-3 py-5 overflow-scroll bg-white grid-col-1 xl:grid-cols-3 ">
@@ -98,9 +101,9 @@ const ConfigurationPage = () => {
             <h2 className="text-2xl font-bold">Manage Datasource</h2>
             <p className="text-gray-400">Securely connect to a datasource</p>
           </header>
-          <main className="flex flex-col gap-3">
-            {[1, 2, 3, 4].map((item) => (
-              <DataSourceCard title="Q1 Sales Data" image={databasecontainer} />
+          <main className="flex flex-col gap-3 overflow-y-auto max-h-96">
+            {dataSources?.map((item) => (
+              <DataSourceCard title={item} image={databasecontainer} />
             ))}
           </main>
         </div>
