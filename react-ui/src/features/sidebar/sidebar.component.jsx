@@ -1,17 +1,13 @@
 import axios from "axios";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import AnalyticsIcon from "../../assets/analytics.svg";
 import AutomationIcon from "../../assets/automation.svg";
 import homeIcon from "../../assets/home.svg";
 import { Button } from "../../components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
 import { chatActions } from "../../store/chat-slice";
+import { ScrollArea } from "../../components/ui/scroll-area";
 
 const linksArr = [
   {
@@ -32,9 +28,34 @@ const linksArr = [
 ];
 
 export function Sidebar() {
-  const { dataSources, selectedDataSource } = useSelector(
+  const { dataSources, selectedDataSource, dataSourceID } = useSelector(
     (state) => state.chat
   );
+
+  const [expand, setExpand] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const dropdownBtnRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If the clicked element is not the dropdown button or a descendant of the dropdown button,
+      // then close the dropdown
+      if (
+        dropdownBtnRef.current &&
+        !dropdownBtnRef.current.contains(event.target)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []); // Empty array means this effect runs once when the component mounts
 
   const dispatch = useDispatch();
 
@@ -86,8 +107,18 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="fixed h-screen border-r-2 w-[200px] flex flex-col items-center">
-      <h1 className="my-10 text-3xl font-bold">IRAME.AI</h1>
+    <aside
+      onMouseOver={() => setExpand(true)}
+      onMouseLeave={() => setExpand(false)}
+      className={`fixed h-screen border-r-2 ${dataSourceID ? (expand || dropdownOpen ? "w-[200px]" : "w-[80px]") : "w-[200px]"} flex transition-all duration-300 ease-in-out flex-col items-center`}
+    >
+      <h1 className="my-10 text-3xl font-bold">
+        {dataSourceID
+          ? expand || dropdownOpen
+            ? "IRAME.AI"
+            : "AI"
+          : "IRAME.AI"}
+      </h1>
       <div className="flex flex-col items-center w-full gap-7">
         {linksArr?.map((item) => (
           <NavLink
@@ -97,32 +128,49 @@ export function Sidebar() {
             }
           >
             <img src={item.icon} alt={item.label} width={20} height={20} />
-            {item.label}
+            {dataSourceID
+              ? expand || dropdownOpen
+                ? item.label
+                : ""
+              : item.label}
           </NavLink>
         ))}
 
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button className="flex px-6 font-semibold text-black bg-white border hover:bg-gray-200 py-7">
+        <Button
+          onClickCapture={() => {
+            setDropdownOpen(true);
+          }}
+          ref={dropdownBtnRef}
+          className="flex px-6 font-semibold text-black bg-white border hover:bg-gray-200 py-7"
+        >
+          {dataSourceID ? (
+            expand || dropdownOpen ? (
               <div>{selectedDataSource || "Select data source"}</div>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <div className="flex flex-col gap-5 px-3 py-3 font-semibold">
-              {dataSources?.map((ds) => (
-                <DropdownMenuItem
-                  key={ds}
-                  onClickCapture={() => {
-                    dispatch(chatActions.setSelectedDataSource(ds));
-                    handleDBSelect(ds);
-                  }}
-                >
-                  {ds}
-                </DropdownMenuItem>
-              ))}
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            ) : (
+              ""
+            )
+          ) : (
+            <div>{selectedDataSource || "Select data source"}</div>
+          )}
+          {!expand && "DB"}
+        </Button>
+
+        {dropdownOpen && (
+          <ScrollArea className="flex flex-col max-w-[180px] gap-5 overflow-y-auto font-semibold max-h-[250px] border shadow-sm rounded-sm">
+            {dataSources?.map((ds) => (
+              <div
+                key={ds}
+                className="px-3 py-3 cursor-pointer hover:bg-blue-200"
+                onClickCapture={() => {
+                  dispatch(chatActions.setSelectedDataSource(ds));
+                  handleDBSelect(ds);
+                }}
+              >
+                {ds}
+              </div>
+            ))}
+          </ScrollArea>
+        )}
       </div>
     </aside>
   );

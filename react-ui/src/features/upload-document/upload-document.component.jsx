@@ -61,7 +61,9 @@ export function UploadDocument(props) {
     }
     let data = new FormData();
     data.append("data_source_name", fileUrlref.current.value);
-    data.append("files", selectedDbFile);
+    selectedDbFile.forEach((file) => {
+      data.append("files", file);
+    });
 
     let config = {
       method: "post",
@@ -87,16 +89,20 @@ export function UploadDocument(props) {
     <div className="flex flex-col w-full px-3 text-black">
       {!props.uploaded && (
         <div className="flex items-center justify-center px-16 py-5 mt-6 bg-white border-2 border-dashed rounded-3xl border-slate-300 max-md:px-5 max-md:mt-10 max-md:max-w-full">
-          {selectedDbFile && (
-            <div className="py-12">
+          {selectedDbFile?.map((file, index) => (
+            <div key={index} className="py-12">
               <div
                 className={`flex items-center group w-16 justify-center p-2 bg-white hover:bg-gray-700 duration-300 transition-all ease-linear rounded-md cursor-pointer`}
               >
                 <div
-                  onClick={() => setSelectedDbFile(null)}
+                  onClick={() =>
+                    setSelectedDbFile(
+                      selectedDbFile.filter((_, i) => i !== index)
+                    )
+                  }
                   className="h-[36px] w-[36px] hidden group-hover:flex rounded-full p-1 bg-white"
                 >
-                  <img src="/trash.svg" alt="excel" width={30} height={30} />
+                  <img src="/trash.svg" alt="delete" width={30} height={30} />
                 </div>
 
                 <img
@@ -109,11 +115,12 @@ export function UploadDocument(props) {
               </div>
 
               <p className="w-20 overflow-hidden text-sm text-center line-clamp-1 text-ellipsis">
-                {selectedDbFile?.name}
+                {file.name}
               </p>
             </div>
-          )}
-          {!selectedDbFile && (
+          ))}
+
+          {!selectedDbFile?.length && (
             <div className="flex flex-col items-center max-w-full my-5 max-md:my-10">
               <div className="relative flex self-stretch justify-between px-20 py-1 text-base font-semibold leading-8 cursor-pointer whitespace-nowrap rounded-xl bg-neutral-100 max-md:px-5">
                 <img
@@ -124,7 +131,8 @@ export function UploadDocument(props) {
                 />
                 <input
                   type="file"
-                  onChange={(e) => setSelectedDbFile(e.target.files[0])}
+                  multiple
+                  onChange={(e) => setSelectedDbFile([...e.target.files])}
                   className="absolute top-0 left-0 z-10 w-full h-full opacity-0 cursor-pointer"
                 />
                 <div className="grow">Upload files</div>
