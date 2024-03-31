@@ -12,7 +12,7 @@ const NewChat = () => {
 	const [progress, setProgress] = useState(0);
 	const [showRenameDialog, setShowRenameDialog] = useState(false);
 
-	const [completedSteps, setCompletedSteps] = useState([2]);
+	const [completedSteps, setCompletedSteps] = useState([1]);
 
 	const gradientText = {
 		backgroundImage:
