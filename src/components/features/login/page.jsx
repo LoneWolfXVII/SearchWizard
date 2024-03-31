@@ -9,7 +9,7 @@ const SignInSignUp = () => {
     }
     return (
         <div className="flex items-center justify-center h-[100vh]">
-            <Button onClick={() => handleRedirect()}>Sign In</Button>
+            <Button onClick={() => handleRedirect()} className="hover:text-white hover:bg-purple100 hover:opacity-90" >Sign In</Button>
         </div>
     );
 }

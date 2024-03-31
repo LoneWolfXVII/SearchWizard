@@ -13,7 +13,7 @@ const AppRoutes = () => {
       <Route path="/app/*" element={
         <Layout>
           <Routes>
-            <Route path="new-chat" element={<NewChat />} />
+            <Route path="" element={<NewChat />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="settings" element={<Settings />} />
             <Route path="help" element={<Help />} />
