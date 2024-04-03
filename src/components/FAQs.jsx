@@ -5,12 +5,12 @@ const FAQs = () => {
 	const [showAnswer, setShowAnswer] = useState(-1);
 
 	return (
-		<section className="w-full lpro:mt-32 mt-14">
+		<section className="w-full tPro:mt-32 mt-14">
 			<div className="my-container">
-				<h2 className="w-full lpro:text-center lpro:mb-16 mb-10">
+				<h2 className="w-full tPro:text-center tPro:mb-16 mb-10">
 					{faqs?.heading}
 				</h2>
-				<div className="grid lpro:grid-cols-2 grid-cols-1 gap-x-16 mb-32">
+				<div className="grid tPro:grid-cols-2 grid-cols-1 gap-x-16 mb-32">
 					{faqs?.questions?.map((faq, index) => {
 						const isOpen = showAnswer === faq.id;
 						return (

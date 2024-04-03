@@ -41,10 +41,10 @@ export default {
 				'text-01': 'rgba(34, 8, 64, 1)', //hero section heading
 				'text-02': 'rgba(93, 0, 198, 1)', //hero section dynamic heading
 				purple: {
-					"20": 'rgba(71, 59, 240, 0.2)',
+					20: 'rgba(71, 59, 240, 0.2)',
 				},
 				gray: {
-					"100": 'rgba(223, 223, 223, 1)',
+					100: 'rgba(223, 223, 223, 1)',
 				},
 			},
 		},

@@ -40,10 +40,10 @@ const Header = ({ setOpen }) => {
 
 	return (
 		<header
-			className={`absolute top-0 left-0 w-full transition-all ease-in-out lpro:duration-300 lpro:h-fit`}
+			className={`absolute top-0 left-0 w-full transition-all ease-in-out tPro:duration-300 tPro:h-fit`}
 		>
 			<div className="grid grid-cols-12 gap-1 py-4 px-8 items-center">
-				<div className="lpro:col-span-2 col-span-12 lpro:inline-block flex gap-2 justify-between">
+				<div className="tPro:col-span-2 col-span-12 tPro:inline-block flex gap-2 justify-between">
 					<h1 className=" text-2xl leading-[29.05px] tracking-[0.2px] font-extrabold text-black/80">
 						IRAME.AI
 					</h1>
@@ -62,7 +62,7 @@ const Header = ({ setOpen }) => {
 						})} */}
 					</ul>
 				</div>
-				<div className="col-span-2 my-auto ml-auto lpro:block hidden">
+				<div className="col-span-2 my-auto ml-auto tPro:block hidden">
 					<button className="primary-button" onClick={() => setOpen(true)}>
 						{headerData?.btnText}
 					</button>
