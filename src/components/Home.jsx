@@ -39,7 +39,7 @@ const Home = () => {
 						setOpen={setOpen}
 						width={'max-w-[500px]'}
 					>
-						<JoinWaitlist />
+						<JoinWaitlist setOpen={setOpen} />
 					</Dialog>
 				</div>
 			) : null}

@@ -4,7 +4,7 @@ import { joinWaitlist } from '../types/home.content';
 import { mailFormatRegEx } from '../lib/utils';
 import { axios } from '../lib/axios';
 
-const JoinWaitlist = () => {
+const JoinWaitlist = ({ setOpen }) => {
 	const [formFields, setFormFields] = useState({
 		email: '',
 		useCase: '',
@@ -42,10 +42,11 @@ const JoinWaitlist = () => {
 		}
 
 		axios
-			.post('/api/waitlist/register', formFields)
+			.post('waitlist/register', formFields)
 			.then((res) => {
 				setIsLoading(false);
 				setFormFields({ email: '', useCase: '' });
+				setOpen(false);
 			})
 			.catch((err) => {
 				setIsLoading(false);
