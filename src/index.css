@@ -1,172 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
-
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-
-    --primary: 268, 84%, 44%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 268, 84%, 44%;
-    --secondary-foreground: 0 0% 9%;
-
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-  }
-
-  html,
-  body {
-    font-family: "Inter", sans-serif !important;
-  }
+html,
+body {
+	font-family: 'Inter', sans-serif;
 }
 
-@layer base {
-  * {
-    @apply border-border m-0 p-0 outline-none list-none box-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  .or-tagline {
-    @apply relative bg-transparent text-center z-[1];
-  }
-  .or-tagline::after {
-    @apply content-[''] absolute border-t border-solid border-purple-20 top-[7px] right-[0%] w-[46%];
-  }
-  .or-tagline::before {
-    @apply content-['']  absolute  border-t border-solid border-purple-20 top-[7px] left-[0%] w-[46%];
-  }
+.primary-button {
+	@apply text-base font-semibold text-white py-3 px-6 rounded-xl bg-primary;
+}
 
-  .light {
-    background: -moz-linear-gradient(
-      -45deg,
-      #6a12cd 0%,
-      #6a12cd 40%,
-      #ffffff 50%,
-      #6a12cd 60%,
-      #6a12cd 100%
-    );
-    background: -webkit-gradient(
-      linear,
-      left top,
-      right bottom,
-      color-stop(0%, #6a12cd),
-      color-stop(40%, #6a12cd),
-      color-stop(50%, #ffffff),
-      color-stop(60%, #6a12cd),
-      color-stop(100%, #6a12cd)
-    );
-    background: -webkit-linear-gradient(
-      -45deg,
-      #6a12cd 0%,
-      #6a12cd 40%,
-      #ffffff 50%,
-      #6a12cd 60%,
-      #6a12cd 100%
-    );
-    background: -o-linear-gradient(
-      -45deg,
-      #6a12cd 0%,
-      #6a12cd 40%,
-      #ffffff 50%,
-      #6a12cd 60%,
-      #6a12cd 100%
-    );
-    background: -ms-linear-gradient(
-      -45deg,
-      #6a12cd 0%,
-      #6a12cd 40%,
-      #ffffff 50%,
-      #6a12cd 60%,
-      #6a12cd 100%
-    );
-    background: linear-gradient(
-      115deg,
-      #6a12cd 0%,
-      #6a12cd 40%,
-      #ffffff 50%,
-      #6a12cd 60%,
-      #6a12cd 100%
-    );
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4600F2', endColorstr='#4600F2',GradientType=1 );
-    background-repeat: no-repeat;
-    background-position: 0px;
-    background-size: 250%;
-  }
+.bg-header {
+	@apply bg-white border-b border-b-black/10;
+}
 
-  .light {
-    animation: light 2s infinite;
-    -webkit-animation: light 2s infinite;
-  }
+h2 {
+	@apply lpro:text-[50px] lpro:leading-[56px] text-4xl font-bold text-typography;
+}
 
-  @keyframes light {
-    0% {
-      background-position: -600px;
-    }
-    100% {
-      background-position: 0px;
-    }
-  }
+p {
+	@apply text-lg font-normal text-typography-opacity-70;
+}
 
-  @-webkit-keyframes light {
-    0% {
-      background-position: -600px;
-    }
-    100% {
-      background-position: 0px;
-    }
-  }
+.hero-section {
+	/* background-image: url('/assets/bgs/background.png'); */
+	background-position: left center;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	@apply lpro:bg-[url('/assets/bgs/background.png')] bg-[url('/assets/bgs/mweb-background.png')];
+}
+
+.my-container {
+	@apply lpro:px-[100px] px-6;
+}
+
+.our-solutions-bg-gradient {
+	background-image: linear-gradient(
+		to bottom,
+		rgba(49, 60, 89, 1),
+		rgba(22, 28, 45, 1)
+	);
+}
+
+.phraese-animation {
+	overflow: hidden;
+}
+
+.phrases {
+	animation: text-animation 2s infinite;
+}
+
+.content {
+	@apply lpro:px-10;
+}
+
+.accordion-content {
+	/* transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out; */
+	max-height: 0;
+	overflow: hidden;
+	opacity: 0;
+}
+
+.accordion-content.open {
+	max-height: 1000px; /* Adjust based on the maximum expected content height */
+	opacity: 1;
+}
+
+@keyframes text-animation {
+	0% {
+		transform: translatey(0);
+		opacity: 1;
+	}
+
+	/* 50% {
+		transform: translatey(-5vmin);
+		opacity: 1;
+	} */
+	75% {
+		transform: translatey(-3vmin);
+		opacity: 0;
+	}
+
+	100% {
+		transform: translatey(-5vmin);
+		opacity: 0;
+	}
+}
+
+.input-wrapper {
+	@apply relative;
+}
+.input-wrapper input {
+	@apply border-black/20 border box-border rounded-lg py-[17px] px-[14px] text-black/80 text-base font-normal leading-5
+     focus:border-black/60 focus-visible:border-black/60 focus:outline-none focus-visible:outline-none
+      placeholder:text-black/40 placeholder:text-sm placeholder:font-normal
+       hover:border-black/40  h-[56px];
+}
+.input-wrapper label {
+	@apply absolute z-[2] left-[14px] top-3.5 px-0.5 pointer-events-none bg-white translate-y-1 transition duration-200 ease-in-out text-black/60 text-base leading-5 font-normal w-4/5;
+}
+
+.input-wrapper input:focus + label,
+.input-wrapper input:valid + label,
+.input-wrapper input.disabled + label {
+	@apply -translate-y-0.5 text-xs leading-3 !-top-1 left-2 !w-fit;
+}
+.input-wrapper input.disabled {
+	@apply cursor-not-allowed pointer-events-none opacity-60;
+}
+.input-wrapper input:disabled + label {
+	@apply text-black/20;
+}
+.input-wrapper input:disabled {
+	@apply text-black/20 border-black/10;
 }
