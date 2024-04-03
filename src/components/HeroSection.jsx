@@ -3,6 +3,11 @@ import { heroSection, phrases } from '../types/home.content.js';
 
 const HeroSection = ({ setOpen }) => {
 	const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+
+	const handleOpen = (e) => {
+		e.stopPropagation();
+		setOpen(true);
+	};
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setCurrentPhraseIndex((prevIndex) => (prevIndex + 1) % phrases.length);
@@ -26,8 +31,8 @@ const HeroSection = ({ setOpen }) => {
 							{heroSection?.subheading}
 						</p>
 						<button
-							className="primary-button mt-10"
-							onClick={() => setOpen(true)}
+							className="primary-button mt-10 z-[5]"
+							onClick={(e) => handleOpen(e)}
 						>
 							Join the waitlist
 						</button>
@@ -40,10 +45,10 @@ const HeroSection = ({ setOpen }) => {
 					</div>
 				</div>
 			</div>
-			<img
+			{/* <img
 				src="/assets/bgs/Wave.png"
 				className="w-full h-auto tPro:block hidden"
-			/>
+			/> */}
 		</section>
 	);
 };
