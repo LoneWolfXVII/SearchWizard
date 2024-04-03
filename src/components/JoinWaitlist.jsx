@@ -42,7 +42,10 @@ const JoinWaitlist = ({ setOpen }) => {
 		}
 
 		axios
-			.post('waitlist/register', formFields)
+			.post('/waitlist', {
+				email_id: formFields.email,
+				usecase: formFields.useCase,
+			})
 			.then((res) => {
 				setIsLoading(false);
 				setFormFields({ email: '', useCase: '' });
