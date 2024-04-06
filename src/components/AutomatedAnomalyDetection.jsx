@@ -7,7 +7,7 @@ const AutomatedAnomalyDetection = () => {
 				<div className="grid grid-cols-2 tPro:gap-x-3 ">
 					<div className="tPro:col-span-1 col-span-2">
 						<img
-							src="/assets/bgs/automated-anomaly.svg"
+							src="/assets/bgs/automated-anomaly-2.svg"
 							className=" w-full tPro:h-[500px]  h-auto object-contain"
 						/>
 					</div>

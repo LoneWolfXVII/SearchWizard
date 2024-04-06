@@ -14,6 +14,7 @@ import OurSolutions from './OurSolutions';
 import SelfCorrectingIntelligence from './SelfCorrectingIntelligence';
 import SmartDataExploration from './SmartDataExploration';
 import JoinWaitlist from './JoinWaitlist';
+import VideoSection from './VideoSection';
 
 const Home = () => {
 	const [open, setOpen] = useState(false);
@@ -21,6 +22,7 @@ const Home = () => {
 		<div className="">
 			<Header setOpen={setOpen} />
 			<HeroSection setOpen={setOpen} />
+			<VideoSection />
 			<SmartDataExploration />
 			<DeepDive />
 			<AutomatedAnomalyDetection />

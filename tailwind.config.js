@@ -46,6 +46,9 @@ export default {
 				gray: {
 					100: 'rgba(223, 223, 223, 1)',
 				},
+				border: {
+					primary: 'rgba(106, 18, 205, 1)',
+				},
 			},
 		},
 	},
