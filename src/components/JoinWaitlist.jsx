@@ -11,9 +11,13 @@ const JoinWaitlist = ({ setOpen }) => {
 	});
 	const [formError, setFormError] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
+	const [showCustomUseCase, setShowCustomUseCase] = useState(false);
 
 	const handleSelectUseCase = (useCase) => {
 		setFormFields({ ...formFields, useCase: useCase });
+		if (useCase === 'other') {
+			setShowCustomUseCase(true);
+		}
 	};
 
 	const verifyFormFields = () => {
@@ -89,6 +93,22 @@ const JoinWaitlist = ({ setOpen }) => {
 							</span>
 						))}
 				</div>
+				{showCustomUseCase ? (
+					<div className="mt-8">
+						<Input
+							value={formFields?.useCase}
+							setValue={(e) =>
+								setFormFields({
+									...formFields,
+									useCase: e.target.value,
+								})
+							}
+							label="Mention your usecase"
+							field="usecase"
+							error={formError}
+						/>
+					</div>
+				) : null}
 				{formError['useCase'] ? (
 					<p className="mb-0 pt-1 text-xs text-red-500">
 						{formError['useCase']}
