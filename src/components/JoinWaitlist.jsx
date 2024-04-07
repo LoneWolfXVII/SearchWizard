@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import Input from './Input';
 import { joinWaitlist } from '../types/home.content';
 import { mailFormatRegEx } from '../lib/utils';
-import { axios } from '../lib/axios';
+import axios from 'axios';
+import { API_URL } from '../config';
+// import { axios } from '../lib/axios';
 
 const JoinWaitlist = ({ setOpen }) => {
 	const [formFields, setFormFields] = useState({
@@ -48,7 +50,7 @@ const JoinWaitlist = ({ setOpen }) => {
 		}
 
 		axios
-			.post('/waitlist', {
+			.post(`${API_URL}/waitlist`, {
 				email_id: formFields.email,
 				usecase: formFields.useCase,
 			})
