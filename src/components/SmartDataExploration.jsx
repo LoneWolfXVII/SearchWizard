@@ -2,7 +2,7 @@ import { smartDataExploration } from '../types/home.content';
 
 const SmartDataExploration = () => {
 	return (
-		<section className="tPro:mt-32">
+		<section className="mt-32">
 			<div className="my-container">
 				<div className="grid grid-cols-2 gap-x-3 ">
 					<div className="tPro:order-2 order-1 tPro:col-span-1 col-span-2">
