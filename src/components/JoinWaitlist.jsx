@@ -17,6 +17,8 @@ const JoinWaitlist = ({ setOpen }) => {
 		setFormFields({ ...formFields, useCase: useCase });
 		if (useCase === 'other') {
 			setShowCustomUseCase(true);
+		} else {
+			setShowCustomUseCase(false);
 		}
 	};
 
