@@ -21,11 +21,13 @@ const HeroSection = ({ setOpen }) => {
 			<div className=" tPro:h-[70%]">
 				<div className="grid grid-cols-2 gap-x-3 ">
 					<div className=" tPro:pl-[100px] tPro:col-span-1 col-span-2">
-						<h1 className="tPro:mt-20 mt-14 tPro:text-[56px] tPro:leading-[68px] text-[32px] leading-10 font-bold text-text-01 phrase-animation">
+						<h1 className="tPro:mt-20 mt-14 tPro:text-[56px] tPro:leading-[68px] text-[32px] leading-10 font-bold text-text-01">
 							{heroSection?.heading1}
-							<span className=" block text-text-02">
-								{phrases[currentPhraseIndex]}
-							</span>
+							<div className="animated-text block">
+								<div className={`text-text-02 phrase `}>
+									{phrases[currentPhraseIndex]}
+								</div>
+							</div>
 						</h1>
 						<p className=" tPro:max-w-[562px] tPro:text-2xl text-sm font-medium text-black/60 tPro:mt-10 mt-8">
 							{heroSection?.subheading}

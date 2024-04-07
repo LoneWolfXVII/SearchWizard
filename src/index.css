@@ -44,14 +44,6 @@ p {
 	);
 }
 
-.phraese-animation {
-	overflow: hidden;
-}
-
-.phrases {
-	animation: text-animation 2s infinite;
-}
-
 .content {
 	@apply tPro:px-10;
 }
@@ -68,24 +60,31 @@ p {
 	opacity: 1;
 }
 
-@keyframes text-animation {
+.animated-text {
+	overflow: hidden;
+	display: block;
+	position: relative;
+	height: 1.2em; /* Adjust the height of the container as needed */
+}
+
+.phrase {
+	animation: textTransition 1.8s infinite; /* Adjust the duration as needed */
+	display: block;
+	opacity: 0;
+	position: absolute;
+	left: 0;
+	top: 100%; /* Start the phrases below the container */
+	width: 100%;
+}
+
+@keyframes textTransition {
 	0% {
-		transform: translatey(0);
 		opacity: 1;
+		top: 100%; /* Start from below the container */
 	}
-
-	/* 50% {
-		transform: translatey(-5vmin);
-		opacity: 1;
-	} */
-	75% {
-		transform: translatey(-3vmin);
-		opacity: 0;
-	}
-
 	100% {
-		transform: translatey(-5vmin);
-		opacity: 0;
+		opacity: 1;
+		top: -100%; /* Move upward by the height of the container */
 	}
 }
 
