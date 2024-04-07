@@ -33,7 +33,7 @@ const VideoSection = () => {
 						className="w-full rounded-lg"
 					></iframe>
 				</div>
-				<div
+				{/* <div
 					className="mt-10 flex flex-wrap items-center cursor-pointer rounded-full border border-black py-4 px-8 text-xl leading-8 font-medium max-w-fit hover:bg-primary hover:text-white hover:border-none"
 					onClick={handlePlayVideo}
 					onMouseEnter={() => setHover(true)}
@@ -48,7 +48,7 @@ const VideoSection = () => {
 						className="size-8 mr-2"
 					/>
 					<span>Watch Video</span>
-				</div>
+				</div> */}
 			</div>
 		</section>
 	);
