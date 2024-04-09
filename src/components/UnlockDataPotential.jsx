@@ -16,12 +16,12 @@ const UnlockDataPotential = () => {
 							Unlock Your Data&apos;s{' '}
 							<span className="block">Potential</span>
 						</h2>
-						{unlockDataPotential?.subheading ? (
+						{/* {unlockDataPotential?.subheading ? (
 							<h4 className="text-2xl font-semibold text-typography/70 mt-8">
 								{unlockDataPotential?.subheading}
 							</h4>
-						) : null}
-						<p className="mt-4">{unlockDataPotential?.content}</p>
+						) : null} */}
+						<p className="mt-8">{unlockDataPotential?.content}</p>
 					</div>
 				</div>
 			</div>

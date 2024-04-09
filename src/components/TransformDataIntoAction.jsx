@@ -11,7 +11,7 @@ const TransformData = () => {
 							className=" w-full tPro:h-[500px]  h-auto object-contain"
 						/>
 					</div>
-					<div className="tPro:order-1 order-2 tPro:col-span-1 col-span-2 flex flex-col items-center content my-auto justify-start lpro:px-10 tPro:mt-12 mt-10 tPro:mx-0 mx-10">
+					<div className="tPro:order-1 order-2 tPro:col-span-1 col-span-2 flex flex-col items-center content my-auto justify-end lpro:px-10 tPro:mt-50 mt-10 tPro:mx-0 mx-10">
 						<h2 className="w-full">
 							Transform Your
 							<span className="block">Data Into Action</span>

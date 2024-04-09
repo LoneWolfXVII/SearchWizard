@@ -19,27 +19,27 @@ export const heroSection = {
 
 export const unlockDataPotential = {
 	heading: 'Unlock Your Data Potential',
-	subheading: "Revealing Insights You Seek and Those You Haven't Yet Imagined",
+	// subheading: "Revealing Insights You Seek and Those You Haven't Yet Imagined",
 	content:
-		"helps you see what you're looking for and even what you haven't thought of yet with interactive exploration capabilities, enabling users to easily connect their data sources and receive insights, recommendations, and answers to queries in natural language. This dual approach simplifies complex data analysis, making it accessible to users without specialized technical knowledge.",
+		'Ira effortlessly connects to any data source, be it structured or unstructured, to dig into your financial data and uncover its complexities. By asking targeted questions, it ensures a deep understanding of your data, leading to tailored analysis, actionable insights, and streamlined workflows for informed decision-making.',
 };
 
 export const tranformDataIntoAction = {
 	heading: 'Transform Your Data Into Action',
 	content:
-		'The Human in Loop feature ensures the accuracy of the analysis by incorporating human input when necessary. Simultaneously, the Knowledge Graph personalizes the user experience by remembering preferences and applying them to future analyses, leading to more intuitive and efficient data interactions over time.',
+		"With Ira, data is not just a collection of numbers and text; it's a goldmine of opportunities. Its intelligent algorithms identify tasks that transform raw information into valuable insights and actions. Tailored to your unique needs, Ira ensures relevance and impact in every task it suggests.",
 };
 
 export const learningAndEvolution = {
 	heading: 'Learning & Evolution',
 	content:
-		'The Human in Loop feature ensures the accuracy of the analysis by incorporating human input when necessary. Simultaneously, the Knowledge Graph personalizes the user experience by remembering preferences and applying them to future analyses, leading to more intuitive and efficient data interactions over time.',
+		"Ira redefines adaptability, learning new tasks tailored to your business needs and evolving over time. This continuous growth ensures that your Ira remains a valuable asset, aligning seamlessly with your strategic goals. Embrace a future where Ira's ever-expanding capabilities keep pace with your business's dynamic nature.",
 };
 
 export const adaptiveWorkspace = {
 	heading: 'Adaptive Workspace',
 	content:
-		'By automating critical business processes such as agreement verification, invoice booking, and claim verification, IRAME.AI streamlines operations and enhances efficiency. Its ability to process and validate information from unstructured and structured documents significantly reduces the likelihood of human error and operational delays.',
+		'Ira comes equipped with a versatile range of tools designed to tackle any finance data task, from simple statistical analysis to complex financial document workflows.',
 };
 
 export const smartDataExploration = {
@@ -62,9 +62,9 @@ export const automatedAnomalyDetection = {
 
 export const dashboardAndCustomization = {
 	heading: 'Personalized Dashboard & Report Customization',
-	subheading: "Revealing Insights You Seek and Those You Haven't Yet Imagined",
+	// subheading: "Revealing Insights You Seek and Those You Haven't Yet Imagined",
 	content:
-		"helps you see what you're looking for and even what you haven't thought of yet with interactive exploration capabilities, enabling users to easily connect their data sources and receive insights, recommendations, and answers to queries in natural language. This dual approach simplifies complex data analysis, making it accessible to users without specialized technical knowledge.",
+		'You can personalize your experience with Ira, setting up dashboards, receiving insights directly into your inbox, and configuring alerts for specific events.',
 };
 
 export const customTaskLearning = {
@@ -111,7 +111,7 @@ export const howDoesItWork = {
 export const keepDataPrivate = {
 	heading: 'Keep Your Data Private',
 	content:
-		'By automating critical business processes such as agreement verification, invoice booking, and claim verification, IRAME.AI streamlines operations and enhances efficiency. Its ability to process and validate information from unstructured and structured documents significantly reduces the likelihood of human error and operational delays.',
+		'We designed Ira with privacy in mind from day one. Ira is available as a web app and a desktop app running on your servers, ensuring data privacy and security.',
 };
 
 export const ourSolutions = {
