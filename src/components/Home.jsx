@@ -15,6 +15,12 @@ import SelfCorrectingIntelligence from './SelfCorrectingIntelligence';
 import SmartDataExploration from './SmartDataExploration';
 import JoinWaitlist from './JoinWaitlist';
 import VideoSection from './VideoSection';
+import UnlockDataPotential from './UnlockDataPotential';
+import TransformData from './TransformDataIntoAction';
+import AdaptiveWorkspace from './AdaptiveWorkspace';
+import LearningAndEvolution from './LearningAndEvolution';
+import KeepDataPrivate from './KeepDataPrivate';
+import StillHaveQuestions from './StillHaveQuestions';
 
 const Home = () => {
 	const [open, setOpen] = useState(false);
@@ -23,15 +29,20 @@ const Home = () => {
 			<Header setOpen={setOpen} />
 			<HeroSection setOpen={setOpen} />
 			<VideoSection />
-			<SmartDataExploration />
-			<DeepDive />
-			<AutomatedAnomalyDetection />
+			<UnlockDataPotential />
+			<TransformData />
+			<AdaptiveWorkspace />
+			<LearningAndEvolution />
 			<DashboardAndCustomization />
-			<CustomTaskLearning />
-			<SelfCorrectingIntelligence />
-			<HowDoesItWork />
+			<KeepDataPrivate />
+			{/* <DeepDive /> */}
+			{/* <AutomatedAnomalyDetection /> */}
+			{/* <CustomTaskLearning /> */}
+			{/* <SelfCorrectingIntelligence /> */}
+			{/* <HowDoesItWork /> */}
 			<OurSolutions />
 			<FAQs />
+			<StillHaveQuestions setOpen={setOpen} />
 			<Footer />
 			{open ? (
 				<div className="">

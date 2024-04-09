@@ -1,15 +1,45 @@
 export const phrases = [
-	'Data Analytics',
-	'Risk Mitigation',
-	'Workflow Automation',
-	'Insight Generation',
-	'Decision Making',
+	'Adhoc analysis',
+	'Claim validation',
+	'Reconciliation',
+	'Contract validation',
+	'KPI Monitoring',
+	'Process compliance',
+	'RFP management',
+	'Expense validation',
+	'Invoice validation',
+	'Fraud monitoring',
 ];
 
 export const heroSection = {
 	heading1: 'Begin the day with easy automation in',
 	subheading:
 		'A Dynamic Platform That Learns With You: Command, Collaborate, and Discover Unseen Possibilities in complex workflows with Knowledge Graphs and AI Agents',
+};
+
+export const unlockDataPotential = {
+	heading: 'Unlock Your Data Potential',
+	subheading: "Revealing Insights You Seek and Those You Haven't Yet Imagined",
+	content:
+		"helps you see what you're looking for and even what you haven't thought of yet with interactive exploration capabilities, enabling users to easily connect their data sources and receive insights, recommendations, and answers to queries in natural language. This dual approach simplifies complex data analysis, making it accessible to users without specialized technical knowledge.",
+};
+
+export const tranformDataIntoAction = {
+	heading: 'Transform Your Data Into Action',
+	content:
+		'The Human in Loop feature ensures the accuracy of the analysis by incorporating human input when necessary. Simultaneously, the Knowledge Graph personalizes the user experience by remembering preferences and applying them to future analyses, leading to more intuitive and efficient data interactions over time.',
+};
+
+export const learningAndEvolution = {
+	heading: 'Learning & Evolution',
+	content:
+		'The Human in Loop feature ensures the accuracy of the analysis by incorporating human input when necessary. Simultaneously, the Knowledge Graph personalizes the user experience by remembering preferences and applying them to future analyses, leading to more intuitive and efficient data interactions over time.',
+};
+
+export const adaptiveWorkspace = {
+	heading: 'Adaptive Workspace',
+	content:
+		'By automating critical business processes such as agreement verification, invoice booking, and claim verification, IRAME.AI streamlines operations and enhances efficiency. Its ability to process and validate information from unstructured and structured documents significantly reduces the likelihood of human error and operational delays.',
 };
 
 export const smartDataExploration = {
@@ -32,8 +62,9 @@ export const automatedAnomalyDetection = {
 
 export const dashboardAndCustomization = {
 	heading: 'Personalized Dashboard & Report Customization',
+	subheading: "Revealing Insights You Seek and Those You Haven't Yet Imagined",
 	content:
-		'Customize your dashboard and reports with frequently used analyses for quicker access. Tailor your workspace to fit your unique needs and preferences, boosting efficiency and productivity with personalized insights',
+		"helps you see what you're looking for and even what you haven't thought of yet with interactive exploration capabilities, enabling users to easily connect their data sources and receive insights, recommendations, and answers to queries in natural language. This dual approach simplifies complex data analysis, making it accessible to users without specialized technical knowledge.",
 };
 
 export const customTaskLearning = {
@@ -75,6 +106,12 @@ export const howDoesItWork = {
 			divider: false,
 		},
 	],
+};
+
+export const keepDataPrivate = {
+	heading: 'Keep Your Data Private',
+	content:
+		'By automating critical business processes such as agreement verification, invoice booking, and claim verification, IRAME.AI streamlines operations and enhances efficiency. Its ability to process and validate information from unstructured and structured documents significantly reduces the likelihood of human error and operational delays.',
 };
 
 export const ourSolutions = {
@@ -129,11 +166,6 @@ export const faqs = {
 		},
 		{
 			id: 2,
-			ques: 'How do I get started?',
-			answer: 'Getting started is easy. Simply sign up for a free trial and start exploring the platform. Our team is always available to help you get started.',
-		},
-		{
-			id: 3,
 			ques: 'How do I integrate my data?',
 			answer: 'IRAME.AI seamlessly integrates with a variety of data sources, including cloud storage, databases, and spreadsheets. Simply connect your data source to begin analyzing your information.',
 		},
@@ -179,24 +211,44 @@ export const joinWaitlist = {
 		'This blog post has been published. Team members will be able to edit this post and republish changes.',
 	useCases: [
 		{
-			label: 'Usecase',
-			value: 'usecase',
+			label: 'Adhoc analysis',
+			value: 'adhoc_analysis',
 		},
 		{
-			label: 'Select Chip',
-			value: 'select_chip0',
+			label: 'Claim validation',
+			value: 'claim_validation',
 		},
 		{
-			label: 'Select Chip',
-			value: 'select_chip1',
+			label: 'Reconciliation',
+			value: 'reconciliation',
 		},
 		{
-			label: 'Select Chip',
-			value: 'select_chip2',
+			label: 'Contract validation',
+			value: 'contract_validation',
 		},
 		{
-			label: 'Select Chip',
-			value: 'select_chip3',
+			label: 'KPI Monitoring',
+			value: 'kpi_monitoring',
+		},
+		{
+			label: 'Process compliance',
+			value: 'process_compliance',
+		},
+		{
+			label: 'RFP management',
+			value: 'rfp_management',
+		},
+		{
+			label: 'Expense validation',
+			value: 'expense_validation',
+		},
+		{
+			label: 'Invoice validation',
+			value: 'invoice_validation',
+		},
+		{
+			label: 'Fraud monitoring',
+			value: 'fraud_monitoring',
 		},
 		{
 			label: 'Other',

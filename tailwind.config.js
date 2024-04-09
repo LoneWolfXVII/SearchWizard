@@ -49,6 +49,9 @@ export default {
 				border: {
 					primary: 'rgba(106, 18, 205, 1)',
 				},
+				backgrounds: {
+					light: 'rgba(249, 250, 251, 1)',
+				},
 			},
 		},
 	},
