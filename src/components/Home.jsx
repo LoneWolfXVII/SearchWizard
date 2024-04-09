@@ -40,7 +40,7 @@ const Home = () => {
 			{/* <CustomTaskLearning /> */}
 			{/* <SelfCorrectingIntelligence /> */}
 			{/* <HowDoesItWork /> */}
-			<OurSolutions />
+			{/* <OurSolutions /> */}
 			<FAQs />
 			<StillHaveQuestions setOpen={setOpen} />
 			<Footer />

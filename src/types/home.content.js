@@ -12,7 +12,7 @@ export const phrases = [
 ];
 
 export const heroSection = {
-	heading1: 'Begin the day with easy automation in',
+	heading1: 'Hi I am Ira, Let me help you with',
 	subheading:
 		'A Dynamic Platform That Learns With You: Command, Collaborate, and Discover Unseen Possibilities in complex workflows with Knowledge Graphs and AI Agents',
 };

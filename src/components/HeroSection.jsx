@@ -29,9 +29,9 @@ const HeroSection = ({ setOpen }) => {
 								</div>
 							</div>
 						</h1>
-						<p className=" tPro:max-w-[562px] tPro:text-2xl text-sm font-medium text-black/60 tPro:mt-10 mt-8">
+						{/* <p className=" tPro:max-w-[562px] tPro:text-2xl text-sm font-medium text-black/60 tPro:mt-10 mt-8">
 							{heroSection?.subheading}
-						</p>
+						</p> */}
 						<button
 							className="primary-button mt-10 z-[5]"
 							onClick={(e) => handleOpen(e)}
@@ -41,7 +41,7 @@ const HeroSection = ({ setOpen }) => {
 					</div>
 					<div className="tPro:col-span-1 col-span-2 pr-8 tPro:block hidden">
 						<img
-							src="/assets/bgs/hero-section.svg"
+							src="/assets/bgs/herosection.svg"
 							className="w-full h-[630px] object-contain"
 						/>
 					</div>

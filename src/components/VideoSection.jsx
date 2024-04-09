@@ -23,8 +23,8 @@ const VideoSection = () => {
 				<div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border-[0.81px] border-border-primary">
 					<iframe
 						// width="560"
-						// height="534"
-						height="315"
+						height="534"
+						// height="315"
 						src={videoUrl}
 						title="YouTube video player"
 						frameBorder="0"
