@@ -1,73 +1,123 @@
-/**@format */
 import { useEffect, useState } from 'react';
-import { tabDetails } from './config';
-import { fetchSuggestions } from './service/new-chat.service';
+import { createQuerySession, fetchSuggestions } from './service/new-chat.service';
 import { useRouter } from '@/hooks/useRouter';
+import useGetCookie from '@/hooks/useGetCookie';
 import { tokenCookie } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const SelectPrompt = ({ handleNextStep, prompt, setPrompt }) => {
-	const [activeTab, setActiveTab] = useState('descriptive');
-	const [suggestions, setSuggestions] = useState([]);
-	const { query } = useRouter();
+	const [activeTab, setActiveTab] = useState('');
+	const [data, setData] = useState([]);
+	const { query, navigate } = useRouter();
+	const token = useGetCookie('token');
 
 	const handleActiveTab = (selectedTab) => {
 		setActiveTab(selectedTab);
 	};
+	const handlePrompt = (question) => {
+		setPrompt(question);
+		handleNextStep(4);
+		createQuerySession(query.dataSourceId, question, token || tokenCookie).then(
+			(res) => {
+				navigate(
+					`/app/new-chat/?step=4&dataSourceId=${query.dataSourceId}&sessionId=${res.session_id}&queryId=${res.query_id}`,
+				);
+			},
+		);
+	};
 
 	useEffect(() => {
-		const token = tokenCookie;
-		if (token && query.dataSourceId) {
-			fetchSuggestions(query.dataSourceId, token).then((resp) => {
-				console.log(resp);
-			});
+		if (query.dataSourceId) {
+			fetchSuggestions(query.dataSourceId, token || tokenCookie).then(
+				(resp) => {
+					console.log(resp);
+					setData(resp);
+					setActiveTab(resp?.suggestion[0]?.type);
+				},
+			);
 		}
 	}, [query.dataSourceId]);
+
 	return (
 		<div className="">
-			<ul className="flex gap-2 items-center">
-				{tabDetails?.tabs?.map((element, indx) => {
-					return (
-						<li
-							key={`tabs:${indx}`}
-							className={`${
-								element?.key === activeTab
-									? ' text-purple-100 border-purple-40 tabActiveBg'
-									: 'text-black/60 border-black/10'
-							} text-sm font-medium border rounded-3xl px-3 py-2 cursor-pointer`}
-							onClick={() => handleActiveTab(element?.key)}
-						>
-							<div className="">{element?.text}</div>
-						</li>
-					);
-				})}
-			</ul>
 			<div className="mt-8">
 				<div className="w-full overflow-x-auto flex gap-4">
-					{[...Array(5)].map((_, index) => (
-						<div
-							className="bg-purple-4 rounded-xl min-w-[11.25rem] max-w-[19.25rem] max-h-[21.75rem] p-4 hover:bg-purple-8 mb-3"
-							key={index}
-						>
-							<div
-								className="overflow-y-auto text-base font-medium text-primary80 "
-								onClick={() => handleNextStep(4)}
-							>
-								<ul className="divide-y-[24px] divide-transparent">
-									<li className="flex items-center gap-2 hover:cursor-pointer hover:text-purple-80">
-										Suggest beautiful places to see on an
-										upcoming long road trip
-									</li>
-								</ul>
+					<ul className="flex gap-2 items-center">
+						{data?.suggestion?.length > 0 ? (
+							data?.suggestion?.map((suggestion, index) => (
+								<li
+									key={suggestion?.suggestion_id}
+									className={`${
+										suggestion?.type === activeTab
+											? ' text-purple-100 border-purple-40 tabActiveBg'
+											: 'text-black/60 border-black/10'
+									} text-sm font-medium border rounded-3xl px-3 py-2 cursor-pointer`}
+									onClick={() => handleActiveTab(suggestion?.type)}
+								>
+									<div>{suggestion?.type}</div>
+								</li>
+							))
+						) : (
+							<div className="flex space-x-2">
+								{[...Array(4)].map((_, index) => (
+									<Skeleton
+										key={index}
+										className="h-8 w-[150px] bg-purple-4 rounded-2xl"
+									/>
+								))}
 							</div>
-							<div
-								className=" text-right mt-6 cursor-pointer"
-								onClick={() => setPrompt('niscahkl')}
-							>
-								<i className="bi-pencil-square text-primary100 bg-white py-1.5 px-2 rounded-full "></i>
-							</div>
-						</div>
-					))}
+						)}
+					</ul>
 				</div>
+				{activeTab ? (
+					<div className="w-full overflow-x-auto flex gap-4 mt-4">
+						{data?.suggestion?.length > 0
+							? data.suggestion
+									.find(
+										(suggestion) =>
+											suggestion.type === activeTab,
+									)
+									.questions.map((question, index) => (
+										<div
+											className="bg-purple-4 rounded-xl min-w-[11.25rem] max-w-[19.25rem] max-h-[21.75rem] p-4 hover:bg-purple-8 mb-3"
+											key={`${index}_question`}
+										>
+											<div
+												className="overflow-y-auto text-base font-medium text-primary80"
+												onClick={() =>
+													handlePrompt(question)
+												}
+											>
+												<ul className="divide-y-[24px] divide-transparent">
+													<li className="flex items-center gap-2 hover:cursor-pointer hover:text-purple-80">
+														{question}
+													</li>
+												</ul>
+											</div>
+											<div
+												className="text-right mt-6 cursor-pointer"
+												onClick={() => setPrompt(question)}
+											>
+												<i className="bi-pencil-square text-primary100 bg-white py-1.5 px-2 rounded-full "></i>
+											</div>
+										</div>
+									))
+							: [...Array(5)].map((_, index) => (
+									<div className="flex space-x-2" key={index}>
+										<Skeleton className="h-[125px] w-[250px] rounded-xl bg-purple-4" />
+									</div>
+							  ))}
+					</div>
+				) : (
+					<div className="flex space-x-2 mt-4">
+						{[...Array(4)].map((_, index) => (
+							<Skeleton
+								className="h-[125px] w-[250px] rounded-xl bg-purple-4"
+								key={index}
+							/>
+						))}
+					</div>
+				)}
 			</div>
 		</div>
 	);

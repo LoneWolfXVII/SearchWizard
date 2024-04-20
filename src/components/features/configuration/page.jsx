@@ -99,7 +99,7 @@ const Configuration = () => {
 	}, [datasourceName]);
 
 	return (
-		<div className="grid grid-cols-12 gap-4">
+		<div className="grid grid-cols-12 gap-4 pt-6">
 			<div className="border rounded-3xl py-4 px-6 col-span-9 shadow-1xl">
 				{' '}
 				{/*TODO: add shadow */}

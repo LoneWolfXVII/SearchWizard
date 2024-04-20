@@ -197,11 +197,18 @@
 		background: linear-gradient(0deg, #ffffff, #ffffff),
 			linear-gradient(0deg, rgba(106, 18, 205, 0.04), rgba(106, 18, 205, 0.04));
 	}
+	.default-tab {
+		@apply text-sm font-medium leading-[22px] text-primary40 py-2 px-0 mr-8 cursor-pointer;
+	}
+	.active-tab {
+		@apply text-sm leading-[22px] text-primary80 font-semibold py-2 px-0 mr-8 cursor-pointer;
+	}
+	s .ghost-tabs li:after {
+		content: '';
+		transition: width 0.3s;
+		@apply w-1 bg-transparent h-[3px] relative  block rounded-sm mt-2;
+	}
+	.ghost-tabs li.active-tab:after {
+		@apply w-full bg-purple-2;
+	}
 }
-
-background: linear-gradient(0deg, rgba(106, 18, 205, 0.02), rgba(106, 18, 205, 0.02)),
-	linear-gradient(
-		180deg,
-		rgba(255, 255, 255, 0.4) 1.14%,
-		rgba(255, 255, 255, 0.16) 98.72%
-	);

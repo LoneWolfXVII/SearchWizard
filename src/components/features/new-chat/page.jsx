@@ -6,16 +6,26 @@ import SelectPrompt from './SelectPromt';
 import InputText from '@/components/elements/InputText';
 import AnalysisData from './AnalysisData';
 import { useRouter } from '@/hooks/useRouter';
+import useGetCookie from '@/hooks/useGetCookie';
+import { cn } from '@/lib/utils';
+import ira from '@/assets/icons/ira_icon.svg';
+import { Button } from '@/components/ui/button';
+import Workspace from './Workspace';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const NewChat = () => {
-	const [value] = useLocalStorage('userDetails');
-	const { query } = useRouter();
+	const [value, updateValue] = useLocalStorage('userDetails');
+	const { query, params } = useRouter();
+	const token = useGetCookie('token');
 
 	const [files, setFiles] = useState([]);
 	const [progress, setProgress] = useState(0);
 	const [showRenameDialog, setShowRenameDialog] = useState(false);
 	const [completedSteps, setCompletedSteps] = useState([1]);
 	const [prompt, setPrompt] = useState('');
+	const [showWorkspace, setShowWorkspace] = useState(true);
+	const [workSpaceTab, setWorkSpaceTab] = useState('Planner');
 
 	const gradientText = {
 		backgroundImage:
@@ -98,6 +108,17 @@ const NewChat = () => {
 		}
 	};
 
+	const handleTabClick = (tab) => {
+		setWorkSpaceTab(tab);
+	};
+
+	useEffect(() => {
+		updateValue({
+			...value,
+			token: token,
+		});
+	}, []);
+
 	useEffect(() => {
 		if (query?.step) {
 			setCompletedSteps((prev) => [...prev, parseInt(query?.step)]);
@@ -109,14 +130,49 @@ const NewChat = () => {
 	return (
 		<>
 			{completedSteps.includes(4) ? (
-				<div className="grid grid-cols-12 gap-4">
-					<div className="border rounded-2xl py-4 px-4 col-span-8 shadow-1xl relative">
-						{prompt}
-						<div className="flex flex-col items-center justify-center">
-							<div className="rounded-[100px] flex justify-between bg-purple-4 px-3 py-2 mb-2">
+				<div className="grid grid-cols-12 gap-4 h-[90vh]">
+					<div
+						className={cn(
+							'border rounded-2xl py-4 px-4 shadow-1xl relative',
+							showWorkspace ? 'col-span-8' : 'col-span-12 mx-[8rem]',
+						)}
+					>
+						<div className={cn('')}>
+							<div className="flex items-center gap-2">
+								<Avatar className="size-10">
+									<AvatarImage src="https://github.com/shadcn.png" />
+									<AvatarFallback>CN</AvatarFallback>
+								</Avatar>
+								{prompt}
+							</div>
+
+							<div className="mt-6 flex items-center space-x-2">
+								<img src={ira} alt="ira" className="size-10" />
+								<Button
+									variant="outline"
+									className="text-sm font-semibold text-purple-100 hover:bg-white hover:text-purple-100 hover:opacity-80"
+									onClick={() => setShowWorkspace(!showWorkspace)}
+								>
+									{showWorkspace ? 'Hide' : 'Show'} Workspace
+								</Button>
+							</div>
+							<div className="flex flex-col space-y-3 mt-4 ml-12">
+								<Skeleton className="h-[125px] w-[250px] rounded-xl bg-purple-8" />
+								<div className="space-y-2">
+									<Skeleton className="h-5 w-[80%] bg-purple-8" />
+									<Skeleton className="h-5 w-[50%] bg-purple-8" />
+									<Skeleton className="h-5 w-[65%] bg-purple-8" />
+								</div>
+							</div>
+						</div>
+						<div className="fixed bottom-6 flex flex-col items-center justify-center">
+							<div className="rounded-[100px] flex justify-between bg-purple-4 px-3 py-2 mb-2 z-10">
 								<InputText
 									placeholder="Enter a prompt here"
-									inputMainClass="border-0 outline-none rounded-none bg-transparent w-[44.2rem]"
+									inputMainClass={cn(
+										'border-0 outline-none rounded-none bg-transparent ',
+										showWorkspace ? 'w-[44.2rem]' : 'w-[53rem]',
+									)}
 									value={prompt}
 									setValue={(e) => setPrompt(e)}
 								/>
@@ -130,15 +186,27 @@ const NewChat = () => {
 							</p>
 						</div>
 					</div>
-					<div className="border rounded-3xl py-4 px-4 col-span-4 shadow-1xl h-fit">
-						<h3 className="text-primary80 font-semibold text-xl">
-							Ira's Workspace
-						</h3>
-						<div className="border rounded-2xl p-4 mt-6"></div>
-					</div>
+					{showWorkspace ? (
+						<div className="border rounded-3xl py-4 px-4 col-span-4 shadow-1xl h-fit">
+							<div className="flex justify-between">
+								<h3 className="text-primary80 font-semibold text-xl">
+									Ira's Workspace
+								</h3>
+								<i
+									className="bi-x text-2xl cursor-pointer"
+									onClick={() => setShowWorkspace(false)}
+								></i>
+							</div>
+
+							<Workspace
+								handleTabClick={handleTabClick}
+								workSpaceTab={workSpaceTab}
+							/>
+						</div>
+					) : null}
 				</div>
 			) : (
-				<div className="flex justify-center">
+				<div className="flex justify-center pt-8">
 					<div className="flex flex-col items-center w-[51.875rem] relative">
 						<div className="align-left w-full">
 							<h1
