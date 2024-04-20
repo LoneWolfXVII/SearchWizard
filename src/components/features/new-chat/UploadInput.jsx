@@ -4,14 +4,18 @@ import { useDropzone } from 'react-dropzone';
 import PropTypes from 'prop-types';
 import { welcomeTypography } from './config';
 import { Progress } from '@/components/ui/progress';
+import { useNavigate } from 'react-router-dom';
 
-const UploadInput = ({ onFileUpload, files, setFiles, progress }) => {
+const UploadInput = ({ onFileUpload, files, setFiles, progress, setOpen }) => {
+	const navigate = useNavigate();
+	const [showFormats, setShowFormats] = useState(false);
+
 	useEffect(() => {
 		console.log(progress);
 	}, [progress]);
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
-		accept: 'image/*, application/pdf, text/csv',
+		accept: 'application/pdf, text/csv',
 		onDrop: (acceptedFiles) => {
 			setFiles((prevFiles) => {
 				if (!Array.isArray(prevFiles)) {
@@ -31,9 +35,11 @@ const UploadInput = ({ onFileUpload, files, setFiles, progress }) => {
 	};
 	const handleSelectFromLibrary = (e) => {
 		e.stopPropagation();
+		setOpen(true);
 	};
 	const showSupportedFormats = (e) => {
 		e.stopPropagation();
+		setShowFormats(!showFormats);
 	};
 	const formatFileSize = (size) => {
 		if (size < 1024) {
@@ -45,6 +51,10 @@ const UploadInput = ({ onFileUpload, files, setFiles, progress }) => {
 		} else {
 			return (size / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
 		}
+	};
+	const handleConnectDataSource = (e) => {
+		e.stopPropagation();
+		navigate('/app/configuration');
 	};
 
 	return (
@@ -78,6 +88,7 @@ const UploadInput = ({ onFileUpload, files, setFiles, progress }) => {
 								<Button
 									variant="secondary"
 									className="w-full bg-purple-8 hover:bg-purple-16 text-purple-100 font-medium"
+									onClick={(e) => handleConnectDataSource(e)}
 								>
 									{welcomeTypography?.btn1Text}
 								</Button>
@@ -96,7 +107,13 @@ const UploadInput = ({ onFileUpload, files, setFiles, progress }) => {
 								}}
 							>
 								<p className="text-sm font-medium leading-4 text-primary100">
+									<i className="bi-folder me-2"></i>
 									{welcomeTypography?.fileStructure}
+									{showFormats ? (
+										<i className="bi-chevron-up ms-2"></i>
+									) : (
+										<i className={`bi-chevron-down ms-2 `}></i>
+									)}
 								</p>
 							</div>
 						</div>

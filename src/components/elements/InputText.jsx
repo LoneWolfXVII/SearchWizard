@@ -94,4 +94,5 @@ InputText.propTypes = {
 	subLabelClassName: PropTypes.string,
 	tooltip: PropTypes.string,
 	value: PropTypes.string,
+	inputMainClass: PropTypes.string,
 };

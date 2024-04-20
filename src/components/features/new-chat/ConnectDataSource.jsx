@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import UploadInput from './UploadInput';
-import { welcomeTypography } from './config';
-import { Switch } from '@/components/ui/switch';
 import PropTypes from 'prop-types';
+import ChooseDataSourceDialog from './ChooseDataSourceDialog';
+import { useState } from 'react';
 
 const ConnectDataSource = ({
 	handleFileUpload,
@@ -11,6 +11,9 @@ const ConnectDataSource = ({
 	progress,
 	handleNextStep,
 }) => {
+	const [open, setOpen] = useState(false);
+	const [selectedDataSource, setSelectedDataSource] = useState('');
+
 	return (
 		<div className="flex flex-col gap-4">
 			<UploadInput
@@ -18,14 +21,9 @@ const ConnectDataSource = ({
 				files={files}
 				setFiles={setFiles}
 				progress={progress}
+				setOpen={setOpen}
 			/>
 			<div className="flex justify-between">
-				<span className="bg-purple-4 rounded-[100px] py-3 px-5 flex items-center gap-2 max-w-[13.2rem]">
-					<p className="text-purpleDark text-sm">
-						{welcomeTypography?.demoDataLabel}
-					</p>
-					<Switch className="h-5 w-9" />
-				</span>
 				{files.length > 0 && progress === 100.0 ? (
 					<Button
 						onClick={() => handleNextStep(2)}
@@ -35,7 +33,13 @@ const ConnectDataSource = ({
 					</Button>
 				) : null}
 			</div>
-			<div className="light"></div>
+			<ChooseDataSourceDialog
+				open={open}
+				setOpen={setOpen}
+				selectedDataSource={selectedDataSource}
+				setSelectedDataSource={setSelectedDataSource}
+				handleNextStep={handleNextStep}
+			/>
 		</div>
 	);
 };

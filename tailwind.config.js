@@ -58,6 +58,7 @@ module.exports = {
 					16: 'rgba(106, 18, 205, 0.16)',
 					20: 'rgba(106, 18, 205, 0.20)',
 					24: 'rgba(106, 18, 205, 0.24)',
+					40: 'rgba(106, 18, 205, 0.4)',
 					80: 'rgba(106, 18, 205, 0.8)',
 					100: 'rgba(106, 18, 205, 1)',
 				},
@@ -65,6 +66,10 @@ module.exports = {
 				primary40: 'rgba(38, 6, 74, 0.4)',
 				primary100: 'rgba(38, 6, 74, 1)',
 				purpleDark: 'rgba(81, 55, 110, 1)',
+				primary20: 'rgba(38, 6, 74, 0.2)',
+				gray: {
+					1: 'rgba(78, 78, 78, 0.1)',
+				},
 			},
 			// borderRadius: {
 			//   lg: "var(--radius)",
@@ -84,6 +89,12 @@ module.exports = {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
+			},
+			dropShadow: {
+				'1xl': '0px 12px 24px -4px rgba(145, 158, 171, 0.12)',
+			},
+			boxShadow: {
+				'1xl': '0px 12px 24px -4px rgba(145, 158, 171, 0.12)',
 			},
 		},
 	},

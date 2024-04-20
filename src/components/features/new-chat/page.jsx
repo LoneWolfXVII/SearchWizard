@@ -1,18 +1,21 @@
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { welcomeTypography } from './config';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ConnectDataSource from './ConnectDataSource';
 import SelectPrompt from './SelectPromt';
 import InputText from '@/components/elements/InputText';
 import AnalysisData from './AnalysisData';
+import { useRouter } from '@/hooks/useRouter';
 
 const NewChat = () => {
 	const [value] = useLocalStorage('userDetails');
+	const { query } = useRouter();
+
 	const [files, setFiles] = useState([]);
 	const [progress, setProgress] = useState(0);
 	const [showRenameDialog, setShowRenameDialog] = useState(false);
-
 	const [completedSteps, setCompletedSteps] = useState([1]);
+	const [prompt, setPrompt] = useState('');
 
 	const gradientText = {
 		backgroundImage:
@@ -83,63 +86,114 @@ const NewChat = () => {
 			case 2:
 				return <AnalysisData />;
 			case 3:
-				return <SelectPrompt />;
+				return (
+					<SelectPrompt
+						handleNextStep={handleNextStep}
+						setPrompt={setPrompt}
+						prompt={prompt}
+					/>
+				);
 			default:
 				return <div>Chat / Converse</div>;
 		}
 	};
 
+	useEffect(() => {
+		if (query?.step) {
+			setCompletedSteps((prev) => [...prev, parseInt(query?.step)]);
+		} else {
+			setCompletedSteps([1]);
+		}
+	}, [query?.step]);
+
 	return (
-		<div className="flex justify-center">
-			<div className="flex flex-col items-center w-[51.875rem] relative">
-				<div className="align-left w-full">
-					<h1
-						className="text-5xl font-semibold align-left"
-						style={gradientText}
-					>{`${welcomeTypography?.headingLine1} ${value.userName}`}</h1>
-					<h1 className="text-5xl font-semibold text-purple-20">
-						{welcomeTypography?.headingLine2}
-					</h1>
-					<ul className="relative mt-6 mb-3 inline-flex gap-2">
-						{[1, 2, 3]?.map((items, indx) => {
-							return (
-								<>
-									<li
-										key={indx}
-										className={[
-											`h-2 w-14 rounded-3xl `,
-											showProgress(items),
-										].join(' ')}
-										onClick={() => {}}
-									></li>
-								</>
-							);
-						})}
-					</ul>
-				</div>
-				<div className="mt-[4.5rem] overflow-scroll w-full">
-					{renderComponent()}
-				</div>
-				{completedSteps.includes(2) ? (
-					<div className="fixed bottom-1 flex flex-col items-center justify-center !w-[51.875rem]">
-						<div className="rounded-[100px] flex justify-between bg-purple-4 px-3 py-2 mb-2 w-full">
-							<InputText
-								placeholder="Enter a prompt here"
-								inputMainClass="border-0 outline-none rounded-none bg-transparent !w-[46rem]"
-							/>
-							<div className="flex gap-2 items-center pr-3">
-								<p>🌁</p>
-								<p>🎤</p>
+		<>
+			{completedSteps.includes(4) ? (
+				<div className="grid grid-cols-12 gap-4">
+					<div className="border rounded-2xl py-4 px-4 col-span-8 shadow-1xl relative">
+						{prompt}
+						<div className="flex flex-col items-center justify-center">
+							<div className="rounded-[100px] flex justify-between bg-purple-4 px-3 py-2 mb-2">
+								<InputText
+									placeholder="Enter a prompt here"
+									inputMainClass="border-0 outline-none rounded-none bg-transparent w-[44.2rem]"
+									value={prompt}
+									setValue={(e) => setPrompt(e)}
+								/>
+								<div className="flex gap-2 items-center pr-3">
+									<i className="bi-send text-primary100 text-lg rotate-45"></i>
+								</div>
 							</div>
+							<p className="text-xs text-primary40 font-normal">
+								Irame.ai may display inaccurate info, including about
+								people, so double-check its responses.
+							</p>
 						</div>
-						<p className="text-xs text-primary40 font-normal">
-							Irame.ai may display inaccurate info, including about
-							people, so double-check its responses.
-						</p>
 					</div>
-				) : null}
-			</div>
-		</div>
+					<div className="border rounded-3xl py-4 px-4 col-span-4 shadow-1xl h-fit">
+						<h3 className="text-primary80 font-semibold text-xl">
+							Ira's Workspace
+						</h3>
+						<div className="border rounded-2xl p-4 mt-6"></div>
+					</div>
+				</div>
+			) : (
+				<div className="flex justify-center">
+					<div className="flex flex-col items-center w-[51.875rem] relative">
+						<div className="align-left w-full">
+							<h1
+								className="text-5xl leading-[60px] font-semibold align-left"
+								style={gradientText}
+							>{`${welcomeTypography?.headingLine1} ${value.userName}`}</h1>
+							<h2 className="text-5xl leading-[60px] font-semibold text-primary20">
+								{completedSteps.includes(2) ||
+								completedSteps.includes(3)
+									? welcomeTypography?.headingLine2_2
+									: welcomeTypography?.headingLine2}
+							</h2>
+							<ul className="relative mt-6 mb-3 inline-flex gap-2">
+								{[1, 2, 3]?.map((items, indx) => {
+									return (
+										<>
+											<li
+												key={indx}
+												className={[
+													`h-2 w-14 rounded-3xl `,
+													showProgress(items),
+												].join(' ')}
+												onClick={() => {}}
+											></li>
+										</>
+									);
+								})}
+							</ul>
+						</div>
+						<div className="mt-[4.5rem] overflow-scroll w-full">
+							{renderComponent()}
+						</div>
+						{completedSteps.includes(2) || completedSteps.includes(3) ? (
+							<div className="fixed bottom-1 flex flex-col items-center justify-center !w-[51.875rem]">
+								<div className="rounded-[100px] flex justify-between bg-purple-4 px-3 py-2 mb-2 w-full">
+									<InputText
+										placeholder="Enter a prompt here"
+										inputMainClass="border-0 outline-none rounded-none bg-transparent !w-[46rem]"
+										value={prompt}
+										setValue={(e) => setPrompt(e)}
+									/>
+									<div className="flex gap-2 items-center pr-3">
+										<i className="bi-send text-primary100 text-lg rotate-45"></i>
+									</div>
+								</div>
+								<p className="text-xs text-primary40 font-normal">
+									Irame.ai may display inaccurate info, including
+									about people, so double-check its responses.
+								</p>
+							</div>
+						) : null}
+					</div>
+				</div>
+			)}
+		</>
 	);
 };
 
