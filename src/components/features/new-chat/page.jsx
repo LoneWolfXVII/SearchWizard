@@ -254,7 +254,7 @@ const NewChat = () => {
 								<ResponseCard answerResp={answerResp} />
 							)}
 						</div>
-						<div className="fixed bottom-7 flex flex-col items-center justify-center z-20 bg-white pt-2">
+						<div className="absolute bottom-5 flex flex-col items-center justify-center z-20 bg-white pt-2">
 							<div className="rounded-[100px] flex justify-between bg-purple-4 px-3 py-2 mb-2 ">
 								<InputText
 									placeholder="Enter a prompt here"

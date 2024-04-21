@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import * as d3 from 'd3';
@@ -30,10 +31,9 @@ const GraphComponent = ({ data }) => {
 		if (chart.type && chart.xAxis && chart.yAxis && data?.response_csv_curl) {
 			d3.csv(data.response_csv_curl).then(makeChart);
 		}
-	}, [chart, data]);
+	}, [chart, data, activeTab]);
 
 	function makeChart(loadedData) {
-		console.log('Loaded data:', loadedData);
 		setLoadedData(loadedData);
 
 		Object.keys(loadedData[0]).forEach((key) => {
@@ -44,34 +44,25 @@ const GraphComponent = ({ data }) => {
 			});
 		});
 
-		// Empty lists for our data and labels
 		const dataPoints = [];
 		const labels = [];
 
-		// Use a for-loop to load the data from the CSV file into our lists
 		for (let i = 0; i < loadedData.length; i++) {
-			// Get the x-axis and y-axis values for each entry
 			const xAxisValue = loadedData[i][chart.xAxis];
 			const yAxisValue = Number(loadedData[i][chart.yAxis]);
 
-			// Add the x-axis value to our labels
 			labels.push(xAxisValue);
-
-			// Add the y-axis value to our data points
 			dataPoints.push(yAxisValue);
 		}
-
-		console.log('Labels:', labels);
-		console.log('Data points:', dataPoints);
 
 		const options = {
 			type: chart.type,
 			data: {
-				labels: labels, // The labels we loaded
+				labels: labels,
 				datasets: [
 					{
-						label: chart.yAxis, // Label for the y-axis data
-						data: dataPoints, // The data points we loaded
+						label: chart.yAxis,
+						data: dataPoints,
 						fill: false,
 						borderColor: 'rgba(106, 18, 205, 0.04)',
 					},
@@ -79,19 +70,23 @@ const GraphComponent = ({ data }) => {
 			},
 		};
 
-		if (!initialized) {
-			const ctx = document.getElementById('canvas');
-			chartRef.current = new Chart(ctx, options);
-			setInitialized(true);
-		} else {
-			chartRef.current.data = options.data;
-			chartRef.current.update();
-		}
+		const ctx = document.getElementById('canvas');
+		chartRef.current = new Chart(ctx, options);
+		setInitialized(true);
+		// if (!initialized) {
+		// 	const ctx = document.getElementById('canvas');
+		// 	chartRef.current = new Chart(ctx, options);
+		// 	setInitialized(true);
+		// } else {
+		// 	chartRef.current.data.labels = labels;
+		// 	chartRef.current.data.datasets[0].data = dataPoints;
+		// 	chartRef.current.update();
+		// }
 	}
 
 	return (
 		<div className="mb-4">
-			{/* <ul className="ghost-tabs relative col-span-12 mb-8 inline-flex w-full border-b border-black-10">
+			<ul className="ghost-tabs relative col-span-12 mb-2 inline-flex w-full border-b border-black-10">
 				{['Graphical View', 'Tabular View'].map((items, indx) => (
 					<li
 						key={indx}
@@ -104,8 +99,13 @@ const GraphComponent = ({ data }) => {
 						{items}
 					</li>
 				))}
-			</ul> */}
-			<canvas id="canvas" width="380" height="250"></canvas>
+			</ul>
+			{activeTab === 'Graphical View' && (
+				<canvas id="canvas" width="380" height="250"></canvas>
+			)}
+			{activeTab === 'Tabular View' && (
+				<TableComponent data={loadedData} columns={columns} />
+			)}
 		</div>
 	);
 };
