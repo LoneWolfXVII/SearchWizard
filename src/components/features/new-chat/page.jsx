@@ -13,9 +13,11 @@ import { Button } from '@/components/ui/button';
 import Workspace from './Workspace';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import ResponseCard from './ResponseCard';
 
 const NewChat = () => {
 	const [value, updateValue] = useLocalStorage('userDetails');
+	const [answerConfig, setAnswerConfig] = useLocalStorage('answerRespConfig');
 	const { query, params } = useRouter();
 	const token = useGetCookie('token');
 
@@ -25,7 +27,9 @@ const NewChat = () => {
 	const [completedSteps, setCompletedSteps] = useState([1]);
 	const [prompt, setPrompt] = useState('');
 	const [showWorkspace, setShowWorkspace] = useState(true);
-	const [workSpaceTab, setWorkSpaceTab] = useState('Planner');
+	const [workSpaceTab, setWorkSpaceTab] = useState('');
+	const [doingScience, setDoingScience] = useState(true);
+	const [answerResp, setAnswerResp] = useState({});
 
 	const gradientText = {
 		backgroundImage:
@@ -101,6 +105,8 @@ const NewChat = () => {
 						handleNextStep={handleNextStep}
 						setPrompt={setPrompt}
 						prompt={prompt}
+						setAnswerResp={setAnswerResp}
+						answerResp={answerResp}
 					/>
 				);
 			default:
@@ -117,6 +123,15 @@ const NewChat = () => {
 			...value,
 			token: token,
 		});
+		setAnswerResp({
+			...answerConfig,
+		});
+		for (const key in answerConfig) {
+			if (answerConfig[key].workspace === 'secondary') {
+				setWorkSpaceTab(key);
+				break;
+			}
+		}
 	}, []);
 
 	useEffect(() => {
@@ -156,14 +171,18 @@ const NewChat = () => {
 									{showWorkspace ? 'Hide' : 'Show'} Workspace
 								</Button>
 							</div>
-							<div className="flex flex-col space-y-3 mt-4 ml-12">
-								<Skeleton className="h-[125px] w-[250px] rounded-xl bg-purple-8" />
-								<div className="space-y-2">
-									<Skeleton className="h-5 w-[80%] bg-purple-8" />
-									<Skeleton className="h-5 w-[50%] bg-purple-8" />
-									<Skeleton className="h-5 w-[65%] bg-purple-8" />
+							{doingScience ? (
+								<div className="flex flex-col space-y-3 mt-4 ml-12">
+									<div className="space-y-2">
+										<Skeleton className="h-5 w-[80%] bg-purple-8" />
+										<Skeleton className="h-5 w-[50%] bg-purple-8" />
+										<Skeleton className="h-5 w-[65%] bg-purple-8" />
+									</div>
+									<Skeleton className="h-[125px] w-[250px] rounded-xl bg-purple-8" />
 								</div>
-							</div>
+							) : (
+								<ResponseCard answerResp={answerResp} />
+							)}
 						</div>
 						<div className="fixed bottom-6 flex flex-col items-center justify-center">
 							<div className="rounded-[100px] flex justify-between bg-purple-4 px-3 py-2 mb-2 z-10">
@@ -201,6 +220,7 @@ const NewChat = () => {
 							<Workspace
 								handleTabClick={handleTabClick}
 								workSpaceTab={workSpaceTab}
+								answerResp={answerResp}
 							/>
 						</div>
 					) : null}
@@ -240,11 +260,11 @@ const NewChat = () => {
 							{renderComponent()}
 						</div>
 						{completedSteps.includes(2) || completedSteps.includes(3) ? (
-							<div className="fixed bottom-1 flex flex-col items-center justify-center !w-[51.875rem]">
+							<div className="fixed bottom-1 flex flex-col items-center justify-center !w-[51.875rem] max-h-[30rem] overflow-x-auto z-20">
 								<div className="rounded-[100px] flex justify-between bg-purple-4 px-3 py-2 mb-2 w-full">
 									<InputText
 										placeholder="Enter a prompt here"
-										inputMainClass="border-0 outline-none rounded-none bg-transparent !w-[46rem]"
+										inputMainClass="border-0 outline-none rounded-none bg-transparent !w-[46rem] !h-auto"
 										value={prompt}
 										setValue={(e) => setPrompt(e)}
 									/>

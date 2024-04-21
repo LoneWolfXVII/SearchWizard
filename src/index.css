@@ -201,7 +201,7 @@
 		@apply text-sm font-medium leading-[22px] text-primary40 py-2 px-0 mr-8 cursor-pointer;
 	}
 	.active-tab {
-		@apply text-sm leading-[22px] text-primary80 font-semibold py-2 px-0 mr-8 cursor-pointer;
+		@apply text-sm leading-[22px] text-primary80 font-semibold py-2 px-0 mr-8 cursor-pointer border-b-[2.5px] border-purple-100;
 	}
 	s .ghost-tabs li:after {
 		content: '';

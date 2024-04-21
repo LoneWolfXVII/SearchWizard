@@ -5,7 +5,7 @@ const CoderComponent = () => {
 	return (
 		<div>
 			<Editor
-				height="65vh"
+				height="68vh"
 				theme="vs-dark"
 				defaultLanguage="javascript"
 				defaultValue="console.log('Hello, World!');
@@ -15,7 +15,7 @@ if(a < b) {
 	return b;
 }
 				"
-				className="rounded-2xl"
+				className="[&>.monaco-editor]:rounded-2xl bg-primary40"
 			/>
 		</div>
 	);

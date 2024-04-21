@@ -28,3 +28,12 @@ export const createQuerySession = async (dataSourceId, prompt, token) => {
 	);
 	return response.data;
 };
+
+export const getAnswerConfig = async (token) => {
+	const response = await axios.get(`${API_URL}/config/answer`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	return response.data;
+};

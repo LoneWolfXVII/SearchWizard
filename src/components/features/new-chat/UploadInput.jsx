@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { welcomeTypography } from './config';
 import { Progress } from '@/components/ui/progress';
 import { useNavigate } from 'react-router-dom';
+import csvIcon from '@/assets/icons/csv.svg';
+import pdfIcon from '@/assets/icons/pdf.svg';
 
 const UploadInput = ({ onFileUpload, files, setFiles, progress, setOpen }) => {
 	const navigate = useNavigate();
@@ -16,15 +18,15 @@ const UploadInput = ({ onFileUpload, files, setFiles, progress, setOpen }) => {
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
 		accept: 'application/pdf, text/csv',
-		onDrop: (acceptedFiles) => {
-			setFiles((prevFiles) => {
-				if (!Array.isArray(prevFiles)) {
-					prevFiles = [];
-				}
-				return [...prevFiles, ...acceptedFiles];
-			});
-			onFileUpload(acceptedFiles); // Pass uploaded files to parent component if needed
-		},
+		// onDrop: (acceptedFiles) => {
+		// 	setFiles((prevFiles) => {
+		// 		if (!Array.isArray(prevFiles)) {
+		// 			prevFiles = [];
+		// 		}
+		// 		return [...prevFiles, ...acceptedFiles];
+		// 	});
+		// 	onFileUpload(acceptedFiles); // Pass uploaded files to parent component if needed
+		// },
 	});
 	const handleRemoveFile = (e, file, idx) => {
 		e.preventDefault();
@@ -62,10 +64,10 @@ const UploadInput = ({ onFileUpload, files, setFiles, progress, setOpen }) => {
 			className={`border border-dashed border-purple-24 bg-purple-2 py-6 rounded-2xl flex justify-center ${
 				isDragActive ? 'border-primary80' : ''
 			}`}
-			{...getRootProps()}
+			// {...getRootProps()}
 		>
 			<div className="flex flex-col">
-				<input {...getInputProps()} />
+				{/* <input {...getInputProps()} /> */}
 				{isDragActive ? (
 					<p className="text-primary80 flex flex-col gap-1 text-center w-[29.5rem] h-[22.5rem]">
 						Drop the files here...
@@ -76,15 +78,15 @@ const UploadInput = ({ onFileUpload, files, setFiles, progress, setOpen }) => {
 							<h2 className="text-4xl font-semibold text-primary80">
 								{welcomeTypography?.subHeading1}
 							</h2>
-							<p className="text-sm font-medium text-primary80">
+							{/* <p className="text-sm font-medium text-primary80">
 								{welcomeTypography.subHeading2}
-							</p>
-							<div className="relative w-full py-6">
+							</p> */}
+							{/* <div className="relative w-full py-6">
 								<p className="or-tagline px-[5px] text-xs text-purple-20">
 									OR
 								</p>
-							</div>
-							<div className="flex gap-2 justify-center w-full z-10">
+							</div> */}
+							<div className="flex gap-2 justify-center w-full z-10 mt-10">
 								<Button
 									variant="secondary"
 									className="w-full bg-purple-8 hover:bg-purple-16 text-purple-100 font-medium"
@@ -116,6 +118,20 @@ const UploadInput = ({ onFileUpload, files, setFiles, progress, setOpen }) => {
 									)}
 								</p>
 							</div>
+							{showFormats ? (
+								<div className="flex justify-center space-x-2 mt-2 w-full transition ease-in">
+									<img
+										src={pdfIcon}
+										alt="pdf"
+										className="w-6 h-6"
+									/>
+									<img
+										src={csvIcon}
+										alt="csv"
+										className="w-6 h-6"
+									/>
+								</div>
+							) : null}
 						</div>
 					</>
 				)}

@@ -1,15 +1,28 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
-import { createQuerySession, fetchSuggestions } from './service/new-chat.service';
+import {
+	createQuerySession,
+	fetchSuggestions,
+	getAnswerConfig,
+} from './service/new-chat.service';
 import { useRouter } from '@/hooks/useRouter';
 import useGetCookie from '@/hooks/useGetCookie';
 import { tokenCookie } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
-const SelectPrompt = ({ handleNextStep, prompt, setPrompt }) => {
+const SelectPrompt = ({
+	handleNextStep,
+	prompt,
+	setPrompt,
+	answerResp,
+	setAnswerResp,
+}) => {
 	const [activeTab, setActiveTab] = useState('');
 	const [data, setData] = useState([]);
 	const { query, navigate } = useRouter();
 	const token = useGetCookie('token');
+	const [answerConfig, setAnswerConfig] = useLocalStorage('answerRespConfig');
 
 	const handleActiveTab = (selectedTab) => {
 		setActiveTab(selectedTab);
@@ -38,11 +51,18 @@ const SelectPrompt = ({ handleNextStep, prompt, setPrompt }) => {
 		}
 	}, [query.dataSourceId]);
 
+	useEffect(() => {
+		getAnswerConfig(token || tokenCookie).then((res) => {
+			setAnswerResp(res);
+			setAnswerConfig(res);
+		});
+	}, []);
+
 	return (
 		<div className="">
 			<div className="mt-8">
 				<div className="w-full overflow-x-auto flex gap-4">
-					<ul className="flex gap-2 items-center">
+					<ul className="flex gap-2 items-center w-full">
 						{data?.suggestion?.length > 0 ? (
 							data?.suggestion?.map((suggestion, index) => (
 								<li
@@ -51,10 +71,12 @@ const SelectPrompt = ({ handleNextStep, prompt, setPrompt }) => {
 										suggestion?.type === activeTab
 											? ' text-purple-100 border-purple-40 tabActiveBg'
 											: 'text-black/60 border-black/10'
-									} text-sm font-medium border rounded-3xl px-3 py-2 cursor-pointer`}
+									} text-sm font-medium border rounded-3xl px-3 py-2 cursor-pointer min-w-fit max-w-[19.25rem]`}
 									onClick={() => handleActiveTab(suggestion?.type)}
 								>
-									<div>{suggestion?.type}</div>
+									<div className="min-w-fit">
+										{suggestion?.type}
+									</div>
 								</li>
 							))
 						) : (

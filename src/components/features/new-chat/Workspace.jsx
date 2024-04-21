@@ -1,19 +1,21 @@
 import { useMemo } from 'react';
 import PlannerComponent from './PlannerComponent';
-import GraphComponent from './GraphComponent';
 import SourceComponent from './SourceComponent';
 import CoderComponent from './CoderComponent';
+import { WorkspaceEnum, workSpaceMap } from './types/new-chat.enum';
+import GraphComponent from '@/components/elements/GraphComponent';
 
-const Workspace = ({ handleTabClick, workSpaceTab }) => {
+const Workspace = ({ handleTabClick, workSpaceTab, answerResp }) => {
 	const renderedComponent = useMemo(() => {
 		switch (workSpaceTab) {
-			case 'Planner':
+			case WorkspaceEnum.Planner:
 				return <PlannerComponent />;
-			case 'Coder':
+			case WorkspaceEnum.Coder:
 				return <CoderComponent />;
-			case 'Graph':
+			case WorkspaceEnum.Graph:
 				return <GraphComponent />;
-			case 'Source':
+			case WorkspaceEnum.Source:
+			case WorkspaceEnum.any_tool:
 				return <SourceComponent />;
 			default:
 				return null;
@@ -22,8 +24,9 @@ const Workspace = ({ handleTabClick, workSpaceTab }) => {
 	return (
 		<div className="border rounded-2xl p-4 mt-6">
 			<ul className="sixty-tabs relative col-span-12 mb-8 inline-flex w-full border-b border-black-10">
-				{['Planner', 'Coder', 'Graph', 'Source']?.map((items, indx) => {
-					return (
+				{Object.keys(answerResp)
+					?.filter((key) => answerResp[key]?.workspace === 'secondary')
+					.map((items, indx) => (
 						<li
 							key={indx}
 							className={[
@@ -34,10 +37,9 @@ const Workspace = ({ handleTabClick, workSpaceTab }) => {
 							].join(' ')}
 							onClick={() => handleTabClick(items)}
 						>
-							{items}
+							{workSpaceMap[items]}
 						</li>
-					);
-				})}
+					))}
 			</ul>
 			{renderedComponent}
 		</div>

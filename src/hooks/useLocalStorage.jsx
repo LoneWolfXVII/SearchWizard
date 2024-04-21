@@ -7,6 +7,7 @@ const initialValue = {
 		userId: 'zi3wfrj',
 		token: '',
 	},
+	answerRespConfig: {},
 };
 
 const useLocalStorage = (key) => {
