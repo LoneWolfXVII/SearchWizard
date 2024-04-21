@@ -5,7 +5,11 @@ import { formatFileSize, getToken, tokenCookie } from '@/lib/utils';
 import { useEffect, useRef, useState } from 'react';
 import excel from '@/assets/icons/ms_excel.svg';
 import { Button } from '@/components/ui/button';
-import { getDataSources, uploadFile } from './service/configuration.service';
+import {
+	createNewDtaSource,
+	getDataSources,
+	uploadFile,
+} from './service/configuration.service';
 import { toast } from 'sonner';
 import Cookies from 'js-cookie';
 import { v4 as uuid } from 'uuid';
@@ -17,6 +21,7 @@ const Configuration = () => {
 	const [formErrors, setFormErrors] = useState({});
 	const [dataSources, setDataSources] = useState([]);
 	const [showNoUpload, setShowNoUpload] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const inputRef = useRef();
 
@@ -49,30 +54,49 @@ const Configuration = () => {
 
 	const uploadFileHelper = async () => {
 		try {
-			const response = await uploadFile(files, setProgress);
-			if (response) {
+			const { data } = await uploadFile(files, setProgress);
+			if (data) {
 				toast.success('File uploaded successfully');
 				//TODO: save s3 urls correspondng to the files
-				setDatasourceName('');
+
+				setFiles(
+					files.map((file) => ({
+						...file,
+						name: file.name,
+						url: data[file.name] || '', // Default to empty string if not found
+					})),
+				);
 			}
 		} catch (error) {
 			setFiles([]);
 			toast.error('Error uploading file');
 		} finally {
-			setProgress(0);
+			// setProgress(0);
 		}
 	};
 	const createDataSource = async () => {
-		const token = Cookies.get('token');
+		setIsLoading(true);
+		const token = Cookies.get('token') || tokenCookie;
+
 		const data = {
 			name: datasourceName,
-			filepath: {
-				file_name: '',
-				file_id: uuid(),
-				file_url: '',
-			},
+			filepath:
+				Array.isArray(files) &&
+				files.map((file) => ({
+					file_name: file.name,
+					file_id: uuid(),
+					file_url: file.url, // Assuming fileUrls is an object containing file URLs
+				})),
 		};
-		const response = await createDataSource(data, token);
+
+		try {
+			const response = await createNewDtaSource(data, token);
+			toast.success('Data source created successfully');
+		} catch (error) {
+			toast.error('Error creating data source');
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	useEffect(() => {
@@ -83,7 +107,7 @@ const Configuration = () => {
 		};
 
 		fetchDataSources();
-	}, []);
+	}, [files]);
 
 	useEffect(() => {
 		if (files.length && !showNoUpload) {
@@ -180,19 +204,29 @@ const Configuration = () => {
 									</Button>
 								</div>
 							</div>
-							{!showNoUpload && progress <= 99.99 ? (
-								<div className="mt-4">
-									<Progress value={progress} className="h-2" />
+							{!showNoUpload && progress <= 99 ? (
+								<div className="mt-4 h-2 w-full bg-gray-200 rounded-lg overflow-hidden">
+									<div
+										className="h-full bg-purple-100"
+										style={{ width: `${progress}%` }}
+									></div>
 								</div>
 							) : null}
 						</div>
 					))}
-				{Array.isArray(files) && files?.length && progress === 100 ? (
+				{!showNoUpload &&
+				Array.isArray(files) &&
+				files?.length &&
+				progress === 100 ? (
 					<div className="mt-4">
 						<Button
 							className="w-full hover:bg-purple-100 hover:text-white hover:opacity-80"
 							onClick={() => createDataSource()}
+							disabled={isLoading}
 						>
+							{isLoading ? (
+								<i className="bi-arrow-repeat animate-spin mr-2"></i>
+							) : null}
 							Save changes
 						</Button>
 					</div>

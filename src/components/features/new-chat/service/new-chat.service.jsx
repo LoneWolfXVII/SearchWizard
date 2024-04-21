@@ -37,3 +37,22 @@ export const getAnswerConfig = async (token) => {
 	});
 	return response.data;
 };
+
+export const getQueryAnswers = async (queryId, token) => {
+	const response = await axios.get(`${API_URL}/query/${queryId}`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	return response.data;
+};
+
+export const getUserDetails = async (token) => {
+	const response = await axios.get(`${API_URL}/oauth/google/user`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
+	console.log(response.data, 'onder===');
+	return response.data;
+};

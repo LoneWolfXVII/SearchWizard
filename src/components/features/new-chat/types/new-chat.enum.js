@@ -2,7 +2,7 @@ export const WorkspaceEnum = {
 	Planner: 'planner',
 	Coder: 'coder',
 	Graph: 'graph',
-	Source: 'Source',
+	Source: 'source',
 };
 
 export const workSpaceMap = {

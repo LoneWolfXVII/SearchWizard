@@ -33,4 +33,4 @@ export const getToken = () => {
 //TODO: make a generic function to get data from cookies
 
 export const tokenCookie =
-	'gAAAAABmIE2Xhz0o-GG05oQoGcCgCgE05uLaOPWHFCc-E9zicinHJ7Ji0VjLHIm6Yu5CqVl41n49VgjXWvBKlB1E476GmxX_-SlZnFxg08A1z72qHQirlvqf8zGnve-UcjDnLqPtrIrjuZx1hKwOg3cjRG6xEvGchw==';
+	'gAAAAABmJO4SybZBhnXuHFlQLJqahMs2lXfvHbRoT-B-DOSMa3xpR2O-C73fkbkUV2g_aOI6o1yIXIeapqXxH7HaABSK5HLaGIRrZEkP8IECtbe6qjDqiYlT7mpyzRq3IdN9GCJRcu8y0IwkRzzC7K9JyfE5QZ-RJw==';

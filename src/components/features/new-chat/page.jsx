@@ -7,13 +7,15 @@ import InputText from '@/components/elements/InputText';
 import AnalysisData from './AnalysisData';
 import { useRouter } from '@/hooks/useRouter';
 import useGetCookie from '@/hooks/useGetCookie';
-import { cn } from '@/lib/utils';
+import { cn, tokenCookie } from '@/lib/utils';
 import ira from '@/assets/icons/ira_icon.svg';
 import { Button } from '@/components/ui/button';
 import Workspace from './Workspace';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import ResponseCard from './ResponseCard';
+import { getQueryAnswers, getUserDetails } from './service/new-chat.service';
+import { get } from 'cross-domain-cookie';
 
 const NewChat = () => {
 	const [value, updateValue] = useLocalStorage('userDetails');
@@ -117,17 +119,40 @@ const NewChat = () => {
 	const handleTabClick = (tab) => {
 		setWorkSpaceTab(tab);
 	};
+	const handleQueryAnswer = () => {};
 
 	useEffect(() => {
-		updateValue({
-			...value,
-			token: token,
-		});
+		const fetchData = async () => {
+			try {
+				if (value.userName && value.email) return;
+				const userData = await getUserDetails(token || tokenCookie);
+				console.log('userData', {
+					token: token,
+					userName: userData?.name,
+					email: userData?.email,
+					avatar: userData?.avatar,
+					userId: userData?._id,
+				});
+
+				// Update local state with user details
+				updateValue({
+					token: token,
+					userName: userData?.name,
+					email: userData?.email,
+					avatar: userData?.avatar,
+				});
+			} catch (error) {
+				console.error('Error fetching user details:', error);
+			}
+		};
+
+		fetchData();
+
 		setAnswerResp({
 			...answerConfig,
 		});
 		for (const key in answerConfig) {
-			if (answerConfig[key].workspace === 'secondary') {
+			if (answerConfig[key].tool_space === 'secondary') {
 				setWorkSpaceTab(key);
 				break;
 			}
@@ -135,12 +160,51 @@ const NewChat = () => {
 	}, []);
 
 	useEffect(() => {
+		// const fetchNWEcookie = async () => {
+		// 	try {
+		// 		const result = await get({
+		// 			iframeUrl: 'http://localhost:5173/',
+		// 			dataKey: 'token',
+		// 		});
+		// 		console.log(result, 'fetch new cookie=');
+		// 	} catch (error) {
+		// 		console.error('Error fetching cookie:', error);
+		// 	}
+		// };
+
+		// fetchNWEcookie();
+		let intervalId;
 		if (query?.step) {
 			setCompletedSteps((prev) => [...prev, parseInt(query?.step)]);
+
+			if (query?.step === '4') {
+				setPrompt('');
+				let timer = 10000;
+				intervalId = setInterval(() => {
+					getQueryAnswers(query?.queryId, token || tokenCookie).then(
+						(res) => {
+							setAnswerResp(res);
+
+							if (res?.answer) {
+								setAnswerConfig(res?.answer);
+							}
+
+							if (res.status === 'in_progress') {
+								timer = 5000;
+								setDoingScience(false);
+							}
+						},
+					);
+				}, timer);
+			}
 		} else {
 			setCompletedSteps([1]);
 		}
-	}, [query?.step]);
+
+		return () => {
+			clearInterval(intervalId);
+		};
+	}, [query?.step, token, tokenCookie]);
 
 	return (
 		<>
@@ -152,16 +216,22 @@ const NewChat = () => {
 							showWorkspace ? 'col-span-8' : 'col-span-12 mx-[8rem]',
 						)}
 					>
-						<div className={cn('')}>
+						<div className="max-h-[45rem] overflow-y-auto">
 							<div className="flex items-center gap-2">
-								<Avatar className="size-10">
-									<AvatarImage src="https://github.com/shadcn.png" />
+								<Avatar className="size-9">
+									<AvatarImage src={value?.avatar} />
 									<AvatarFallback>CN</AvatarFallback>
 								</Avatar>
-								{prompt}
+								{answerResp?.query ? (
+									<p className="ms-1">{answerResp?.query}</p>
+								) : (
+									<>
+										<Skeleton className="h-6 w-[90%] bg-purple-8 ms-1" />
+									</>
+								)}
 							</div>
 
-							<div className="mt-6 flex items-center space-x-2">
+							<div className="mt-10 flex items-center space-x-2">
 								<img src={ira} alt="ira" className="size-10" />
 								<Button
 									variant="outline"
@@ -184,8 +254,8 @@ const NewChat = () => {
 								<ResponseCard answerResp={answerResp} />
 							)}
 						</div>
-						<div className="fixed bottom-6 flex flex-col items-center justify-center">
-							<div className="rounded-[100px] flex justify-between bg-purple-4 px-3 py-2 mb-2 z-10">
+						<div className="fixed bottom-6 flex flex-col items-center justify-center z-20 bg-white pt-2">
+							<div className="rounded-[100px] flex justify-between bg-purple-4 px-3 py-2 mb-2 ">
 								<InputText
 									placeholder="Enter a prompt here"
 									inputMainClass={cn(
@@ -194,6 +264,7 @@ const NewChat = () => {
 									)}
 									value={prompt}
 									setValue={(e) => setPrompt(e)}
+									onKeyPress={() => handleQueryAnswer()}
 								/>
 								<div className="flex gap-2 items-center pr-3">
 									<i className="bi-send text-primary100 text-lg rotate-45"></i>

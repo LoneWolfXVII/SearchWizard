@@ -52,10 +52,10 @@ const SelectPrompt = ({
 	}, [query.dataSourceId]);
 
 	useEffect(() => {
-		getAnswerConfig(token || tokenCookie).then((res) => {
-			setAnswerResp(res);
-			setAnswerConfig(res);
-		});
+		// getAnswerConfig(token || tokenCookie).then((res) => {
+		// 	setAnswerResp(res);
+		// 	setAnswerConfig(res);
+		// });
 	}, []);
 
 	return (
@@ -101,7 +101,7 @@ const SelectPrompt = ({
 									)
 									.questions.map((question, index) => (
 										<div
-											className="bg-purple-4 rounded-xl min-w-[11.25rem] max-w-[19.25rem] max-h-[21.75rem] p-4 hover:bg-purple-8 mb-3"
+											className="bg-purple-4 rounded-xl min-w-[15rem] max-w-[19.25rem] max-h-[21.75rem] p-4 hover:bg-purple-8 mb-3"
 											key={`${index}_question`}
 										>
 											<div
