@@ -58,7 +58,14 @@ const Workspace = ({ handleTabClick, workSpaceTab, answerResp }) => {
 			{answerResp?.answer ? (
 				renderedComponent
 			) : (
-				<Skeleton className="h-96 w-full bg-purple-8 rounded-2xl" />
+				// <Skeleton className="h-96 w-full bg-purple-8 rounded-2xl" />
+				<div className="flex flex-col space-y-3">
+					<div className="space-y-2">
+						<Skeleton className="h-5 w-[50%] bg-purple-8" />
+						<Skeleton className="h-5 w-[90%] bg-purple-8" />
+					</div>
+					<Skeleton className="h-[125px] w-[250px] rounded-xl bg-purple-8" />
+				</div>
 			)}
 		</div>
 	);

@@ -101,7 +101,7 @@ const SelectPrompt = ({
 									)
 									.questions.map((question, index) => (
 										<div
-											className="bg-purple-4 rounded-xl min-w-[15rem] max-w-[19.25rem] max-h-[21.75rem] p-4 hover:bg-purple-8 mb-3"
+											className="relative bg-purple-4 rounded-xl min-w-[15rem] max-w-[19.25rem] max-h-[21.75rem] p-4 hover:bg-purple-8 mb-3"
 											key={`${index}_question`}
 										>
 											<div
@@ -117,7 +117,7 @@ const SelectPrompt = ({
 												</ul>
 											</div>
 											<div
-												className="text-right mt-6 cursor-pointer"
+												className="absolute bottom-4 right-4 text-right mt-6 cursor-pointer"
 												onClick={() => setPrompt(question)}
 											>
 												<i className="bi-pencil-square text-primary100 bg-white py-1.5 px-2 rounded-full "></i>

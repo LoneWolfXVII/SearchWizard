@@ -14,13 +14,17 @@ import Workspace from './Workspace';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import ResponseCard from './ResponseCard';
-import { getQueryAnswers, getUserDetails } from './service/new-chat.service';
+import {
+	createQuerySession,
+	getQueryAnswers,
+	getUserDetails,
+} from './service/new-chat.service';
 import { get } from 'cross-domain-cookie';
 
 const NewChat = () => {
 	const [value, updateValue] = useLocalStorage('userDetails');
 	const [answerConfig, setAnswerConfig] = useLocalStorage('answerRespConfig');
-	const { query, params } = useRouter();
+	const { query, params, navigate } = useRouter();
 	const token = useGetCookie('token');
 
 	const [files, setFiles] = useState([]);
@@ -119,7 +123,16 @@ const NewChat = () => {
 	const handleTabClick = (tab) => {
 		setWorkSpaceTab(tab);
 	};
-	const handleQueryAnswer = () => {};
+	const handleQueryAnswer = () => {
+		handleNextStep(4);
+		createQuerySession(query.dataSourceId, prompt, token || tokenCookie).then(
+			(res) => {
+				navigate(
+					`/app/new-chat/?step=4&dataSourceId=${query.dataSourceId}&sessionId=${res.session_id}&queryId=${res.query_id}`,
+				);
+			},
+		);
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -160,19 +173,6 @@ const NewChat = () => {
 	}, []);
 
 	useEffect(() => {
-		// const fetchNWEcookie = async () => {
-		// 	try {
-		// 		const result = await get({
-		// 			iframeUrl: 'http://localhost:5173/',
-		// 			dataKey: 'token',
-		// 		});
-		// 		console.log(result, 'fetch new cookie=');
-		// 	} catch (error) {
-		// 		console.error('Error fetching cookie:', error);
-		// 	}
-		// };
-
-		// fetchNWEcookie();
 		let intervalId;
 		if (query?.step) {
 			setCompletedSteps((prev) => [...prev, parseInt(query?.step)]);
@@ -254,7 +254,7 @@ const NewChat = () => {
 								<ResponseCard answerResp={answerResp} />
 							)}
 						</div>
-						<div className="fixed bottom-6 flex flex-col items-center justify-center z-20 bg-white pt-2">
+						<div className="fixed bottom-7 flex flex-col items-center justify-center z-20 bg-white pt-2">
 							<div className="rounded-[100px] flex justify-between bg-purple-4 px-3 py-2 mb-2 ">
 								<InputText
 									placeholder="Enter a prompt here"
@@ -264,9 +264,11 @@ const NewChat = () => {
 									)}
 									value={prompt}
 									setValue={(e) => setPrompt(e)}
-									onKeyPress={() => handleQueryAnswer()}
+									onkeyDown={(e) => {
+										if (e.key === 'Enter') handleQueryAnswer();
+									}}
 								/>
-								<div className="flex gap-2 items-center pr-3">
+								<div className="flex gap-2 items-center pr-3 cursor-pointer">
 									<i className="bi-send text-primary100 text-lg rotate-45"></i>
 								</div>
 							</div>
@@ -338,8 +340,15 @@ const NewChat = () => {
 										inputMainClass="border-0 outline-none rounded-none bg-transparent !w-[46rem] !h-auto"
 										value={prompt}
 										setValue={(e) => setPrompt(e)}
+										onkeyDown={(e) => {
+											if (e.key === 'Enter')
+												handleQueryAnswer();
+										}}
 									/>
-									<div className="flex gap-2 items-center pr-3">
+									<div
+										className="flex gap-2 items-center pr-3 cursor-pointer"
+										onClick={handleQueryAnswer}
+									>
 										<i className="bi-send text-primary100 text-lg rotate-45"></i>
 									</div>
 								</div>

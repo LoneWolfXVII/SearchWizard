@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import * as d3 from 'd3';
+import TableComponent from './TableComponent';
 
 const GraphComponent = ({ data }) => {
 	const [chart, setChart] = useState({
@@ -8,6 +9,11 @@ const GraphComponent = ({ data }) => {
 		yAxis: '',
 		type: '',
 	});
+	const [initialized, setInitialized] = useState(false);
+	const [loadedData, setLoadedData] = useState([]);
+	const [columns, setColumns] = useState([]);
+	const [activeTab, setActiveTab] = useState('Graphical View');
+
 	const chartRef = useRef(null);
 
 	useEffect(() => {
@@ -18,16 +24,25 @@ const GraphComponent = ({ data }) => {
 				type: data['graph_type'],
 			});
 		}
-	}, []);
+	}, [data]);
 
 	useEffect(() => {
 		if (chart.type && chart.xAxis && chart.yAxis && data?.response_csv_curl) {
 			d3.csv(data.response_csv_curl).then(makeChart);
 		}
-	}, [chart]);
+	}, [chart, data]);
 
 	function makeChart(loadedData) {
 		console.log('Loaded data:', loadedData);
+		setLoadedData(loadedData);
+
+		Object.keys(loadedData[0]).forEach((key) => {
+			setColumns((prev) => {
+				const uniqueKeys = new Set(prev);
+				uniqueKeys.add(key);
+				return [...uniqueKeys];
+			});
+		});
 
 		// Empty lists for our data and labels
 		const dataPoints = [];
@@ -64,16 +79,33 @@ const GraphComponent = ({ data }) => {
 			},
 		};
 
-		if (chartRef.current) {
-			chartRef.current.destroy(); // Destroy existing chart instance
+		if (!initialized) {
+			const ctx = document.getElementById('canvas');
+			chartRef.current = new Chart(ctx, options);
+			setInitialized(true);
+		} else {
+			chartRef.current.data = options.data;
+			chartRef.current.update();
 		}
-		const ctx = document.getElementById('canvas');
-		chartRef.current = new Chart(ctx, options);
 	}
 
 	return (
 		<div className="mb-4">
-			<canvas id="canvas" width="400" height="400"></canvas>
+			{/* <ul className="ghost-tabs relative col-span-12 mb-8 inline-flex w-full border-b border-black-10">
+				{['Graphical View', 'Tabular View'].map((items, indx) => (
+					<li
+						key={indx}
+						className={[
+							'!pb-0',
+							activeTab === items ? 'active-tab' : 'default-tab',
+						].join(' ')}
+						onClick={() => setActiveTab(items)}
+					>
+						{items}
+					</li>
+				))}
+			</ul> */}
+			<canvas id="canvas" width="380" height="250"></canvas>
 		</div>
 	);
 };
