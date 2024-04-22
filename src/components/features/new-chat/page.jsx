@@ -24,6 +24,8 @@ const NewChat = () => {
 	const [value, updateValue] = useLocalStorage('userDetails');
 	const [answerConfig, setAnswerConfig] = useLocalStorage('answerRespConfig');
 	const [dataSource] = useLocalStorage('dataSource');
+	const [promptQuery] = useLocalStorage('prompt');
+
 	const { query, params, navigate } = useRouter();
 	const token = useGetCookie('token');
 
@@ -177,6 +179,10 @@ const NewChat = () => {
 		if (query?.step) {
 			setCompletedSteps((prev) => [...prev, parseInt(query?.step)]);
 
+			if (query?.step === '3') {
+				setCompletedSteps([1, 3]);
+			}
+
 			if (query?.step === '4') {
 				setPrompt('');
 				let timer = 10000;
@@ -226,8 +232,8 @@ const NewChat = () => {
 									<AvatarImage src={value?.avatar} />
 									<AvatarFallback>CN</AvatarFallback>
 								</Avatar>
-								{answerResp?.query ? (
-									<p className="ms-1">{answerResp?.query}</p>
+								{promptQuery?.data ? (
+									<p className="ms-1">{promptQuery?.data}</p>
 								) : (
 									<>
 										<Skeleton className="h-6 w-[90%] bg-purple-8 ms-1" />

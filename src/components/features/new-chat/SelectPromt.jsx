@@ -23,20 +23,28 @@ const SelectPrompt = ({
 	const { query, navigate } = useRouter();
 	const token = useGetCookie('token');
 	const [answerConfig, setAnswerConfig] = useLocalStorage('answerRespConfig');
+	const [promptQuery, setPromptQuery] = useLocalStorage('query');
 
 	const handleActiveTab = (selectedTab) => {
 		setActiveTab(selectedTab);
 	};
 	const handlePrompt = (question) => {
-		setPrompt(question);
-		handleNextStep(4);
-		createQuerySession(query.dataSourceId, question, token || tokenCookie).then(
-			(res) => {
+		try {
+			// setPrompt(question);
+			setPromptQuery({ data: question });
+			handleNextStep(4);
+			createQuerySession(
+				query.dataSourceId,
+				question,
+				token || tokenCookie,
+			).then((res) => {
 				navigate(
 					`/app/new-chat/?step=4&dataSourceId=${query.dataSourceId}&sessionId=${res.session_id}&queryId=${res.query_id}`,
 				);
-			},
-		);
+			});
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	useEffect(() => {

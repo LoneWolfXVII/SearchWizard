@@ -13,6 +13,9 @@ const initialValue = {
 		id: '',
 		name: '',
 	},
+	prompt: {
+		data: '',
+	},
 };
 
 const useLocalStorage = (key) => {

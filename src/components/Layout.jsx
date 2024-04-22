@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
 				} `}
 			>
 				<Header />
-				<div className="px-8 pb-8 pt-0">{children}</div>
+				<div className="px-8 pt-0">{children}</div>
 			</main>
 		</div>
 	);
