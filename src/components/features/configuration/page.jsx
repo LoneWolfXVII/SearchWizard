@@ -124,7 +124,7 @@ const Configuration = () => {
 
 	return (
 		<div className="grid grid-cols-12 gap-4 pt-6">
-			<div className="border rounded-3xl py-4 px-6 col-span-9 shadow-1xl">
+			<div className="border rounded-3xl py-4 px-6 col-span-9 shadow-1xl h-fit">
 				{' '}
 				{/*TODO: add shadow */}
 				<h3 className="text-primary80 font-semibold text-xl">
@@ -191,17 +191,24 @@ const Configuration = () => {
 								</div>
 								<div className="flex items-center text-sm font-medium">
 									{!showNoUpload && progress < 100 ? (
-										<p>uploading...</p>
+										<p className="mr-4">uploading...</p>
 									) : null}
-									<Button
-										variant="ghost"
+									<div
+										onClick={() =>
+											window.open(file.file_url, '_blank')
+										}
+										className="text-md px-2 py-1 rounded-md bg-purple-8 hover:bg-purple-8"
+									>
+										<i className="bi-download text-lg text-primary80  font-semibold cursor-pointer "></i>
+									</div>
+									<div
 										onClick={(e) =>
 											handleRemoveFile(e, file, idx)
 										}
-										className="text-md py-0"
+										className="text-md px-2 py-1 rounded-md bg-purple-8  hover:bg-purple-8 ml-2"
 									>
-										<i className="bi-x text-lg text-primary80 text-xl font-semibold cursor-pointer pr-0"></i>
-									</Button>
+										<i className="bi-x text-xl text-primary80  font-semibold cursor-pointer"></i>
+									</div>
 								</div>
 							</div>
 							{!showNoUpload && progress <= 99 ? (

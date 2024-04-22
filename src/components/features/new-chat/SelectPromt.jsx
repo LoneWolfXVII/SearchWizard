@@ -92,7 +92,7 @@ const SelectPrompt = ({
 					</ul>
 				</div>
 				{activeTab ? (
-					<div className="w-full overflow-x-auto flex gap-4 mt-4">
+					<div className="w-full overflow-x-auto flex gap-4 mt-8">
 						{data?.suggestion?.length > 0
 							? data.suggestion
 									.find(
@@ -110,7 +110,7 @@ const SelectPrompt = ({
 													handlePrompt(question)
 												}
 											>
-												<ul className="divide-y-[24px] divide-transparent">
+												<ul className="divide-y-[24px] divide-transparent line-clamp-3">
 													<li className="flex items-center gap-2 hover:cursor-pointer hover:text-purple-80">
 														{question}
 													</li>

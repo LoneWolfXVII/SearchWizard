@@ -9,6 +9,10 @@ const initialValue = {
 		avatar: '',
 	},
 	answerRespConfig: {},
+	dataSource: {
+		id: '',
+		name: '',
+	},
 };
 
 const useLocalStorage = (key) => {

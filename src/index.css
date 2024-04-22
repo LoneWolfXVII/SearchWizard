@@ -81,6 +81,30 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+	/*scroll-bar-styles-START*/
+
+	::-webkit-scrollbar {
+		width: 4px;
+		height: 4px;
+	}
+
+	/* Track */
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	/* Handle */
+	::-webkit-scrollbar-thumb {
+		background: transparent;
+		border-radius: 4px;
+	}
+
+	/* Handle on hover */
+	::-webkit-scrollbar-thumb:hover {
+		background: transparent;
+	}
+
+	/*scroll-bar-styles-END*/
 
 	.or-tagline {
 		@apply relative bg-transparent text-center z-[1];

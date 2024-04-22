@@ -19,11 +19,11 @@ import {
 	getQueryAnswers,
 	getUserDetails,
 } from './service/new-chat.service';
-import { get } from 'cross-domain-cookie';
 
 const NewChat = () => {
 	const [value, updateValue] = useLocalStorage('userDetails');
 	const [answerConfig, setAnswerConfig] = useLocalStorage('answerRespConfig');
+	const [dataSource] = useLocalStorage('dataSource');
 	const { query, params, navigate } = useRouter();
 	const token = useGetCookie('token');
 
@@ -216,7 +216,11 @@ const NewChat = () => {
 							showWorkspace ? 'col-span-8' : 'col-span-12 mx-[8rem]',
 						)}
 					>
-						<div className="max-h-[45rem] overflow-y-auto">
+						<div className="mt-2 mb-8 rounded-lg px-5 py-2 bg-purple-4 float-right text-primary80 font-medium">
+							<i className="bi-database-check mr-2 text-primary80"></i>
+							{dataSource.name}
+						</div>
+						<div className="max-h-[45rem] overflow-y-auto mt-14">
 							<div className="flex items-center gap-2">
 								<Avatar className="size-9">
 									<AvatarImage src={value?.avatar} />
@@ -329,7 +333,7 @@ const NewChat = () => {
 								})}
 							</ul>
 						</div>
-						<div className="mt-[4.5rem] overflow-scroll w-full">
+						<div className="mt-[2.5rem] overflow-scroll w-full">
 							{renderComponent()}
 						</div>
 						{completedSteps.includes(2) || completedSteps.includes(3) ? (

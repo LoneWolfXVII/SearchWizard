@@ -15,6 +15,7 @@ import { tokenCookie } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
 const ChooseDataSourceDialog = ({
 	open,
@@ -24,6 +25,7 @@ const ChooseDataSourceDialog = ({
 	handleNextStep,
 }) => {
 	const [dataSources, setDataSources] = useState([]);
+	const [value, setValue] = useLocalStorage('dataSource');
 
 	const navigate = useNavigate();
 
@@ -62,9 +64,14 @@ const ChooseDataSourceDialog = ({
 							>
 								<RadioGroup
 									className="w-full"
-									onClick={() =>
-										setSelectedDataSource(source.datasource_id)
-									}
+									onClick={() => {
+										setSelectedDataSource(source.datasource_id);
+										setValue({
+											...value,
+											id: selectedDataSource,
+											name: source.name,
+										});
+									}}
 								>
 									<div className="flex items-center justify-between space-x-2">
 										<Label

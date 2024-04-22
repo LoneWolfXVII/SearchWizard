@@ -69,12 +69,12 @@ const UploadInput = ({ onFileUpload, files, setFiles, progress, setOpen }) => {
 			<div className="flex flex-col">
 				{/* <input {...getInputProps()} /> */}
 				{isDragActive ? (
-					<p className="text-primary80 flex flex-col gap-1 text-center w-[29.5rem] h-[22.5rem]">
+					<p className="text-primary80 flex flex-col gap-1 text-center min-w-[29.5rem] min-h-[22.5rem]">
 						Drop the files here...
 					</p>
 				) : (
 					<>
-						<div className="flex flex-col gap-1 text-center w-[29.5rem]">
+						<div className="flex flex-col gap-1 text-center min-w-[29.5rem]">
 							<h2 className="text-4xl font-semibold text-primary80">
 								{welcomeTypography?.subHeading1}
 							</h2>
