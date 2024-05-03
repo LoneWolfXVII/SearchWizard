@@ -28,7 +28,7 @@ const Home = () => {
 		<div className="">
 			<Header setOpen={setOpen} />
 			<HeroSection setOpen={setOpen} />
-			<VideoSection />
+			{/* <VideoSection /> */}
 			<UnlockDataPotential />
 			<TransformData />
 			<AdaptiveWorkspace />
