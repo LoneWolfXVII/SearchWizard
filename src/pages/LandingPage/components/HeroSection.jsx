@@ -1,6 +1,6 @@
 const HeroSection = ({setOpen}) => {
   return (
-    <div className="hero-section tPro:py-4 tPro:h-full tPro:pt-24 pt-14 tPro:px-0 px-6 pb-40 relative">
+    <div className="hero-section tPro:py-4 tPro:h-full tPro:pt-24 pt-14 tPro:px-0 px-6 pb-40">
       {/* Title */}
       <div className="flex flex-col mx-[12rem] gap-4 items-center pt-16">
         {/* Text */}
