@@ -9,10 +9,6 @@ const Abilities = () => {
     },
     {title: "AI Data Analytics" ,
       description: "With Ira, data is not just a collection of numbers and text. Its intelligent algorithms identify tasks that transform raw information into valuable insights and actions.",
-      imgPath: '/assets/bgs/ai-data-anyalytics-black.svg'
-    },
-    {title: "AI Data Analytics" ,
-      description: "With Ira, data is not just a collection of numbers and text. Its intelligent algorithms identify tasks that transform raw information into valuable insights and actions.",
       imgPath: '/assets/bgs/transform-data-action.svg'
     },
     {title: "Learning, Evolution, and Customization",
@@ -29,14 +25,14 @@ const Abilities = () => {
     },
   ]
   return (
-    <div className="flex bg-gray-secondary flex-col p-[3.5rem] tPro:p-[7.5rem]">
-      <div className="flex flex-col gap-4 items-center pt-16">
+    <div className="flex bg-gray-secondary flex-col px-4 py-20 sm:p-[3.5rem] tPro:p-[7.5rem]">
+      <div className="flex flex-col gap-4 items-center sm:pt-16">
         {/* Text */}
-        <h1 className="text-[72px] leading-[72px] text-center font-bold">
+        <h1 className="md:text-[72px] text-[34px] leading-[39px] md:leading-[80px] sm:text-center font-bold">
           AI in Finance to Put Your Processes on{" "}
           <span className="text-border-primary"> Autopilot</span>
         </h1>
-        <p className="text-2xl text-center text-black/60">
+        <p className=" text-[14px] sm:text-2xl sm:text-center text-black/60">
           Transforming the way finance professionals work
         </p>
       </div>

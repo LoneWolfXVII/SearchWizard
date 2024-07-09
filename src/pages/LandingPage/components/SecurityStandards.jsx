@@ -3,7 +3,7 @@ import React from "react";
 const SecurityStandards = () => {
   return (
     <div className="bg-border-light p-[7.5rem] flex flex-col">
-      <h1 className="text-[72px] leading-[80px] text-center font-bold">
+      <h1 className="md:text-[72px] text-[34px] leading-[39px] md:leading-[80px] text-center font-bold">
         Irame Comes with Impeccable Data Security Standards
       </h1>
       <p className="text-2xl mt-4 text-center text-black/60">

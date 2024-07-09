@@ -122,7 +122,7 @@ p {
 }
 
 .ability-card {
-	/* border: 10px solid; */
+	border: 10px solid white;
 	/* border-color: "linear-gradient(249.36deg, #FFFFFF -0.56%, rgba(255, 255, 255, 0.2) 99.98%)"; */
 	box-shadow: 0px 0px 40px 0px rgba(99, 115, 129, 0.12);
 	/* background: linear-gradient(90deg, hsla(258, 80%, 38%, 1) 0%, hsla(47, 61%, 59%, 1) 100%); */

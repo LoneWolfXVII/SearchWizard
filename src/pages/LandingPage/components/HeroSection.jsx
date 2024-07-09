@@ -2,12 +2,12 @@ const HeroSection = ({setOpen}) => {
   return (
     <div className="hero-section tPro:py-4 tPro:h-full tPro:pt-24 pt-14 tPro:px-0 px-6 pb-40">
       {/* Title */}
-      <div className="flex flex-col mx-[12rem] gap-4 items-center pt-16">
+      <div className="flex flex-col sm:mx-[12rem] gap-4 items-start md:items-center md:pt-16">
         {/* Text */}
-        <h1 className="text-[88px] leading-[88px] text-center font-bold">
+        <h1 className="md:text-[88px] text-[34px] leading-[44px] md:leading-[88px] sm:text-center font-bold">
           AI in Finance to Put Your Processes on <span className='text-border-primary'> Autopilot</span>
         </h1>
-        <p className="text-2xl text-center text-black/60">Transforming the way finance professionals work</p>
+        <p className="text-2xl sm:text-center text-black/60">Transforming the way finance professionals work</p>
         <div className="pt-12">
 					<button className="primary-button" onClick={() => setOpen(true)} >
 						Start for Free
