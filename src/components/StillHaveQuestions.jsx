@@ -1,6 +1,6 @@
 const StillHaveQuestions = ({ setOpen }) => {
 	return (
-		<section className="mt-16">
+		<section className=" mt-[-150px]">
 			<div className="my-container ">
 				<div className="bg-backgrounds-light rounded-2xl py-10 px-8 justify-center">
 					<img

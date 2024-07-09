@@ -1,6 +1,6 @@
 export const Footer = () => {
 	return (
-		<section className="py-14 bg-black mt-[120px]">
+		<section className=" py-14 mt-[120px] h-[600px]">
 			<div className="my-container">
 				<div className="text-center w-full">
 					<h6 className=" text-white/80">

@@ -1,6 +1,6 @@
-const HeroSection = () => {
+const HeroSection = ({setOpen}) => {
   return (
-    <div className="hero-section w-full">
+    <div className="hero-section tPro:py-4 tPro:h-full tPro:pt-24 pt-14 tPro:px-0 px-6 pb-40">
       {/* Title */}
       <div className="flex flex-col mx-[12rem] gap-4 items-center pt-16">
         {/* Text */}
@@ -9,7 +9,7 @@ const HeroSection = () => {
         </h1>
         <p className="text-2xl text-center text-black/60">Transforming the way finance professionals work</p>
         <div className="pt-12">
-					<button className="primary-button" >
+					<button className="primary-button" onClick={() => setOpen(true)} >
 						Start for Free
 					</button>
 				</div>

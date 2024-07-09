@@ -1,46 +1,25 @@
 /**@format */
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { headerData } from './config';
-import { Link } from 'react-router-dom';
 
 const Header = ({ setOpen }) => {
-	// const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+	const [isTop, setIsTop] = useState(true);
 
-	// const [headerClass, setHeaderClass] = useState('bg-transparent');
-	// const [isMobileMenu, setIsMobileMenu] = useState(false);
-	// const dropdownRef = useRef(null);
+	useEffect(() => {
+		const handleScroll = () => {
+			const top = window.scrollY < 100;
+			setIsTop(top);
+		};
 
-	// const toggleMobileMenu = () => {
-	// 	try {
-	// 		setIsMobileMenu(!isMobileMenu);
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	}
-	// };
-	// const handleHeaderScroll = useDebouncedCallback(() => {
-	// 	if (window.scrollY > 30) {
-	// 		setHeaderClass('bg-header');
-	// 	} else {
-	// 		setHeaderClass('bg-transparent');
-	// 	}
-	// }, 10);
-
-	// useEffect(() => {
-	// 	const eventHandler = () => handleHeaderScroll();
-
-	// 	window.addEventListener('scroll', eventHandler);
-
-	// 	return () => {
-	// 		window.removeEventListener('scroll', eventHandler);
-	// 		handleHeaderScroll.cancel();
-	// 	};
-	// }, [handleHeaderScroll]);
-
-	// useClickOutside(dropdownRef, () => setIsMobileMenu(false));
+		window.addEventListener('scroll', handleScroll);
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	}, [])
 
 	return (
 		<header
-			className={`absolute top-0 left-0 w-full transition-all ease-in-out tPro:duration-300 tPro:h-fit`}
+			className={`absolute top-0 left-0 w-full transition-all ease-in-out tPro:duration-300 tPro:h-fit ${isTop ? 'border-transparent' : 'border-b bg-white/75 backdrop-blur-lg '}`}
 		>
 			<div className="grid grid-cols-12 gap-1 py-4 px-8 items-center">
 				<div className="tPro:col-span-2 col-span-12 tPro:inline-block flex gap-2 justify-between">
