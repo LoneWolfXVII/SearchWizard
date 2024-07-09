@@ -8,7 +8,7 @@ const AbilityCard = ({ title, description, imgPath }) => {
           <h2 className="w-full">{title}</h2>
           <p className="mt-8">{description}</p>
         </div>
-        <div className="tPro:col-span-1 col-span-2 lpro:mx-0 mx-10">
+        <div className="tPro:col-span-1 col-span-2 lpro:mx-0 mx-10 xl:my-10">
           <img
             src={imgPath}
             className=" w-full tPro:h-[500px]  h-auto object-contain"
