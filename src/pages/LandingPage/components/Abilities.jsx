@@ -29,7 +29,7 @@ const Abilities = () => {
     },
   ]
   return (
-    <div className="flex bg-gray-secondary flex-col p-[7.5rem]">
+    <div className="flex bg-gray-secondary flex-col p-[3.5rem] tPro:p-[7.5rem]">
       <div className="flex flex-col gap-4 items-center pt-16">
         {/* Text */}
         <h1 className="text-[72px] leading-[72px] text-center font-bold">

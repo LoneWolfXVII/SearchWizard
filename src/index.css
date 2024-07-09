@@ -6,7 +6,7 @@
 html,
 body {
 	font-family: 'Inter', sans-serif;
-	overscroll-behavior: none
+	overscroll-behavior: none;
 }
 
 .primary-button {
@@ -33,7 +33,7 @@ p {
 	/* background-image: url('/assets/bgs/background.png'); */
 	background-position: center center;
 	background-repeat: no-repeat;
-	background-size: 100%;
+	background-size: cover;
 	@apply bg-[url('/assets/bgs/hero-bg.svg')] 
 }
 
