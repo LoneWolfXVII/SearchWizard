@@ -10,7 +10,7 @@ body {
 }
 
 .primary-button {
-	@apply text-base font-semibold text-white py-4 px-8 rounded-xl bg-primary;
+	@apply text-base font-semibold w-full text-white py-4 px-8 rounded-xl bg-primary;
 }
 
 .secondary-button {
@@ -34,7 +34,7 @@ p {
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-size: cover;
-	@apply bg-[url('/assets/bgs/hero-bg.svg')] 
+	@apply bg-[url('/assets/bgs/hero-bg.svg')]
 }
 
 .my-container {
@@ -42,11 +42,9 @@ p {
 }
 
 .our-solutions-bg-gradient {
-	background-image: linear-gradient(
-		to bottom,
-		rgba(49, 60, 89, 1),
-		rgba(22, 28, 45, 1)
-	);
+	background-image: linear-gradient(to bottom,
+			rgba(49, 60, 89, 1),
+			rgba(22, 28, 45, 1));
 }
 
 .content {
@@ -61,7 +59,8 @@ p {
 }
 
 .accordion-content.open {
-	max-height: 1000px; /* Adjust based on the maximum expected content height */
+	max-height: 1000px;
+	/* Adjust based on the maximum expected content height */
 	opacity: 1;
 }
 
@@ -69,54 +68,62 @@ p {
 	overflow: hidden;
 	display: block;
 	position: relative;
-	height: 1.2em; /* Adjust the height of the container as needed */
+	height: 1.2em;
+	/* Adjust the height of the container as needed */
 }
 
 .phrase {
-	animation: textTransition 2s infinite; /* Adjust the duration as needed */
+	animation: textTransition 2s infinite;
+	/* Adjust the duration as needed */
 	display: block;
 	opacity: 0;
 	position: absolute;
 	left: 0;
-	top: 100%; /* Start the phrases below the container */
+	top: 100%;
+	/* Start the phrases below the container */
 	width: 100%;
 }
 
 @keyframes textTransition {
 	0% {
 		opacity: 1;
-		top: 100%; /* Start from below the container */
+		top: 100%;
+		/* Start from below the container */
 	}
+
 	100% {
 		opacity: 1;
-		top: -120%; /* Move upward by the height of the container */
+		top: -120%;
+		/* Move upward by the height of the container */
 	}
 }
 
 .input-wrapper {
 	@apply relative;
 }
+
 .input-wrapper input {
-	@apply border-black/20 border box-border rounded-lg py-[17px] px-[14px] text-black/80 text-base font-normal leading-5
-     focus:border-black/60 focus-visible:border-black/60 focus:outline-none focus-visible:outline-none
-      placeholder:text-black/40 placeholder:text-sm placeholder:font-normal
-       hover:border-black/40  h-[56px];
+	@apply border-black/20 border box-border rounded-lg py-[17px] px-[14px] text-black/80 text-base font-normal leading-5 focus:border-black/60 focus-visible:border-black/60 focus:outline-none focus-visible:outline-none placeholder:text-black/40 placeholder:text-sm placeholder:font-normal hover:border-black/40 h-[56px];
 }
+
 .input-wrapper label {
 	@apply absolute z-[2] left-[14px] top-3.5 px-0.5 pointer-events-none bg-white translate-y-1 transition duration-200 ease-in-out text-black/60 text-base leading-5 font-normal w-4/5;
 }
 
-.input-wrapper input:focus + label,
-.input-wrapper input:valid + label,
-.input-wrapper input.disabled + label {
+.input-wrapper input:focus+label,
+.input-wrapper input:valid+label,
+.input-wrapper input.disabled+label {
 	@apply -translate-y-0.5 text-xs leading-3 !-top-1 left-2 !w-fit;
 }
+
 .input-wrapper input.disabled {
 	@apply cursor-not-allowed pointer-events-none opacity-60;
 }
-.input-wrapper input:disabled + label {
+
+.input-wrapper input:disabled+label {
 	@apply text-black/20;
 }
+
 .input-wrapper input:disabled {
 	@apply text-black/20 border-black/10;
 }
@@ -137,6 +144,6 @@ p {
 	background-repeat: no-repeat;
 	background-size: cover;
 	padding-bottom: 100px;
-  }
-  
+}
+
   

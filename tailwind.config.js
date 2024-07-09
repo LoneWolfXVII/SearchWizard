@@ -46,22 +46,16 @@ export default {
 				},
 				gray: {
 					100: 'rgba(223, 223, 223, 1)',
-					secondary: 'rgba(244, 246, 250, 1)'
+					secondary: 'rgba(244, 246, 250, 1)',
 				},
 				border: {
 					primary: 'rgba(106, 18, 205, 1)',
-					light: 'rgba(255, 255, 255, 1)'
+					light: 'rgba(255, 255, 255, 1)',
 				},
 				backgrounds: {
 					light: 'rgba(249, 250, 251, 1)',
 				},
-				
-			},
-			animation: {
-				marquee: 'marquee 25s linear infinite',
-				marquee2: 'marquee2 25s linear infinite',
-				marquee3: 'marquee 25s linear infinite',
-			},
+			}
 		},
 	},
 	plugins: [],

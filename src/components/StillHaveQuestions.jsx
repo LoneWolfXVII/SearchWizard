@@ -1,7 +1,7 @@
 const StillHaveQuestions = ({ setOpen }) => {
 	return (
 		<section className=" mt-[-150px]">
-			<div className="my-container ">
+			<div className="my-container sm:w-fit mx-auto">
 				<div className="bg-backgrounds-light rounded-2xl py-10 px-8 justify-center">
 					<img
 						src="/assets/icons/avatar-group.svg"
@@ -20,10 +20,10 @@ const StillHaveQuestions = ({ setOpen }) => {
 							our friendly team.
 						</p>
 						<button
-							className="primary-button mt-8"
+							className="mx-auto secondary-button sm:[w-fit] mt-8"
 							onClick={() => setOpen(true)}
 						>
-							Get in touch
+							Get a Demo
 						</button>
 					</div>
 				</div>

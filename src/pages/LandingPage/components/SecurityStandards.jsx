@@ -9,18 +9,41 @@ const SecurityStandards = () => {
       <p className="text-[14px] md:text-2xl mt-4 md:text-center text-black/60">
         Transforming the way finance professionals work
       </p>
-      <div className="flex pt-24 justify-center flex-wrap gap-20">
-        <img src="/assets/icons/iso.svg" alt="iso icon" />
-        <img src="/assets/icons/gdpr.svg" alt="gdpr icon" />
-        <img src="/assets/icons/soc2.svg" alt="soc2 icon" />
-        <img
-          src="/assets/icons/software-suggest.svg"
-          alt="software-suggest icon"
-        />
-        <img src="/assets/icons/g2.svg" alt="g2 icon" />
+      <div className="flex pt-6 sm:pt-24 justify-around sm:justify-center flex-wrap sm:gap-20">
+        {Array.isArray(securityIcons) && securityIcons.map((icon, index) => (
+          <img
+            key={`security_icon_${index}`}
+            src={icon.img}
+            alt={icon.name}
+            className="w-12 h-auto sm:w-24 md:w-32"
+          />
+        ))}
       </div>
     </div>
   );
 };
 
 export default SecurityStandards;
+
+const securityIcons = [
+  {
+    img: '/assets/icons/iso.svg',
+    name: 'ISO',
+  },
+  {
+    img: '/assets/icons/gdpr.svg',
+    name: 'GDPR',
+  },
+  {
+    img: '/assets/icons/soc2.svg',
+    name: 'SOC2',
+  },
+  {
+    img: '/assets/icons/software-suggest.svg',
+    name: 'Software Suggest',
+  },
+  {
+    img: '/assets/icons/g2.svg',
+    name: 'G2',
+  },
+];
