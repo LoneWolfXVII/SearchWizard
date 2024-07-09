@@ -6,10 +6,15 @@
 html,
 body {
 	font-family: 'Inter', sans-serif;
+	overscroll-behavior: none
 }
 
 .primary-button {
-	@apply text-base font-semibold text-white py-3 px-6 rounded-xl bg-primary;
+	@apply text-base font-semibold text-white py-4 px-8 rounded-xl bg-primary;
+}
+
+.secondary-button {
+	@apply text-base font-semibold text-border-primary py-3 px-6 rounded-lg bg-secondary;
 }
 
 .bg-header {
@@ -26,10 +31,10 @@ p {
 
 .hero-section {
 	/* background-image: url('/assets/bgs/background.png'); */
-	background-position: left center;
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
-	@apply tPro:bg-[url('/assets/bgs/background.png')] bg-[url('/assets/bgs/mweb-background.png')];
+	background-position: center center;
+	/* background-repeat:repeat-x; */
+	background-size: 100%;
+	@apply bg-[url('/assets/bgs/hero-bg.svg')] 
 }
 
 .my-container {
@@ -114,4 +119,16 @@ p {
 }
 .input-wrapper input:disabled {
 	@apply text-black/20 border-black/10;
+}
+
+.ability-card {
+	/* border: 10px solid; */
+	/* border-color: "linear-gradient(249.36deg, #FFFFFF -0.56%, rgba(255, 255, 255, 0.2) 99.98%)"; */
+	box-shadow: 0px 0px 40px 0px rgba(99, 115, 129, 0.12);
+	/* background: linear-gradient(90deg, hsla(258, 80%, 38%, 1) 0%, hsla(47, 61%, 59%, 1) 100%); */
+	background: linear-gradient(0deg, #FFFFFF, #FFFFFF), linear-gradient(89.88deg, rgba(121, 28, 226, 0) 39.49%, rgba(121, 28, 226, 0.1) 99.9%);
+
+
+
+
 }

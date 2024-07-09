@@ -34,6 +34,7 @@ export default {
 				// => @media (min-width: 1900px) { ... }
 			},
 			colors: {
+				secondary: 'rgba(106, 18, 205, 0.08)',
 				primary: 'rgba(121, 28, 226, 1)', //#791CE2
 				typography: 'rgba(22, 28, 45, 1)', //headings
 				'typography-opacity-70': 'rgba(22, 28, 45, 0.70)', //subheadings
@@ -45,13 +46,16 @@ export default {
 				},
 				gray: {
 					100: 'rgba(223, 223, 223, 1)',
+					secondary: 'rgba(244, 246, 250, 1)'
 				},
 				border: {
 					primary: 'rgba(106, 18, 205, 1)',
+					light: 'rgba(255, 255, 255, 1)'
 				},
 				backgrounds: {
 					light: 'rgba(249, 250, 251, 1)',
 				},
+				
 			},
 		},
 	},
