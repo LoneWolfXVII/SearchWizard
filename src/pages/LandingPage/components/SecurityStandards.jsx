@@ -2,11 +2,11 @@ import React from "react";
 
 const SecurityStandards = () => {
   return (
-    <div className="bg-border-light p-[7.5rem] flex flex-col">
-      <h1 className="md:text-[72px] text-[34px] leading-[39px] md:leading-[80px] text-center font-bold">
+    <div className="bg-border-light px-4 p-[7.5rem] md:p-[7.5rem] flex flex-col">
+      <h1 className="md:text-[72px] text-[34px] leading-[39px] md:leading-[80px] md:text-center font-bold">
         Irame Comes with Impeccable Data Security Standards
       </h1>
-      <p className="text-2xl mt-4 text-center text-black/60">
+      <p className="text-[14px] md:text-2xl mt-4 md:text-center text-black/60">
         Transforming the way finance professionals work
       </p>
       <div className="flex pt-24 justify-center flex-wrap gap-20">

@@ -1,10 +1,10 @@
 const BackedBy = () => {
   return (
-    <div className="bg-gray-secondary p-[7.5rem] flex flex-col">
-      <h1 className="md:text-[72px] text-[34px] leading-[39px] md:leading-[80px] text-center font-bold">
+    <div className="bg-gray-secondary px-4 p-[7.5rem] md:p-[7.5rem] flex flex-col">
+      <h1 className="md:text-[72px] text-[34px] leading-[39px] md:leading-[80px] md:text-center font-bold">
       Backed By Some of the Best Minds in the Industry 
       </h1>
-      <p className="text-2xl mt-4 text-center text-black/60">
+      <p className="text-[14px] md:text-2xl mt-4 md:text-center text-black/60">
         Transforming the way finance professionals work
       </p>
       <div className="flex pt-24 justify-center flex-wrap gap-20">
