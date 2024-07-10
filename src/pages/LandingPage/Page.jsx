@@ -21,12 +21,8 @@ const LandingPage = () => {
       <SecurityStandards />
       <BackedBy />
       <FAQs/>
-      <section className="footer-gradient-container relative mt-[20rem]">
       <StillHaveQuestions setOpen={setOpen} />
-      <div>
         <Footer />
-      </div>
-    </section>
       
       {open ? (
 				<div className="">

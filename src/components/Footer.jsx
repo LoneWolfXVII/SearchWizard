@@ -1,6 +1,6 @@
 export const Footer = () => {
 	return (
-		<section className=" py-14 mt-[120px] h-[600px]">
+		<section className="footer-gradient-container py-14 mt-[120px] h-10 ">
 			<div className="my-container">
 				<div className="text-center w-full">
 					<h6 className=" text-white/80">
